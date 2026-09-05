@@ -10,33 +10,219 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
+import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ConsultationRouteImport } from './routes/consultation'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as TreatmentsRouteImport } from './routes/treatments'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as MedicinesIndexRouteImport } from './routes/medicines.index'
+import { Route as MedicinesSlugRouteImport } from './routes/medicines.$slug'
+import { Route as MedicinesCategorySlugRouteImport } from './routes/medicines.category.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutDoctorRoute = AboutDoctorRouteImport.update({
+  id: '/about-doctor',
+  path: '/about-doctor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookAppointmentRoute = BookAppointmentRouteImport.update({
+  id: '/book-appointment',
+  path: '/book-appointment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationRoute = ConsultationRouteImport.update({
+  id: '/consultation',
+  path: '/consultation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreatmentsRoute = TreatmentsRouteImport.update({
+  id: '/treatments',
+  path: '/treatments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicinesIndexRoute = MedicinesIndexRouteImport.update({
+  id: '/medicines/',
+  path: '/medicines/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicinesSlugRoute = MedicinesSlugRouteImport.update({
+  id: '/medicines/$slug',
+  path: '/medicines/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
+  id: '/medicines/category/$slug',
+  path: '/medicines/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about-doctor': typeof AboutDoctorRoute
+  '/book-appointment': typeof BookAppointmentRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/services': typeof ServicesRoute
+  '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/medicines/': typeof MedicinesIndexRoute
+  '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about-doctor': typeof AboutDoctorRoute
+  '/book-appointment': typeof BookAppointmentRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/services': typeof ServicesRoute
+  '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog': typeof BlogIndexRoute
+  '/medicines': typeof MedicinesIndexRoute
+  '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about-doctor': typeof AboutDoctorRoute
+  '/book-appointment': typeof BookAppointmentRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/services': typeof ServicesRoute
+  '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/medicines/': typeof MedicinesIndexRoute
+  '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about-doctor'
+    | '/book-appointment'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/services'
+    | '/treatments'
+    | '/blog/$slug'
+    | '/medicines/$slug'
+    | '/blog/'
+    | '/medicines/'
+    | '/medicines/category/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about-doctor'
+    | '/book-appointment'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/services'
+    | '/treatments'
+    | '/blog/$slug'
+    | '/medicines/$slug'
+    | '/blog'
+    | '/medicines'
+    | '/medicines/category/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about-doctor'
+    | '/book-appointment'
+    | '/cart'
+    | '/checkout'
+    | '/consultation'
+    | '/contact'
+    | '/faq'
+    | '/services'
+    | '/treatments'
+    | '/blog/$slug'
+    | '/medicines/$slug'
+    | '/blog/'
+    | '/medicines/'
+    | '/medicines/category/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutDoctorRoute: typeof AboutDoctorRoute
+  BookAppointmentRoute: typeof BookAppointmentRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  ConsultationRoute: typeof ConsultationRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  ServicesRoute: typeof ServicesRoute
+  TreatmentsRoute: typeof TreatmentsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  MedicinesSlugRoute: typeof MedicinesSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  MedicinesIndexRoute: typeof MedicinesIndexRoute
+  MedicinesCategorySlugRoute: typeof MedicinesCategorySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +234,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about-doctor': {
+      id: '/about-doctor'
+      path: '/about-doctor'
+      fullPath: '/about-doctor'
+      preLoaderRoute: typeof AboutDoctorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book-appointment': {
+      id: '/book-appointment'
+      path: '/book-appointment'
+      fullPath: '/book-appointment'
+      preLoaderRoute: typeof BookAppointmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultation': {
+      id: '/consultation'
+      path: '/consultation'
+      fullPath: '/consultation'
+      preLoaderRoute: typeof ConsultationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treatments': {
+      id: '/treatments'
+      path: '/treatments'
+      fullPath: '/treatments'
+      preLoaderRoute: typeof TreatmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medicines/': {
+      id: '/medicines/'
+      path: '/medicines'
+      fullPath: '/medicines/'
+      preLoaderRoute: typeof MedicinesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medicines/$slug': {
+      id: '/medicines/$slug'
+      path: '/medicines/$slug'
+      fullPath: '/medicines/$slug'
+      preLoaderRoute: typeof MedicinesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medicines/category/$slug': {
+      id: '/medicines/category/$slug'
+      path: '/medicines/category/$slug'
+      fullPath: '/medicines/category/$slug'
+      preLoaderRoute: typeof MedicinesCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutDoctorRoute: AboutDoctorRoute,
+  BookAppointmentRoute: BookAppointmentRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  ConsultationRoute: ConsultationRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  ServicesRoute: ServicesRoute,
+  TreatmentsRoute: TreatmentsRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  MedicinesSlugRoute: MedicinesSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  MedicinesIndexRoute: MedicinesIndexRoute,
+  MedicinesCategorySlugRoute: MedicinesCategorySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
