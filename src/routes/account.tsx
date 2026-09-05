@@ -42,7 +42,7 @@ type ProfileForm = {
 const empty: ProfileForm = { full_name: "", phone: "", date_of_birth: "", gender: "", city: "" };
 
 function AccountPage() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, isCareTeam } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState<ProfileForm>(empty);
   const [role, setRole] = useState<string>("patient");
