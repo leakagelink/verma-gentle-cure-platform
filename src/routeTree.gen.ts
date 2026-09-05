@@ -15,8 +15,12 @@ import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as TreatmentsRouteImport } from './routes/treatments'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as MedicinesIndexRouteImport } from './routes/medicines.index'
 import { Route as MedicinesSlugRouteImport } from './routes/medicines.$slug'
 import { Route as MedicinesCategorySlugRouteImport } from './routes/medicines.category.$slug'
@@ -51,6 +55,16 @@ const ConsultationRoute = ConsultationRouteImport.update({
   path: '/consultation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -59,6 +73,16 @@ const ServicesRoute = ServicesRouteImport.update({
 const TreatmentsRoute = TreatmentsRouteImport.update({
   id: '/treatments',
   path: '/treatments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MedicinesIndexRoute = MedicinesIndexRouteImport.update({
@@ -84,9 +108,13 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/services': typeof ServicesRoute
   '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
@@ -97,9 +125,13 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/services': typeof ServicesRoute
   '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog': typeof BlogIndexRoute
   '/medicines': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
@@ -111,9 +143,13 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
   '/services': typeof ServicesRoute
   '/treatments': typeof TreatmentsRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
@@ -126,9 +162,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/consultation'
+    | '/contact'
+    | '/faq'
     | '/services'
     | '/treatments'
+    | '/blog/$slug'
     | '/medicines/$slug'
+    | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -139,9 +179,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/consultation'
+    | '/contact'
+    | '/faq'
     | '/services'
     | '/treatments'
+    | '/blog/$slug'
     | '/medicines/$slug'
+    | '/blog'
     | '/medicines'
     | '/medicines/category/$slug'
   id:
@@ -152,9 +196,13 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/consultation'
+    | '/contact'
+    | '/faq'
     | '/services'
     | '/treatments'
+    | '/blog/$slug'
     | '/medicines/$slug'
+    | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
   fileRoutesById: FileRoutesById
@@ -166,9 +214,13 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
   ServicesRoute: typeof ServicesRoute
   TreatmentsRoute: typeof TreatmentsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   MedicinesSlugRoute: typeof MedicinesSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   MedicinesIndexRoute: typeof MedicinesIndexRoute
   MedicinesCategorySlugRoute: typeof MedicinesCategorySlugRoute
 }
@@ -217,6 +269,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsultationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -229,6 +295,20 @@ declare module '@tanstack/react-router' {
       path: '/treatments'
       fullPath: '/treatments'
       preLoaderRoute: typeof TreatmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/medicines/': {
@@ -262,9 +342,13 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
   ServicesRoute: ServicesRoute,
   TreatmentsRoute: TreatmentsRoute,
+  BlogSlugRoute: BlogSlugRoute,
   MedicinesSlugRoute: MedicinesSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
   MedicinesIndexRoute: MedicinesIndexRoute,
   MedicinesCategorySlugRoute: MedicinesCategorySlugRoute,
 }
