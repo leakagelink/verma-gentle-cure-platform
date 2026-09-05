@@ -5,7 +5,8 @@ import { useMemo, useState } from "react";
 import { MedicineCard } from "@/components/shop/MedicineCard";
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Input } from "@/components/ui/input";
-import { MEDICINES, MEDICINE_CATEGORIES, PRODUCT_DISCLAIMER } from "@/lib/shop-data";
+import { useProducts } from "@/lib/products";
+import { MEDICINE_CATEGORIES, PRODUCT_DISCLAIMER } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/medicines/")({
@@ -42,9 +43,10 @@ function ShopPage() {
   const [category, setCategory] = useState<string>("all");
   const [sort, setSort] = useState<(typeof SORTS)[number]["key"]>("popular");
   const [inStockOnly, setInStockOnly] = useState(false);
+  const { products } = useProducts();
 
   const results = useMemo(() => {
-    let list = MEDICINES.filter((m) => {
+    let list = products.filter((m) => {
       const q = query.trim().toLowerCase();
       const matchesQuery =
         !q || m.name.toLowerCase().includes(q) || m.brand.toLowerCase().includes(q);
@@ -59,7 +61,7 @@ function ShopPage() {
       return b.reviews - a.reviews;
     });
     return list;
-  }, [query, category, sort, inStockOnly]);
+  }, [products, query, category, sort, inStockOnly]);
 
   return (
     <>

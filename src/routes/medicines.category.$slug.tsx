@@ -3,13 +3,14 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { MedicineCard } from "@/components/shop/MedicineCard";
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
-import { MEDICINES, MEDICINE_CATEGORIES } from "@/lib/shop-data";
+import { useProducts } from "@/lib/products";
+import { MEDICINE_CATEGORIES } from "@/lib/shop-data";
 
 export const Route = createFileRoute("/medicines/category/$slug")({
   loader: ({ params }) => {
     const category = MEDICINE_CATEGORIES.find((c) => c.slug === params.slug);
     if (!category) throw notFound();
-    return { category, items: MEDICINES.filter((m) => m.category === category.slug) };
+    return { category };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
@@ -40,7 +41,9 @@ export const Route = createFileRoute("/medicines/category/$slug")({
 });
 
 function CategoryPage() {
-  const { category, items } = Route.useLoaderData();
+  const { category } = Route.useLoaderData();
+  const { products } = useProducts();
+  const items = products.filter((m) => m.category === category.slug);
   return (
     <>
       <PageHero eyebrow="Category" title={category.name} description={category.description} />
