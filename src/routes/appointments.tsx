@@ -232,9 +232,6 @@ function AppointmentsPage() {
                 </li>
               );
             })}
-
-              );
-            })}
           </ul>
         )}
 
