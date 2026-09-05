@@ -3,9 +3,13 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 
 import { supabase } from "@/integrations/supabase/client";
 
+export type AppRole = "patient" | "doctor" | "admin";
+
 type AuthContextValue = {
   user: User | null;
   session: Session | null;
+  role: AppRole | null;
+  isCareTeam: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 };
@@ -13,12 +17,15 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   session: null,
+  role: null,
+  isCareTeam: false,
   loading: true,
   signOut: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [role, setRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
