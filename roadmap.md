@@ -16,10 +16,14 @@
 - [x] Digital prescriptions with printable layout (/prescriptions/:id)
 - [ ] File uploads (reports) — moves to Phase 3 with storage buckets
 
-## Phase 3 — Commerce
-- [ ] Products, cart and orders in the database
-- [ ] Coupons, order status tracking
+## Phase 3 — Commerce (done)
+- [x] Products, cart and orders in the database (products, orders, order_items, store_settings)
+- [x] Checkout saves real orders with items, coupon, delivery fee and totals
+- [x] Customer order tracking (/orders) and store admin order management (/admin)
+- [x] COD configurable (on/off, min/max order) plus delivery fee and free-delivery threshold
 - [ ] Payment gateway integration layer (Razorpay / Cashfree / UPI) once credentials are supplied
+- [ ] File uploads (reports) with storage buckets
+
 
 ## Phase 4 — Admin & operations
 - [ ] Admin dashboard with charts and all management modules
