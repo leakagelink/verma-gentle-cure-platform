@@ -42,7 +42,7 @@ type ProfileForm = {
 const empty: ProfileForm = { full_name: "", phone: "", date_of_birth: "", gender: "", city: "" };
 
 function AccountPage() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, isCareTeam } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState<ProfileForm>(empty);
   const [role, setRole] = useState<string>("patient");
@@ -200,6 +200,26 @@ function AccountPage() {
         </form>
 
         <div className="space-y-4">
+          <Link to="/appointments" className="card-premium flex items-center gap-3 p-5">
+            <CalendarDays className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">My appointments & prescriptions</span>
+              <span className="block text-sm text-muted-foreground">
+                Track consultations and view your prescriptions
+              </span>
+            </span>
+          </Link>
+          {isCareTeam && (
+            <Link to="/doctor" className="card-premium flex items-center gap-3 p-5">
+              <Stethoscope className="size-5 text-leaf" />
+              <span>
+                <span className="block font-semibold">Doctor dashboard</span>
+                <span className="block text-sm text-muted-foreground">
+                  Review requests and issue prescriptions
+                </span>
+              </span>
+            </Link>
+          )}
           <Link to="/book-appointment" className="card-premium flex items-center gap-3 p-5">
             <CalendarDays className="size-5 text-leaf" />
             <span>
@@ -223,8 +243,8 @@ function AccountPage() {
           </Link>
           <p className="flex gap-2 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-leaf" />
-            Only you can see your profile. Appointment history, prescriptions and order tracking
-            appear here as those modules go live.
+            Only you can see your profile, appointments and prescriptions. Order tracking appears
+            here as that module goes live.
           </p>
         </div>
       </div>

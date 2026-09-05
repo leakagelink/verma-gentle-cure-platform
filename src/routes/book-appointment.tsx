@@ -1,7 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check, ChevronLeft, ChevronRight, Paperclip, ShieldCheck } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -100,15 +103,20 @@ function nextDays(count: number) {
 }
 
 function BookAppointmentPage() {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Form>(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const [appointmentId, setAppointmentId] = useState("");
   const days = useMemo(() => nextDays(12), []);
   const fee = form.type === "new" ? CONSULT_FEES.new : CONSULT_FEES.followUp;
-  const appointmentId = useMemo(
-    () => `VGC-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 899999)}`,
-    [],
-  );
+
+  useEffect(() => {
+    if (!user) return;
+    setForm((f) => (f.email ? f : { ...f, email: user.email ?? "" }));
+  }, [user]);
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -130,12 +138,58 @@ function BookAppointmentPage() {
     return Object.keys(e).length === 0;
   }
 
+  async function confirmAppointment() {
+    if (!user) {
+      toast.error("Please sign in to confirm your appointment.");
+      navigate({ to: "/auth" });
+      return;
+    }
+    setSaving(true);
+    const { data, error } = await supabase
+      .from("appointments")
+      .insert({
+        patient_id: user.id,
+        patient_name: form.fullName.trim(),
+        phone: form.mobile.trim(),
+        email: form.email.trim(),
+        date_of_birth: form.dob,
+        gender: form.gender,
+        mode: form.mode,
+        appointment_date: form.date,
+        slot: form.slot,
+        concern: [form.concern, form.symptoms, form.duration, form.notes]
+          .filter((part) => part.trim().length > 0)
+          .join("\n\n"),
+        medical_history: form.previousTreatment || null,
+        current_medication: form.currentMedicines || null,
+        allergies: form.allergies || null,
+        fee,
+        status: "pending",
+        payment_status: "pending",
+      })
+      .select("id")
+      .single();
+    setSaving(false);
+
+    if (error || !data) {
+      toast.error("We could not save your appointment. Please try again.");
+      return;
+    }
+
+    setAppointmentId(`VGC-${data.id.slice(0, 8).toUpperCase()}`);
+    toast.success("Appointment requested");
+    setStep(7);
+  }
+
   function goNext() {
     if (!validate(step)) {
       toast.error("Please complete the highlighted fields.");
       return;
     }
-    if (step === 6) toast.success("Appointment confirmed");
+    if (step === 6) {
+      void confirmAppointment();
+      return;
+    }
     setStep((s) => Math.min(s + 1, 7));
   }
 
@@ -474,6 +528,15 @@ function BookAppointmentPage() {
                   appointment with payment status <strong className="text-navy">Pending</strong>.
                 </p>
                 <p className="mt-4 font-display text-2xl text-navy">Payable: {formatINR(fee)}</p>
+                {!authLoading && !user && (
+                  <p className="mt-4 rounded-xl border border-leaf/40 bg-mint/40 p-4 text-sm text-forest">
+                    Please{" "}
+                    <Link to="/auth" className="font-semibold underline">
+                      sign in or create an account
+                    </Link>{" "}
+                    so your appointment and prescriptions stay saved in your private patient record.
+                  </p>
+                )}
               </Step>
             )}
 
@@ -482,7 +545,7 @@ function BookAppointmentPage() {
                 <span className="mx-auto grid size-14 place-items-center rounded-full bg-mint text-forest">
                   <Check className="size-7" />
                 </span>
-                <h2 className="mt-5 text-2xl text-navy">Appointment confirmed</h2>
+                <h2 className="mt-5 text-2xl text-navy">Appointment requested</h2>
                 <dl className="mx-auto mt-6 max-w-md divide-y divide-border rounded-2xl border border-border text-left">
                   {[
                     ["Appointment ID", appointmentId],
@@ -500,7 +563,7 @@ function BookAppointmentPage() {
                 </dl>
                 <div className="mt-7 flex flex-wrap justify-center gap-3">
                   <Button asChild className="rounded-full">
-                    <Link to="/consultation">View consultation details</Link>
+                    <Link to="/appointments">View my appointments</Link>
                   </Button>
                   <Button asChild variant="outline" className="rounded-full">
                     <Link to="/">Go to home</Link>
@@ -519,8 +582,8 @@ function BookAppointmentPage() {
                 >
                   <ChevronLeft className="size-4" /> Back
                 </Button>
-                <Button className="h-12 rounded-full px-6" onClick={goNext}>
-                  {step === 6 ? "Confirm appointment" : "Continue"}
+                <Button className="h-12 rounded-full px-6" onClick={goNext} disabled={saving}>
+                  {step === 6 ? (saving ? "Saving…" : "Confirm appointment") : "Continue"}
                   <ChevronRight className="size-4" />
                 </Button>
               </div>

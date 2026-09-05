@@ -12,12 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
@@ -44,6 +46,11 @@ const AboutDoctorRoute = AboutDoctorRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppointmentsRoute = AppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -74,6 +81,11 @@ const ConsultationRoute = ConsultationRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorRoute = DoctorRouteImport.update({
+  id: '/doctor',
+  path: '/doctor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -141,12 +153,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -164,12 +178,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -188,12 +204,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -213,12 +231,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/appointments'
     | '/auth'
     | '/book-appointment'
     | '/cart'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -236,12 +256,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/appointments'
     | '/auth'
     | '/book-appointment'
     | '/cart'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -259,12 +281,14 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/appointments'
     | '/auth'
     | '/book-appointment'
     | '/cart'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -283,12 +307,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
   AccountRoute: typeof AccountRoute
+  AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
+  DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
@@ -324,6 +350,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appointments': {
+      id: '/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AppointmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -366,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor': {
+      id: '/doctor'
+      path: '/doctor'
+      fullPath: '/doctor'
+      preLoaderRoute: typeof DoctorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -459,12 +499,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutDoctorRoute: AboutDoctorRoute,
   AccountRoute: AccountRoute,
+  AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
+  DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,

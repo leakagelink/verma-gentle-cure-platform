@@ -14,6 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          allergies: string | null
+          appointment_date: string
+          concern: string
+          created_at: string
+          current_medication: string | null
+          date_of_birth: string | null
+          doctor_notes: string | null
+          email: string | null
+          fee: number
+          gender: string | null
+          id: string
+          medical_history: string | null
+          mode: Database["public"]["Enums"]["consultation_mode"]
+          patient_id: string
+          patient_name: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          phone: string
+          slot: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          updated_at: string
+        }
+        Insert: {
+          allergies?: string | null
+          appointment_date: string
+          concern: string
+          created_at?: string
+          current_medication?: string | null
+          date_of_birth?: string | null
+          doctor_notes?: string | null
+          email?: string | null
+          fee?: number
+          gender?: string | null
+          id?: string
+          medical_history?: string | null
+          mode?: Database["public"]["Enums"]["consultation_mode"]
+          patient_id: string
+          patient_name: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone: string
+          slot: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+        }
+        Update: {
+          allergies?: string | null
+          appointment_date?: string
+          concern?: string
+          created_at?: string
+          current_medication?: string | null
+          date_of_birth?: string | null
+          doctor_notes?: string | null
+          email?: string | null
+          fee?: number
+          gender?: string | null
+          id?: string
+          medical_history?: string | null
+          mode?: Database["public"]["Enums"]["consultation_mode"]
+          patient_id?: string
+          patient_name?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone?: string
+          slot?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      prescriptions: {
+        Row: {
+          advice: string | null
+          appointment_id: string | null
+          created_at: string
+          diagnosis: string
+          doctor_id: string | null
+          follow_up_date: string | null
+          id: string
+          medicines: Json
+          patient_id: string
+          prescription_no: string
+          updated_at: string
+        }
+        Insert: {
+          advice?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string
+          doctor_id?: string | null
+          follow_up_date?: string | null
+          id?: string
+          medicines?: Json
+          patient_id: string
+          prescription_no?: string
+          updated_at?: string
+        }
+        Update: {
+          advice?: string | null
+          appointment_id?: string | null
+          created_at?: string
+          diagnosis?: string
+          doctor_id?: string | null
+          follow_up_date?: string | null
+          id?: string
+          medicines?: Json
+          patient_id?: string
+          prescription_no?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescriptions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -86,6 +205,9 @@ export type Database = {
     }
     Enums: {
       app_role: "patient" | "doctor" | "admin"
+      appointment_status: "pending" | "confirmed" | "completed" | "cancelled"
+      consultation_mode: "clinic" | "video" | "audio"
+      payment_status: "pending" | "paid" | "refunded" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -214,6 +336,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["patient", "doctor", "admin"],
+      appointment_status: ["pending", "confirmed", "completed", "cancelled"],
+      consultation_mode: ["clinic", "video", "audio"],
+      payment_status: ["pending", "paid", "refunded", "failed"],
     },
   },
 } as const
