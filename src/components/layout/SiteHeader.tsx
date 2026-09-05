@@ -54,7 +54,7 @@ export function SiteHeader() {
             </Link>
           </Button>
           <Button asChild variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex">
-            <Link to="/auth" aria-label="Login or account">
+            <Link to={user ? "/account" : "/auth"} aria-label="Login or account">
               <UserRound className="size-5" />
             </Link>
           </Button>
@@ -99,8 +99,8 @@ export function SiteHeader() {
             </Link>
           </Button>
           <Button asChild variant="outline" className="h-12 rounded-xl text-base">
-            <Link to="/auth" onClick={() => setOpen(false)}>
-              Login / Register
+            <Link to={user ? "/account" : "/auth"} onClick={() => setOpen(false)}>
+              {user ? "My account" : "Login / Register"}
             </Link>
           </Button>
         </nav>
