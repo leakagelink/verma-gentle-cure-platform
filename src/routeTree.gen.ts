@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
@@ -38,6 +39,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutDoctorRoute = AboutDoctorRouteImport.update({
   id: '/about-doctor',
   path: '/about-doctor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -134,6 +140,7 @@ const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/account': typeof AccountRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about-doctor'
+    | '/account'
     | '/auth'
     | '/book-appointment'
     | '/cart'
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about-doctor'
+    | '/account'
     | '/auth'
     | '/book-appointment'
     | '/cart'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about-doctor'
+    | '/account'
     | '/auth'
     | '/book-appointment'
     | '/cart'
@@ -270,6 +282,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
+  AccountRoute: typeof AccountRoute
   AuthRoute: typeof AuthRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/about-doctor'
       fullPath: '/about-doctor'
       preLoaderRoute: typeof AboutDoctorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -438,6 +458,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutDoctorRoute: AboutDoctorRoute,
+  AccountRoute: AccountRoute,
   AuthRoute: AuthRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,

@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, Home, Pill, Stethoscope, UserRound } from "lucide-react";
 
-const TABS = [
-  { to: "/", label: "Home", icon: Home, exact: true },
-  { to: "/consultation", label: "Consult", icon: Stethoscope, exact: false },
-  { to: "/medicines", label: "Shop", icon: Pill, exact: false },
-  { to: "/book-appointment", label: "Appointments", icon: CalendarDays, exact: false },
-  { to: "/auth", label: "Account", icon: UserRound, exact: false },
-] as const;
+import { useAuth } from "@/hooks/useAuth";
 
 export function MobileTabBar() {
+  const { user } = useAuth();
+  const TABS = [
+    { to: "/", label: "Home", icon: Home, exact: true },
+    { to: "/consultation", label: "Consult", icon: Stethoscope, exact: false },
+    { to: "/medicines", label: "Shop", icon: Pill, exact: false },
+    { to: "/book-appointment", label: "Appointments", icon: CalendarDays, exact: false },
+    { to: user ? "/account" : "/auth", label: "Account", icon: UserRound, exact: false },
+  ] as const;
   return (
     <nav
       aria-label="App navigation"
