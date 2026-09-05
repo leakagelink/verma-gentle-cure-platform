@@ -83,6 +83,135 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          line_total: number
+          name: string
+          order_id: string
+          pack: string
+          price: number
+          product_id: string | null
+          qty: number
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          line_total?: number
+          name: string
+          order_id: string
+          pack?: string
+          price?: number
+          product_id?: string | null
+          qty?: number
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          line_total?: number
+          name?: string
+          order_id?: string
+          pack?: string
+          price?: number
+          product_id?: string | null
+          qty?: number
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          coupon: string | null
+          created_at: string
+          customer_name: string
+          delivery_fee: number
+          discount: number
+          email: string
+          id: string
+          notes: string | null
+          order_no: string
+          payment_method: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          phone: string
+          pincode: string
+          state: string
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal: number
+          total: number
+          tracking_note: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          city: string
+          coupon?: string | null
+          created_at?: string
+          customer_name: string
+          delivery_fee?: number
+          discount?: number
+          email?: string
+          id?: string
+          notes?: string | null
+          order_no?: string
+          payment_method?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone: string
+          pincode: string
+          state: string
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total?: number
+          tracking_note?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          coupon?: string | null
+          created_at?: string
+          customer_name?: string
+          delivery_fee?: number
+          discount?: number
+          email?: string
+          id?: string
+          notes?: string | null
+          order_no?: string
+          payment_method?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          phone?: string
+          pincode?: string
+          state?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal?: number
+          total?: number
+          tracking_note?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       prescriptions: {
         Row: {
           advice: string | null
@@ -133,6 +262,66 @@ export type Database = {
           },
         ]
       }
+      products: {
+        Row: {
+          brand: string
+          category: string
+          created_at: string
+          description: string
+          id: string
+          ingredients: string
+          is_active: boolean
+          mrp: number
+          name: string
+          pack: string
+          price: number
+          rating: number
+          reviews: number
+          slug: string
+          stock: number
+          updated_at: string
+          usage_instructions: string
+        }
+        Insert: {
+          brand?: string
+          category: string
+          created_at?: string
+          description?: string
+          id?: string
+          ingredients?: string
+          is_active?: boolean
+          mrp?: number
+          name: string
+          pack?: string
+          price?: number
+          rating?: number
+          reviews?: number
+          slug: string
+          stock?: number
+          updated_at?: string
+          usage_instructions?: string
+        }
+        Update: {
+          brand?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          ingredients?: string
+          is_active?: boolean
+          mrp?: number
+          name?: string
+          pack?: string
+          price?: number
+          rating?: number
+          reviews?: number
+          slug?: string
+          stock?: number
+          updated_at?: string
+          usage_instructions?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -166,6 +355,42 @@ export type Database = {
           id?: string
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      store_settings: {
+        Row: {
+          cod_enabled: boolean
+          cod_max_order: number
+          cod_min_order: number
+          delivery_fee: number
+          free_delivery_over: number
+          id: string
+          online_payment_enabled: boolean
+          updated_at: string
+          upi_enabled: boolean
+        }
+        Insert: {
+          cod_enabled?: boolean
+          cod_max_order?: number
+          cod_min_order?: number
+          delivery_fee?: number
+          free_delivery_over?: number
+          id?: string
+          online_payment_enabled?: boolean
+          updated_at?: string
+          upi_enabled?: boolean
+        }
+        Update: {
+          cod_enabled?: boolean
+          cod_max_order?: number
+          cod_min_order?: number
+          delivery_fee?: number
+          free_delivery_over?: number
+          id?: string
+          online_payment_enabled?: boolean
+          updated_at?: string
+          upi_enabled?: boolean
         }
         Relationships: []
       }
@@ -207,6 +432,13 @@ export type Database = {
       app_role: "patient" | "doctor" | "admin"
       appointment_status: "pending" | "confirmed" | "completed" | "cancelled"
       consultation_mode: "clinic" | "video" | "audio"
+      order_status:
+        | "placed"
+        | "confirmed"
+        | "packed"
+        | "shipped"
+        | "delivered"
+        | "cancelled"
       payment_status: "pending" | "paid" | "refunded" | "failed"
     }
     CompositeTypes: {
@@ -338,6 +570,14 @@ export const Constants = {
       app_role: ["patient", "doctor", "admin"],
       appointment_status: ["pending", "confirmed", "completed", "cancelled"],
       consultation_mode: ["clinic", "video", "audio"],
+      order_status: [
+        "placed",
+        "confirmed",
+        "packed",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ],
       payment_status: ["pending", "paid", "refunded", "failed"],
     },
   },
