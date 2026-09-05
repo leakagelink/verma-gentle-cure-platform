@@ -115,16 +115,16 @@ function BookAppointmentPage() {
 
   function validate(current: number) {
     const e: Record<string, string> = {};
-    if (current === 2 && !form.date) e.date = "Select a date to continue.";
-    if (current === 3 && !form.slot) e.slot = "Select a time slot to continue.";
+    if (current === 2 && !form.date) e["date"] = "Select a date to continue.";
+    if (current === 3 && !form.slot) e["slot"] = "Select a time slot to continue.";
     if (current === 4) {
-      if (form.fullName.trim().length < 3) e.fullName = "Enter your full name.";
+      if (form.fullName.trim().length < 3) e["fullName"] = "Enter your full name.";
       if (!/^[6-9]\d{9}$/.test(form.mobile.trim()))
-        e.mobile = "Enter a valid 10-digit Indian mobile number.";
-      if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) e.email = "Enter a valid email address.";
-      if (!form.dob) e.dob = "Enter your date of birth.";
-      if (!form.gender) e.gender = "Select a gender.";
-      if (form.concern.trim().length < 4) e.concern = "Describe your primary health concern.";
+        e["mobile"] = "Enter a valid 10-digit Indian mobile number.";
+      if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) e["email"] = "Enter a valid email address.";
+      if (!form.dob) e["dob"] = "Enter your date of birth.";
+      if (!form.gender) e["gender"] = "Select a gender.";
+      if (form.concern.trim().length < 4) e["concern"] = "Describe your primary health concern.";
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -239,7 +239,7 @@ function BookAppointmentPage() {
             )}
 
             {step === 2 && (
-              <Step title="Select date" error={errors.date}>
+              <Step title="Select date" error={errors["date"]}>
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                   {days.map((d) => (
                     <button
@@ -268,7 +268,7 @@ function BookAppointmentPage() {
             )}
 
             {step === 3 && (
-              <Step title="Select time slot" error={errors.slot}>
+              <Step title="Select time slot" error={errors["slot"]}>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {SLOTS.map((s, i) => {
                     const taken = i === 2;
@@ -297,14 +297,14 @@ function BookAppointmentPage() {
             {step === 4 && (
               <Step title="Patient & medical information">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Full name" error={errors.fullName}>
+                  <Field label="Full name" error={errors["fullName"]}>
                     <Input
                       value={form.fullName}
                       onChange={(e) => set("fullName", e.target.value)}
                       placeholder="Your full name"
                     />
                   </Field>
-                  <Field label="Gender" error={errors.gender}>
+                  <Field label="Gender" error={errors["gender"]}>
                     <div className="flex gap-2">
                       {["Female", "Male", "Other"].map((g) => (
                         <button
@@ -323,10 +323,10 @@ function BookAppointmentPage() {
                       ))}
                     </div>
                   </Field>
-                  <Field label="Date of birth" error={errors.dob}>
+                  <Field label="Date of birth" error={errors["dob"]}>
                     <Input type="date" value={form.dob} onChange={(e) => set("dob", e.target.value)} />
                   </Field>
-                  <Field label="Mobile number" error={errors.mobile}>
+                  <Field label="Mobile number" error={errors["mobile"]}>
                     <Input
                       inputMode="numeric"
                       value={form.mobile}
@@ -334,7 +334,7 @@ function BookAppointmentPage() {
                       placeholder="10-digit mobile"
                     />
                   </Field>
-                  <Field label="Email address" error={errors.email}>
+                  <Field label="Email address" error={errors["email"]}>
                     <Input
                       type="email"
                       value={form.email}
@@ -355,7 +355,7 @@ function BookAppointmentPage() {
                   Medical information
                 </h3>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  <Field label="Primary health concern" error={errors.concern}>
+                  <Field label="Primary health concern" error={errors["concern"]}>
                     <Input value={form.concern} onChange={(e) => set("concern", e.target.value)} />
                   </Field>
                   <Field label="Duration of concern">
@@ -555,7 +555,7 @@ function Step({
   children,
 }: {
   title: string;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
 }) {
   return (
@@ -574,8 +574,8 @@ function Field({
   children,
 }: {
   label: string;
-  error?: string;
-  className?: string;
+  error?: string | undefined;
+  className?: string | undefined;
   children: React.ReactNode;
 }) {
   return (
