@@ -8,12 +8,14 @@ import {
   type ReactNode,
 } from "react";
 
-import { MEDICINES, type Medicine } from "@/lib/shop-data";
+import { useProducts } from "@/lib/products";
+import { type Medicine } from "@/lib/shop-data";
 
 export type CartLine = { slug: string; qty: number };
 
 type CartContextValue = {
   lines: CartLine[];
+  products: Medicine[];
   items: { medicine: Medicine; qty: number }[];
   count: number;
   subtotal: number;
@@ -28,6 +30,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
+  const { products } = useProducts();
 
   useEffect(() => {
     try {
@@ -73,13 +76,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextValue>(() => {
     const items = lines
       .map((l) => {
-        const medicine = MEDICINES.find((m) => m.slug === l.slug);
+        const medicine = products.find((m) => m.slug === l.slug);
         return medicine ? { medicine, qty: l.qty } : null;
       })
       .filter((x): x is { medicine: Medicine; qty: number } => x !== null);
 
     return {
       lines,
+      products,
       items,
       count: items.reduce((n, i) => n + i.qty, 0),
       subtotal: items.reduce((n, i) => n + i.qty * i.medicine.price, 0),
@@ -88,7 +92,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       remove,
       clear,
     };
-  }, [lines, add, setQty, remove, clear]);
+  }, [lines, products, add, setQty, remove, clear]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
