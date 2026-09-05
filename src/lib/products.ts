@@ -85,6 +85,10 @@ export function useStoreSettings() {
   return { settings: query.data ?? DEFAULT_STORE_SETTINGS, isLoading: query.isLoading };
 }
 
+export const COUPON_STORAGE_KEY = "vgc.coupon.v1";
+
+export const COUPONS: Record<string, number> = { GENTLE10: 0.1, WELCOME5: 0.05 };
+
 export const ORDER_STATUS_FLOW: OrderStatus[] = [
   "placed",
   "confirmed",

@@ -7,6 +7,7 @@ import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/lib/cart-store";
+import { COUPONS, COUPON_STORAGE_KEY, useStoreSettings } from "@/lib/products";
 import { formatINR } from "@/lib/shop-data";
 
 export const Route = createFileRoute("/cart")({
@@ -28,17 +29,15 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
-export const DELIVERY_FEE = 49;
-export const FREE_DELIVERY_OVER = 799;
-const COUPONS: Record<string, number> = { GENTLE10: 0.1, WELCOME5: 0.05 };
-
 function CartPage() {
   const { items, subtotal, setQty, remove } = useCart();
   const [code, setCode] = useState("");
   const [applied, setApplied] = useState<{ code: string; rate: number } | null>(null);
+  const { settings } = useStoreSettings();
 
   const discount = applied ? Math.round(subtotal * applied.rate) : 0;
-  const delivery = subtotal === 0 || subtotal - discount >= FREE_DELIVERY_OVER ? 0 : DELIVERY_FEE;
+  const delivery =
+    subtotal === 0 || subtotal - discount >= settings.free_delivery_over ? 0 : settings.delivery_fee;
   const total = Math.max(0, subtotal - discount + delivery);
 
   return (
@@ -126,9 +125,19 @@ function CartPage() {
                 const rate = COUPONS[code];
                 if (rate) {
                   setApplied({ code, rate });
+                  try {
+                    localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify({ code, rate }));
+                  } catch {
+                    /* storage unavailable */
+                  }
                   toast.success(`Coupon ${code} applied`);
                 } else {
                   setApplied(null);
+                  try {
+                    localStorage.removeItem(COUPON_STORAGE_KEY);
+                  } catch {
+                    /* storage unavailable */
+                  }
                   toast.error("Invalid coupon code");
                 }
               }}
