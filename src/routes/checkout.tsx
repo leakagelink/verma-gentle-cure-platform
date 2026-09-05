@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
@@ -8,7 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart-store";
+import { COUPON_STORAGE_KEY, useStoreSettings, type PaymentMethod } from "@/lib/products";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
@@ -28,14 +31,16 @@ export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
 });
 
-const DELIVERY_FEE = 49;
-const FREE_DELIVERY_OVER = 799;
-const COD_ENABLED = true;
-
 function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
-  const [placed, setPlaced] = useState<string | null>(null);
-  const [method, setMethod] = useState<"online" | "upi" | "cod">("online");
+  const { user, loading } = useAuth();
+  const { settings } = useStoreSettings();
+  const navigate = useNavigate();
+
+  const [placed, setPlaced] = useState<{ orderNo: string; method: PaymentMethod } | null>(null);
+  const [method, setMethod] = useState<PaymentMethod>("cod");
+  const [saving, setSaving] = useState(false);
+  const [coupon, setCoupon] = useState<{ code: string; rate: number } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     name: "",
@@ -45,16 +50,49 @@ function CheckoutPage() {
     city: "",
     state: "",
     pincode: "",
+    notes: "",
   });
 
-  const delivery = subtotal >= FREE_DELIVERY_OVER || subtotal === 0 ? 0 : DELIVERY_FEE;
-  const total = subtotal + delivery;
-  const orderId = useMemo(
-    () => `VGC-ORD-${Math.floor(100000 + Math.random() * 899999)}`,
-    [],
-  );
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(COUPON_STORAGE_KEY);
+      if (raw) setCoupon(JSON.parse(raw) as { code: string; rate: number });
+    } catch {
+      /* ignore malformed storage */
+    }
+  }, []);
 
-  function placeOrder() {
+  useEffect(() => {
+    if (user?.email) setForm((f) => (f.email ? f : { ...f, email: user.email ?? "" }));
+  }, [user]);
+
+  // Keep the selected payment method valid for the current store configuration.
+  useEffect(() => {
+    const allowed: PaymentMethod[] = [];
+    if (settings.online_payment_enabled) allowed.push("online");
+    if (settings.upi_enabled) allowed.push("upi");
+    if (settings.cod_enabled) allowed.push("cod");
+    if (allowed.length > 0 && !allowed.includes(method)) setMethod(allowed[0] as PaymentMethod);
+  }, [settings, method]);
+
+  const discount = coupon ? Math.round(subtotal * coupon.rate) : 0;
+  const payable = Math.max(0, subtotal - discount);
+  const delivery =
+    subtotal === 0 || payable >= settings.free_delivery_over ? 0 : settings.delivery_fee;
+  const total = payable + delivery;
+
+  const codBlocked =
+    !settings.cod_enabled ||
+    total < settings.cod_min_order ||
+    total > settings.cod_max_order;
+
+  async function placeOrder() {
+    if (!user) {
+      toast.error("Please sign in to place your order.");
+      void navigate({ to: "/auth" });
+      return;
+    }
+
     const e: Record<string, string> = {};
     if (form.name.trim().length < 3) e["name"] = "Enter your full name.";
     if (!/^[6-9]\d{9}$/.test(form.mobile.trim())) e["mobile"] = "Enter a valid mobile number.";
@@ -68,8 +106,65 @@ function CheckoutPage() {
       toast.error("Please complete the highlighted fields.");
       return;
     }
-    setPlaced(orderId);
+    if (method === "cod" && codBlocked) {
+      toast.error("Cash on delivery is not available for this order.");
+      return;
+    }
+
+    setSaving(true);
+    const { data: order, error } = await supabase
+      .from("orders")
+      .insert({
+        user_id: user.id,
+        customer_name: form.name.trim(),
+        phone: form.mobile.trim(),
+        email: form.email.trim(),
+        address: form.address.trim(),
+        city: form.city.trim(),
+        state: form.state.trim(),
+        pincode: form.pincode.trim(),
+        payment_method: method,
+        payment_status: "pending",
+        status: "placed",
+        subtotal,
+        discount,
+        delivery_fee: delivery,
+        total,
+        coupon: coupon?.code ?? null,
+        notes: form.notes.trim() || null,
+      })
+      .select("id, order_no")
+      .single();
+
+    if (error || !order) {
+      setSaving(false);
+      toast.error("We could not place your order. Please try again.");
+      return;
+    }
+
+    const { error: itemsError } = await supabase.from("order_items").insert(
+      items.map(({ medicine, qty }) => ({
+        order_id: order.id,
+        slug: medicine.slug,
+        name: medicine.name,
+        pack: medicine.pack,
+        price: medicine.price,
+        qty,
+        line_total: medicine.price * qty,
+      })),
+    );
+    setSaving(false);
+    if (itemsError) {
+      toast.error("Order saved, but some items could not be added. Our team will call you.");
+    }
+
+    setPlaced({ orderNo: order.order_no, method });
     clear();
+    try {
+      localStorage.removeItem(COUPON_STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
     toast.success("Order placed");
   }
 
@@ -81,15 +176,15 @@ function CheckoutPage() {
         </span>
         <h1 className="mt-5 text-3xl text-navy">Order placed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Order ID <strong className="text-navy">{placed}</strong> · Payment status:{" "}
-          {method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
+          Order ID <strong className="text-navy">{placed.orderNo}</strong> · Payment status:{" "}
+          {placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild className="rounded-full">
-            <Link to="/medicines">Continue shopping</Link>
+            <Link to="/orders">Track my orders</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
-            <Link to="/">Go home</Link>
+            <Link to="/medicines">Continue shopping</Link>
           </Button>
         </div>
       </section>
@@ -107,11 +202,45 @@ function CheckoutPage() {
     );
   }
 
+  const methodOptions: { value: PaymentMethod; title: string; body: string; disabled: boolean }[] = [
+    {
+      value: "online",
+      title: "Online payment",
+      body: settings.online_payment_enabled ? "Card / Netbanking" : "Not enabled yet",
+      disabled: !settings.online_payment_enabled,
+    },
+    {
+      value: "upi",
+      title: "UPI",
+      body: settings.upi_enabled ? "Any UPI app" : "Not enabled yet",
+      disabled: !settings.upi_enabled,
+    },
+    {
+      value: "cod",
+      title: "Cash on Delivery",
+      body: settings.cod_enabled
+        ? codBlocked
+          ? `Available for orders ${formatINR(settings.cod_min_order)}–${formatINR(settings.cod_max_order)}`
+          : "Pay the delivery partner"
+        : "Currently turned off",
+      disabled: codBlocked,
+    },
+  ];
+
   return (
     <>
       <PageHero eyebrow="Checkout" title="Delivery details" />
       <section className="container-page grid gap-8 py-12 lg:grid-cols-[1.4fr_0.6fr]">
         <div className="card-premium p-6 lg:p-8">
+          {!loading && !user && (
+            <div className="mb-6 rounded-2xl border border-border surface-ivory p-4 text-sm text-muted-foreground">
+              Please{" "}
+              <Link to="/auth" className="font-semibold text-leaf underline">
+                sign in
+              </Link>{" "}
+              so your order is saved to your account and you can track it.
+            </div>
+          )}
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Full name" error={errors["name"]}>
               <Input
@@ -159,37 +288,39 @@ function CheckoutPage() {
                 onChange={(e) => setForm({ ...form, pincode: e.target.value })}
               />
             </Field>
+            <Field label="Delivery notes (optional)" className="sm:col-span-2">
+              <Textarea
+                rows={2}
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                placeholder="Landmark, preferred delivery time, etc."
+              />
+            </Field>
           </div>
 
           <h2 className="mt-8 text-sm font-semibold uppercase tracking-[0.18em] text-leaf">
             Payment method
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            {(
-              [
-                ["online", "Online payment", "Card / Netbanking"],
-                ["upi", "UPI", "Any UPI app"],
-                ["cod", "Cash on Delivery", COD_ENABLED ? "Available" : "Disabled by clinic"],
-              ] as const
-            ).map(([value, title, body]) => (
+            {methodOptions.map((option) => (
               <button
-                key={value}
+                key={option.value}
                 type="button"
-                disabled={value === "cod" && !COD_ENABLED}
-                onClick={() => setMethod(value)}
+                disabled={option.disabled}
+                onClick={() => setMethod(option.value)}
                 className={cn(
                   "rounded-2xl border p-4 text-left disabled:opacity-40",
-                  method === value ? "border-leaf bg-mint/50" : "border-border",
+                  method === option.value ? "border-leaf bg-mint/50" : "border-border",
                 )}
               >
-                <p className="font-semibold text-navy">{title}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{body}</p>
+                <p className="font-semibold text-navy">{option.title}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{option.body}</p>
               </button>
             ))}
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            Online payment credentials are not configured yet, so online and UPI orders are recorded
-            with payment status Pending until the gateway is connected.
+            Payment options are managed by the clinic. Orders paid online or by UPI are recorded with
+            payment status Pending until the gateway is connected.
           </p>
         </div>
 
@@ -210,6 +341,12 @@ function CheckoutPage() {
               <dt className="text-muted-foreground">Subtotal</dt>
               <dd className="text-navy">{formatINR(subtotal)}</dd>
             </div>
+            {discount > 0 && (
+              <div className="flex justify-between">
+                <dt className="text-muted-foreground">Coupon {coupon?.code}</dt>
+                <dd className="text-forest">− {formatINR(discount)}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-muted-foreground">Delivery</dt>
               <dd className="text-navy">{delivery ? formatINR(delivery) : "Free"}</dd>
@@ -219,8 +356,12 @@ function CheckoutPage() {
             <span className="font-sans text-sm text-muted-foreground">Total</span>
             {formatINR(total)}
           </p>
-          <Button className="mt-6 h-12 w-full rounded-full" onClick={placeOrder}>
-            Place order
+          <Button
+            className="mt-6 h-12 w-full rounded-full"
+            onClick={() => void placeOrder()}
+            disabled={saving}
+          >
+            {saving ? "Placing order…" : "Place order"}
           </Button>
         </aside>
       </section>
