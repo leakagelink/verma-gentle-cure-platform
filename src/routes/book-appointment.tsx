@@ -138,12 +138,58 @@ function BookAppointmentPage() {
     return Object.keys(e).length === 0;
   }
 
+  async function confirmAppointment() {
+    if (!user) {
+      toast.error("Please sign in to confirm your appointment.");
+      navigate({ to: "/auth" });
+      return;
+    }
+    setSaving(true);
+    const { data, error } = await supabase
+      .from("appointments")
+      .insert({
+        patient_id: user.id,
+        patient_name: form.fullName.trim(),
+        phone: form.mobile.trim(),
+        email: form.email.trim(),
+        date_of_birth: form.dob,
+        gender: form.gender,
+        mode: form.mode,
+        appointment_date: form.date,
+        slot: form.slot,
+        concern: [form.concern, form.symptoms, form.duration, form.notes]
+          .filter((part) => part.trim().length > 0)
+          .join("\n\n"),
+        medical_history: form.previousTreatment || null,
+        current_medication: form.currentMedicines || null,
+        allergies: form.allergies || null,
+        fee,
+        status: "pending",
+        payment_status: "pending",
+      })
+      .select("id")
+      .single();
+    setSaving(false);
+
+    if (error || !data) {
+      toast.error("We could not save your appointment. Please try again.");
+      return;
+    }
+
+    setAppointmentId(`VGC-${data.id.slice(0, 8).toUpperCase()}`);
+    toast.success("Appointment requested");
+    setStep(7);
+  }
+
   function goNext() {
     if (!validate(step)) {
       toast.error("Please complete the highlighted fields.");
       return;
     }
-    if (step === 6) toast.success("Appointment confirmed");
+    if (step === 6) {
+      void confirmAppointment();
+      return;
+    }
     setStep((s) => Math.min(s + 1, 7));
   }
 
