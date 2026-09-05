@@ -31,6 +31,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as MedicinesIndexRouteImport } from './routes/medicines.index'
 import { Route as MedicinesSlugRouteImport } from './routes/medicines.$slug'
+import { Route as PrescriptionsIdRouteImport } from './routes/prescriptions.$id'
 import { Route as MedicinesCategorySlugRouteImport } from './routes/medicines.category.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -143,6 +144,11 @@ const MedicinesSlugRoute = MedicinesSlugRouteImport.update({
   path: '/medicines/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrescriptionsIdRoute = PrescriptionsIdRouteImport.update({
+  id: '/prescriptions/$id',
+  path: '/prescriptions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
   id: '/medicines/category/$slug',
   path: '/medicines/category/$slug',
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/prescriptions/$id': typeof PrescriptionsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -195,6 +202,7 @@ export interface FileRoutesByTo {
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/prescriptions/$id': typeof PrescriptionsIdRoute
   '/blog': typeof BlogIndexRoute
   '/medicines': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
+  '/prescriptions/$id': typeof PrescriptionsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -248,6 +257,7 @@ export interface FileRouteTypes {
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
+    | '/prescriptions/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
+    | '/prescriptions/$id'
     | '/blog'
     | '/medicines'
     | '/medicines/category/$slug'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
+    | '/prescriptions/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
@@ -324,6 +336,7 @@ export interface RootRouteChildren {
   TreatmentsRoute: typeof TreatmentsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   MedicinesSlugRoute: typeof MedicinesSlugRoute
+  PrescriptionsIdRoute: typeof PrescriptionsIdRoute
   BlogIndexRoute: typeof BlogIndexRoute
   MedicinesIndexRoute: typeof MedicinesIndexRoute
   MedicinesCategorySlugRoute: typeof MedicinesCategorySlugRoute
@@ -485,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MedicinesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prescriptions/$id': {
+      id: '/prescriptions/$id'
+      path: '/prescriptions/$id'
+      fullPath: '/prescriptions/$id'
+      preLoaderRoute: typeof PrescriptionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/medicines/category/$slug': {
       id: '/medicines/category/$slug'
       path: '/medicines/category/$slug'
@@ -516,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   TreatmentsRoute: TreatmentsRoute,
   BlogSlugRoute: BlogSlugRoute,
   MedicinesSlugRoute: MedicinesSlugRoute,
+  PrescriptionsIdRoute: PrescriptionsIdRoute,
   BlogIndexRoute: BlogIndexRoute,
   MedicinesIndexRoute: MedicinesIndexRoute,
   MedicinesCategorySlugRoute: MedicinesCategorySlugRoute,
