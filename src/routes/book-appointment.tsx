@@ -528,6 +528,15 @@ function BookAppointmentPage() {
                   appointment with payment status <strong className="text-navy">Pending</strong>.
                 </p>
                 <p className="mt-4 font-display text-2xl text-navy">Payable: {formatINR(fee)}</p>
+                {!authLoading && !user && (
+                  <p className="mt-4 rounded-xl border border-leaf/40 bg-mint/40 p-4 text-sm text-forest">
+                    Please{" "}
+                    <Link to="/auth" className="font-semibold underline">
+                      sign in or create an account
+                    </Link>{" "}
+                    so your appointment and prescriptions stay saved in your private patient record.
+                  </p>
+                )}
               </Step>
             )}
 
