@@ -100,15 +100,20 @@ function nextDays(count: number) {
 }
 
 function BookAppointmentPage() {
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Form>(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const [appointmentId, setAppointmentId] = useState("");
   const days = useMemo(() => nextDays(12), []);
   const fee = form.type === "new" ? CONSULT_FEES.new : CONSULT_FEES.followUp;
-  const appointmentId = useMemo(
-    () => `VGC-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 899999)}`,
-    [],
-  );
+
+  useEffect(() => {
+    if (!user) return;
+    setForm((f) => (f.email ? f : { ...f, email: user.email ?? "" }));
+  }, [user]);
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
