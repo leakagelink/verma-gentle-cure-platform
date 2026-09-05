@@ -6,14 +6,15 @@
 - [x] Public site: home (12 sections), about doctor, services, consultation, treatments, blog + article,
       FAQ, contact, shop + category + product, cart, checkout, 4 legal pages
 - [x] Per-route SEO metadata, canonical links, JSON-LD
-- [ ] Replace placeholder wordmark with the official logo file (awaiting upload)
-- [ ] Enable Lovable Cloud: auth (patient/doctor/admin roles), database schema, RLS, secure storage buckets
+- [x] Replace placeholder wordmark with the official logo file
+- [x] Enable Lovable Cloud: auth (patient/doctor/admin roles), database schema, RLS, secure storage buckets
 
-## Phase 2 — Consultation platform
-- [ ] Persist appointments + uploads to the database
-- [ ] Patient dashboard (appointments, prescriptions, reports, orders, addresses, notifications)
-- [ ] Doctor dashboard + consultation room UI
-- [ ] Digital prescriptions with printable layout
+## Phase 2 — Consultation platform (done)
+- [x] Persist appointments to the database
+- [x] Patient dashboard (appointments, status, cancel, prescriptions)
+- [x] Doctor dashboard (confirm / complete / notes / issue prescription)
+- [x] Digital prescriptions with printable layout (/prescriptions/:id)
+- [ ] File uploads (reports) — moves to Phase 3 with storage buckets
 
 ## Phase 3 — Commerce
 - [ ] Products, cart and orders in the database
