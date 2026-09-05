@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
@@ -48,6 +49,11 @@ const AboutDoctorRoute = AboutDoctorRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppointmentsRoute = AppointmentsRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -192,6 +199,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -220,6 +228,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -249,6 +258,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -331,6 +343,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
   AccountRoute: typeof AccountRoute
+  AdminRoute: typeof AdminRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
@@ -376,6 +389,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appointments': {
@@ -539,6 +559,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutDoctorRoute: AboutDoctorRoute,
   AccountRoute: AccountRoute,
+  AdminRoute: AdminRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
   BookAppointmentRoute: BookAppointmentRoute,
