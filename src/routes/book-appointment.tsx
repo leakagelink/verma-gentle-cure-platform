@@ -545,7 +545,7 @@ function BookAppointmentPage() {
                 <span className="mx-auto grid size-14 place-items-center rounded-full bg-mint text-forest">
                   <Check className="size-7" />
                 </span>
-                <h2 className="mt-5 text-2xl text-navy">Appointment confirmed</h2>
+                <h2 className="mt-5 text-2xl text-navy">Appointment requested</h2>
                 <dl className="mx-auto mt-6 max-w-md divide-y divide-border rounded-2xl border border-border text-left">
                   {[
                     ["Appointment ID", appointmentId],
@@ -563,7 +563,7 @@ function BookAppointmentPage() {
                 </dl>
                 <div className="mt-7 flex flex-wrap justify-center gap-3">
                   <Button asChild className="rounded-full">
-                    <Link to="/consultation">View consultation details</Link>
+                    <Link to="/appointments">View my appointments</Link>
                   </Button>
                   <Button asChild variant="outline" className="rounded-full">
                     <Link to="/">Go to home</Link>
@@ -582,8 +582,8 @@ function BookAppointmentPage() {
                 >
                   <ChevronLeft className="size-4" /> Back
                 </Button>
-                <Button className="h-12 rounded-full px-6" onClick={goNext}>
-                  {step === 6 ? "Confirm appointment" : "Continue"}
+                <Button className="h-12 rounded-full px-6" onClick={goNext} disabled={saving}>
+                  {step === 6 ? (saving ? "Saving…" : "Confirm appointment") : "Continue"}
                   <ChevronRight className="size-4" />
                 </Button>
               </div>
