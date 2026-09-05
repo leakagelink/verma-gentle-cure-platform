@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
@@ -21,6 +22,7 @@ import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -47,6 +49,11 @@ const AboutDoctorRoute = AboutDoctorRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppointmentsRoute = AppointmentsRouteImport.update({
@@ -92,6 +99,11 @@ const DoctorRoute = DoctorRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
@@ -159,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -168,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
@@ -185,6 +199,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -194,6 +209,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
@@ -212,6 +228,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about-doctor': typeof AboutDoctorRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
@@ -221,6 +238,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
@@ -240,6 +258,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -249,6 +268,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
@@ -266,6 +286,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -275,6 +296,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
@@ -292,6 +314,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about-doctor'
     | '/account'
+    | '/admin'
     | '/appointments'
     | '/auth'
     | '/book-appointment'
@@ -301,6 +324,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
@@ -319,6 +343,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
   AccountRoute: typeof AccountRoute
+  AdminRoute: typeof AdminRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
@@ -328,6 +353,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
+  OrdersRoute: typeof OrdersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ServicesRoute: typeof ServicesRoute
@@ -363,6 +389,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appointments': {
@@ -426,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy-policy': {
@@ -519,6 +559,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutDoctorRoute: AboutDoctorRoute,
   AccountRoute: AccountRoute,
+  AdminRoute: AdminRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
   BookAppointmentRoute: BookAppointmentRoute,
@@ -528,6 +569,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
+  OrdersRoute: OrdersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ServicesRoute: ServicesRoute,

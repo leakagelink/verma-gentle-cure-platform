@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { StockBadge } from "@/components/shop/MedicineCard";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
+import { useProduct } from "@/lib/products";
 import { MEDICINES, MEDICINE_CATEGORIES, PRODUCT_DISCLAIMER, formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +45,9 @@ export const Route = createFileRoute("/medicines/$slug")({
 });
 
 function ProductPage() {
-  const { medicine } = Route.useLoaderData();
+  const { medicine: seed } = Route.useLoaderData();
+  const { product } = useProduct(seed.slug);
+  const medicine = product ?? seed;
   const { add } = useCart();
   const [qty, setQty] = useState(1);
   const [activeImage, setActiveImage] = useState(0);

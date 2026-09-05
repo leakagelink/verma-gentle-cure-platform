@@ -209,6 +209,15 @@ function AccountPage() {
               </span>
             </span>
           </Link>
+          <Link to="/orders" className="card-premium flex items-center gap-3 p-5">
+            <Package className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">My orders</span>
+              <span className="block text-sm text-muted-foreground">
+                Track medicine orders and delivery status
+              </span>
+            </span>
+          </Link>
           {isCareTeam && (
             <Link to="/doctor" className="card-premium flex items-center gap-3 p-5">
               <Stethoscope className="size-5 text-leaf" />
@@ -216,6 +225,17 @@ function AccountPage() {
                 <span className="block font-semibold">Doctor dashboard</span>
                 <span className="block text-sm text-muted-foreground">
                   Review requests and issue prescriptions
+                </span>
+              </span>
+            </Link>
+          )}
+          {isCareTeam && (
+            <Link to="/admin" className="card-premium flex items-center gap-3 p-5">
+              <Package className="size-5 text-leaf" />
+              <span>
+                <span className="block font-semibold">Store admin</span>
+                <span className="block text-sm text-muted-foreground">
+                  Manage orders, delivery and payment options
                 </span>
               </span>
             </Link>
@@ -243,9 +263,9 @@ function AccountPage() {
           </Link>
           <p className="flex gap-2 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-leaf" />
-            Only you can see your profile, appointments and prescriptions. Order tracking appears
-            here as that module goes live.
+            Only you can see your profile, appointments, prescriptions and orders.
           </p>
+
         </div>
       </div>
     </section>
