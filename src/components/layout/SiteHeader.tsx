@@ -41,9 +41,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <Button asChild variant="ghost" size="icon" className="rounded-full">
-            <Link to="/cart" aria-label="Shopping cart">
+          <Button asChild variant="ghost" size="icon" className="relative rounded-full">
+            <Link to="/cart" aria-label={`Shopping cart, ${count} items`}>
               <ShoppingBag className="size-5" />
+              {count > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 grid min-w-5 place-items-center rounded-full bg-leaf px-1 text-[0.62rem] font-bold text-leaf-foreground">
+                  {count}
+                </span>
+              )}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex">
