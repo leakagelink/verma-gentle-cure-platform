@@ -19,6 +19,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
@@ -80,6 +81,11 @@ const ConsultationRoute = ConsultationRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorRoute = DoctorRouteImport.update({
+  id: '/doctor',
+  path: '/doctor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/doctor'
     | '/faq'
     | '/privacy-policy'
     | '/refund-policy'
@@ -302,6 +314,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
+  DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
@@ -386,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/doctor': {
+      id: '/doctor'
+      path: '/doctor'
+      fullPath: '/doctor'
+      preLoaderRoute: typeof DoctorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -486,6 +506,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
+  DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
