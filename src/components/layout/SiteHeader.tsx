@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/cart-store";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -18,6 +19,7 @@ const NAV = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
@@ -41,9 +43,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          <Button asChild variant="ghost" size="icon" className="rounded-full">
-            <Link to="/cart" aria-label="Shopping cart">
+          <Button asChild variant="ghost" size="icon" className="relative rounded-full">
+            <Link to="/cart" aria-label={`Shopping cart, ${count} items`}>
               <ShoppingBag className="size-5" />
+              {count > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 grid min-w-5 place-items-center rounded-full bg-leaf px-1 text-[0.62rem] font-bold text-leaf-foreground">
+                  {count}
+                </span>
+              )}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex">
