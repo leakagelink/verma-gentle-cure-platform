@@ -7,6 +7,7 @@ import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/lib/cart-store";
+import { productImage } from "@/lib/product-images";
 import { COUPONS, COUPON_STORAGE_KEY, useStoreSettings } from "@/lib/products";
 import { formatINR } from "@/lib/shop-data";
 
