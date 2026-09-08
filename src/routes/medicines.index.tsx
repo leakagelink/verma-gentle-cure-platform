@@ -138,14 +138,14 @@ function ShopPage() {
             {filters}
           </aside>
 
-          <div className="min-w-0">
-            <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
-              <p className="truncate text-sm text-muted-foreground">
+          <div className="min-w-0 max-w-full overflow-hidden">
+            <div className="flex min-w-0 items-center gap-2 sm:flex-wrap sm:justify-between sm:gap-3">
+              <p className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
                 {results.length} {results.length === 1 ? "product" : "products"}
               </p>
               <Drawer>
                 <DrawerTrigger asChild>
-                  <Button variant="outline" className="h-10 rounded-full px-3 lg:hidden">
+                  <Button variant="outline" className="h-10 shrink-0 rounded-full px-3 lg:hidden">
                     <SlidersHorizontal className="size-4" /> Filters
                   </Button>
                 </DrawerTrigger>
@@ -162,12 +162,12 @@ function ShopPage() {
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
-              <div className="flex items-center gap-2">
+              <div className="w-28 shrink-0 sm:w-auto">
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as typeof sort)}
                   aria-label="Sort products"
-                  className="min-h-10 max-w-32 rounded-full border border-border bg-card px-3 text-sm text-navy sm:max-w-none sm:px-4"
+                  className="min-h-10 w-full min-w-0 rounded-full border border-border bg-card px-2 text-xs text-navy sm:w-auto sm:px-4 sm:text-sm"
                 >
                   {SORTS.map((s) => (
                     <option key={s.key} value={s.key}>
