@@ -24,6 +24,14 @@
 - [ ] Payment gateway integration layer (Razorpay / Cashfree / UPI) once credentials are supplied
 - [ ] File uploads (reports) with storage buckets
 
+## Mobile app experience (done)
+- [x] Compact app header, secondary navigation sheet and safe-area-aware bottom tabs
+- [x] Short mobile page introductions and hidden desktop footer on phones
+- [x] Two-column medicine browsing with filter sheet and touch-friendly product cards
+- [x] Compact booking progress with sticky action controls
+- [x] Mobile-optimized account, appointment and order layouts
+- [x] Standalone web-app manifest and mobile device metadata
+
 
 ## Phase 4 — Admin & operations
 - [ ] Admin dashboard with charts and all management modules
