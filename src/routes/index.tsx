@@ -17,6 +17,7 @@ import {
 
 import heroImage from "@/assets/hero-remedies.jpg";
 import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import { MobileHome } from "@/components/home/MobileHome";
 import { SectionHeading } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
 import {
