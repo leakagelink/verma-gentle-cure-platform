@@ -49,7 +49,7 @@ export function MobileHome() {
               delivered to your door.
             </p>
             <div className="mt-4 flex gap-2">
-              <Button asChild className="h-11 flex-1 rounded-xl text-sm">
+              <Button asChild className="h-11 flex-1 rounded-xl bg-lime text-sm font-semibold text-navy hover:bg-lime/90">
                 <Link to="/book-appointment">
                   Book consultation <ArrowRight className="size-4" />
                 </Link>
