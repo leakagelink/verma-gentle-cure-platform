@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
+import { productImage } from "@/lib/product-images";
 import { formatINR, stockStatus, type Medicine } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
@@ -32,9 +33,18 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
       <Link
         to="/medicines/$slug"
         params={{ slug: medicine.slug }}
-        className="block h-28 gradient-leaf sm:h-40"
+        className="block h-28 overflow-hidden surface-ivory sm:h-40"
         aria-label={medicine.name}
-      />
+      >
+        <img
+          src={productImage(medicine.category)}
+          alt={medicine.name}
+          loading="lazy"
+          width={800}
+          height={800}
+          className="size-full object-cover"
+        />
+      </Link>
       <div className="flex flex-1 flex-col p-3 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <p className="truncate text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-leaf sm:text-xs sm:tracking-[0.16em]">
