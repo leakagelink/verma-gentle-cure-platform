@@ -100,8 +100,8 @@ function AppointmentsPage() {
         description="Everything from your consultations in one private, access-controlled place."
       />
 
-      <section className="container-page py-12">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <section className="container-page py-6 sm:py-12">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:flex-wrap sm:justify-between">
           <h2 className="flex items-center gap-2 text-xl text-navy">
             <CalendarDays className="size-5 text-leaf" /> Appointments
           </h2>
@@ -119,9 +119,9 @@ function AppointmentsPage() {
         ) : (
           <ul className="mt-6 grid gap-4">
             {appointments.map((appt) => (
-              <li key={appt.id} className="card-premium p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
+              <li key={appt.id} className="card-premium p-4 sm:p-6">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                  <div className="min-w-0">
                     <p className="font-display text-lg text-navy">
                       {formatDateLong(appt.appointment_date)} · {appt.slot}
                     </p>

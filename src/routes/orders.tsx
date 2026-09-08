@@ -83,7 +83,7 @@ function OrdersPage() {
         title="Order history & delivery status"
         description="Every medicine order placed from your account, with its current delivery and payment status."
       />
-      <section className="container-page py-12">
+      <section className="container-page py-6 sm:py-12">
         {busy ? (
           <p className="text-sm text-muted-foreground">Loading your orders…</p>
         ) : orders.length === 0 ? (
@@ -100,9 +100,9 @@ function OrdersPage() {
         ) : (
           <div className="space-y-5">
             {orders.map((order) => (
-              <article key={order.id} className="card-premium p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
+              <article key={order.id} className="card-premium p-4 sm:p-6">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                  <div className="min-w-0">
                     <p className="font-display text-xl text-navy">{order.order_no}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Placed on {formatOrderDate(order.created_at)} ·{" "}

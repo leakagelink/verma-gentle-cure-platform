@@ -123,29 +123,31 @@ function AccountPage() {
   }
 
   return (
-    <section className="container-page max-w-5xl py-12 lg:py-16">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-3xl">My account</h1>
+    <section className="container-page max-w-5xl py-6 sm:py-12 lg:py-16">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:flex-wrap sm:justify-between sm:gap-4">
+        <div className="min-w-0">
+          <h1 className="truncate text-2xl sm:text-3xl">My account</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Signed in as {user.email} · {role}
+            <span className="block truncate">{user.email}</span>
+            <span className="capitalize">{role}</span>
           </p>
         </div>
         <Button
           variant="outline"
-          className="rounded-full"
+          size="icon"
+          className="shrink-0 rounded-full sm:w-auto sm:px-4"
           onClick={async () => {
             await signOut();
             toast.success("Signed out.");
             void navigate({ to: "/" });
           }}
         >
-          <LogOut className="size-4" /> Sign out
+          <LogOut className="size-4" /> <span className="hidden sm:inline">Sign out</span>
         </Button>
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <form onSubmit={save} className="card-premium space-y-4 p-6">
+        <form onSubmit={save} className="card-premium space-y-4 p-5 sm:p-6">
           <h2 className="text-xl">Your details</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
