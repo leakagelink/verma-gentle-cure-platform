@@ -201,13 +201,13 @@ function BookAppointmentPage() {
         description="Eight quick steps. Your medical information stays private and access-controlled."
       />
 
-      <section className="container-page py-12">
-        <ol className="flex flex-wrap gap-2" aria-label="Booking progress">
+      <section className="container-page py-5 sm:py-10 lg:py-12">
+        <ol className="hide-scrollbar -mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" aria-label="Booking progress">
           {STEP_LABELS.map((label, i) => (
             <li
               key={label}
               className={cn(
-                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium",
+                "flex shrink-0 snap-start items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium",
                 i === step && "border-leaf bg-mint text-forest",
                 i < step && "border-transparent bg-forest text-forest-foreground",
                 i > step && "border-border text-muted-foreground",
@@ -219,8 +219,8 @@ function BookAppointmentPage() {
           ))}
         </ol>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_0.6fr]">
-          <div className="card-premium p-6 lg:p-8">
+        <div className="mt-5 grid gap-8 sm:mt-8 lg:grid-cols-[1.4fr_0.6fr]">
+          <div className="px-1 py-3 sm:card-premium sm:p-6 lg:p-8">
             {step === 0 && (
               <Step title="Choose consultation type">
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -573,7 +573,7 @@ function BookAppointmentPage() {
             )}
 
             {step < 7 && (
-              <div className="mt-8 flex items-center justify-between gap-3 border-t border-border pt-6">
+              <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 -mx-4 mt-8 flex items-center justify-between gap-3 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-xl sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-6">
                 <Button
                   variant="ghost"
                   className="rounded-full"
@@ -590,7 +590,7 @@ function BookAppointmentPage() {
             )}
           </div>
 
-          <aside className="h-fit rounded-3xl border border-border surface-ivory p-6 lg:sticky lg:top-24">
+          <aside className="hidden h-fit rounded-3xl border border-border surface-ivory p-6 lg:sticky lg:top-24 lg:block">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
               Your booking
             </p>

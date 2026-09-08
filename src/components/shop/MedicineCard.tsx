@@ -32,37 +32,37 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
       <Link
         to="/medicines/$slug"
         params={{ slug: medicine.slug }}
-        className="block h-40 gradient-leaf"
+        className="block h-28 gradient-leaf sm:h-40"
         aria-label={medicine.name}
       />
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-3 sm:p-5">
         <div className="flex items-start justify-between gap-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-leaf">
+          <p className="truncate text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-leaf sm:text-xs sm:tracking-[0.16em]">
             {medicine.brand}
           </p>
           <StockBadge stock={medicine.stock} />
         </div>
-        <h3 className="mt-2 text-base font-semibold leading-snug text-navy">
+        <h3 className="mt-2 line-clamp-2 min-h-10 text-sm font-semibold leading-snug text-navy sm:min-h-0 sm:text-base">
           <Link to="/medicines/$slug" params={{ slug: medicine.slug }}>
             {medicine.name}
           </Link>
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{medicine.pack}</p>
-        <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+        <p className="mt-2 hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
           <Star className="size-3.5 fill-lime text-lime" />
           {medicine.rating} · {medicine.reviews} reviews
         </p>
         <div className="mt-4 flex flex-1 items-end justify-between gap-3">
           <div>
-            <p className="font-display text-xl text-navy">{formatINR(medicine.price)}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="font-display text-lg text-navy sm:text-xl">{formatINR(medicine.price)}</p>
+            <p className="text-[0.65rem] text-muted-foreground sm:text-xs">
               <s>{formatINR(medicine.mrp)}</s> · {discount}% off
             </p>
           </div>
         </div>
-        <div className="mt-4 flex gap-2">
+        <div className="mt-3 flex gap-2 sm:mt-4">
           <Button
-            className="h-11 flex-1 rounded-full"
+            className="h-10 flex-1 rounded-xl px-2 text-xs sm:h-11 sm:rounded-full sm:px-4 sm:text-sm"
             disabled={medicine.stock === 0}
             onClick={() => {
               add(medicine.slug);
@@ -71,7 +71,7 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
           >
             Add to cart
           </Button>
-          <Button asChild variant="outline" className="h-11 rounded-full">
+          <Button asChild variant="outline" className="hidden h-11 rounded-full sm:inline-flex">
             <Link to="/medicines/$slug" params={{ slug: medicine.slug }}>
               View
             </Link>

@@ -15,7 +15,7 @@ export function MobileTabBar() {
   return (
     <nav
       aria-label="App navigation"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-border/80 bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_-20px_var(--navy)] backdrop-blur-xl lg:hidden"
     >
       <ul className="grid grid-cols-5">
         {TABS.map(({ to, label, icon: Icon, exact }) => (
@@ -23,10 +23,12 @@ export function MobileTabBar() {
             <Link
               to={to}
               activeOptions={{ exact }}
-              className="flex min-h-14 flex-col items-center justify-center gap-1 px-1 py-2 text-[0.65rem] font-medium text-muted-foreground transition-colors"
-              activeProps={{ className: "text-navy" }}
+              className="group flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-1.5 text-[0.65rem] font-medium text-muted-foreground transition-colors active:scale-95"
+              activeProps={{ className: "text-forest" }}
             >
-              <Icon className="size-5" />
+              <span className="grid h-7 min-w-12 place-items-center rounded-full transition-colors group-data-[status=active]:bg-mint">
+                <Icon className="size-5" />
+              </span>
               <span className="truncate">{label}</span>
             </Link>
           </li>

@@ -1,0 +1,19 @@
+{
+  "name": "Verma Gentle Cure",
+  "short_name": "Gentle Cure",
+  "description": "Homeopathic consultations, appointments, prescriptions and medicine orders.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8F7EF",
+  "theme_color": "#063B52",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -94,6 +94,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#063B52" },
+      { name: "application-name", content: "Verma Gentle Cure" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Gentle Cure" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -105,6 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
   shellComponent: RootShell,
@@ -136,7 +141,7 @@ function RootComponent() {
         <CartProvider>
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            <main className="flex-1 pb-20 lg:pb-0">
+            <main className="flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
               {/* Required: nested routes render here. */}
               <Outlet />
             </main>

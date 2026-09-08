@@ -23,7 +23,7 @@ const LEGAL = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border surface-ivory">
+    <footer className="mt-24 hidden border-t border-border surface-ivory lg:block">
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
           <Logo />

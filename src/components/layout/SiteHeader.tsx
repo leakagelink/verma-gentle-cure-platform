@@ -4,7 +4,15 @@ import { useState } from "react";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { useCart } from "@/lib/cart-store";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -24,8 +32,8 @@ export function SiteHeader() {
   const { user } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-      <div className="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
+      <div className="container-page flex h-15 items-center justify-between gap-3 lg:h-20">
         <Link to="/" className="shrink-0" aria-label="Verma Gentle Cure home">
           <Logo />
         </Link>
@@ -63,49 +71,47 @@ export function SiteHeader() {
           <Button asChild className="hidden rounded-full lg:inline-flex">
             <Link to="/book-appointment">Book Consultation</Link>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full lg:hidden"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
-          </Button>
+          <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
+            <DrawerTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full lg:hidden" aria-label="More">
+                <Menu className="size-5" />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="max-h-[82dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] lg:hidden">
+              <DrawerHeader className="grid grid-cols-[minmax(0,1fr)_auto] items-center text-left">
+                <div className="min-w-0">
+                  <DrawerTitle className="font-display text-xl text-navy">Explore</DrawerTitle>
+                  <DrawerDescription>More from Verma Gentle Cure</DrawerDescription>
+                </div>
+                <DrawerClose asChild>
+                  <Button variant="ghost" size="icon" className="shrink-0 rounded-full" aria-label="Close menu">
+                    <X className="size-5" />
+                  </Button>
+                </DrawerClose>
+              </DrawerHeader>
+              <nav className="grid grid-cols-2 gap-2 overflow-y-auto px-4 pb-4" aria-label="More navigation">
+                {NAV.filter((item) => item.to !== "/").map((item) => (
+                  <DrawerClose asChild key={item.to}>
+                    <Link
+                      to={item.to}
+                      className="flex min-h-12 items-center rounded-xl border border-border px-4 text-sm font-medium text-foreground active:bg-mint/60"
+                    >
+                      {item.label}
+                    </Link>
+                  </DrawerClose>
+                ))}
+                <DrawerClose asChild>
+                  <Link
+                    to={user ? "/account" : "/auth"}
+                    className="col-span-2 flex min-h-12 items-center justify-center rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
+                  >
+                    {user ? "My account" : "Login / Register"}
+                  </Link>
+                </DrawerClose>
+              </nav>
+            </DrawerContent>
+          </Drawer>
         </div>
-      </div>
-
-      <div
-        className={cn(
-          "overflow-hidden border-t border-border/70 bg-background transition-[max-height,opacity] duration-300 lg:hidden",
-          open ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0",
-        )}
-      >
-        <nav className="container-page flex flex-col gap-1 py-4" aria-label="Mobile">
-          {NAV.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-mint/60"
-              activeProps={{ className: "bg-mint text-navy" }}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Button asChild className="mt-2 h-12 rounded-xl text-base">
-            <Link to="/book-appointment" onClick={() => setOpen(false)}>
-              Book Consultation
-            </Link>
-          </Button>
-          <Button asChild variant="outline" className="h-12 rounded-xl text-base">
-            <Link to={user ? "/account" : "/auth"} onClick={() => setOpen(false)}>
-              {user ? "My account" : "Login / Register"}
-            </Link>
-          </Button>
-        </nav>
       </div>
     </header>
   );
