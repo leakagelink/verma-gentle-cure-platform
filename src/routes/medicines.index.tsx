@@ -4,6 +4,17 @@ import { useMemo, useState } from "react";
 
 import { MedicineCard } from "@/components/shop/MedicineCard";
 import { PageHero } from "@/components/ui-kit/PageHero";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { useProducts } from "@/lib/products";
 import { MEDICINE_CATEGORIES, PRODUCT_DISCLAIMER } from "@/lib/shop-data";
@@ -25,6 +36,7 @@ export const Route = createFileRoute("/medicines/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/medicines" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/medicines" }],
   }),
@@ -44,6 +56,55 @@ function ShopPage() {
   const [sort, setSort] = useState<(typeof SORTS)[number]["key"]>("popular");
   const [inStockOnly, setInStockOnly] = useState(false);
   const { products } = useProducts();
+
+  const filters = (
+    <>
+      <div>
+        <Label>Search</Label>
+        <div className="relative mt-2">
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search medicines or brands"
+            className="pl-9"
+            aria-label="Search medicines"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label>Categories</Label>
+        <div className="mt-2 flex flex-wrap gap-2 lg:flex-col lg:items-start">
+          <FilterChip active={category === "all"} onClick={() => setCategory("all")}>
+            All medicines
+          </FilterChip>
+          {MEDICINE_CATEGORIES.map((c) => (
+            <FilterChip
+              key={c.slug}
+              active={category === c.slug}
+              onClick={() => setCategory(c.slug)}
+            >
+              {c.name}
+            </FilterChip>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <Label>Availability</Label>
+        <label className="mt-2 flex min-h-11 items-center gap-3 text-sm text-muted-foreground">
+          <input
+            type="checkbox"
+            checked={inStockOnly}
+            onChange={(e) => setInStockOnly(e.target.checked)}
+            className="size-5 accent-[var(--leaf)]"
+          />
+          In stock only
+        </label>
+      </div>
+    </>
+  );
 
   const results = useMemo(() => {
     let list = products.filter((m) => {
@@ -71,67 +132,42 @@ function ShopPage() {
         description="Dilutions, mother tinctures, biochemic tablets, personal care and daily wellness supplements."
       />
 
-      <section className="container-page py-12">
+      <section className="container-page py-6 sm:py-12">
         <div className="grid gap-8 lg:grid-cols-[16rem_1fr]">
-          <aside className="space-y-6 lg:sticky lg:top-24 lg:h-fit">
-            <div>
-              <Label>Search</Label>
-              <div className="relative mt-2">
-                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search medicines or brands"
-                  className="pl-9"
-                  aria-label="Search medicines"
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label>Categories</Label>
-              <div className="mt-2 flex flex-wrap gap-2 lg:flex-col lg:items-start">
-                <FilterChip active={category === "all"} onClick={() => setCategory("all")}>
-                  All medicines
-                </FilterChip>
-                {MEDICINE_CATEGORIES.map((c) => (
-                  <FilterChip
-                    key={c.slug}
-                    active={category === c.slug}
-                    onClick={() => setCategory(c.slug)}
-                  >
-                    {c.name}
-                  </FilterChip>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <Label>Filters</Label>
-              <label className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                <input
-                  type="checkbox"
-                  checked={inStockOnly}
-                  onChange={(e) => setInStockOnly(e.target.checked)}
-                  className="size-4 accent-[var(--leaf)]"
-                />
-                In stock only
-              </label>
-            </div>
+          <aside className="hidden space-y-6 lg:sticky lg:top-24 lg:block lg:h-fit">
+            {filters}
           </aside>
 
           <div>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm text-muted-foreground">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
+              <p className="truncate text-sm text-muted-foreground">
                 {results.length} {results.length === 1 ? "product" : "products"}
               </p>
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="outline" className="h-10 rounded-full px-3 lg:hidden">
+                    <SlidersHorizontal className="size-4" /> Filters
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="max-h-[86dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] lg:hidden">
+                  <DrawerHeader className="text-left">
+                    <DrawerTitle className="font-display text-xl text-navy">Filter medicines</DrawerTitle>
+                    <DrawerDescription>Narrow products by category and availability.</DrawerDescription>
+                  </DrawerHeader>
+                  <div className="space-y-6 overflow-y-auto px-4 pb-2">{filters}</div>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button className="min-h-12 rounded-xl">Show {results.length} products</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="size-4 text-muted-foreground" />
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as typeof sort)}
                   aria-label="Sort products"
-                  className="min-h-10 rounded-full border border-border bg-card px-4 text-sm text-navy"
+                  className="min-h-10 max-w-32 rounded-full border border-border bg-card px-3 text-sm text-navy sm:max-w-none sm:px-4"
                 >
                   {SORTS.map((s) => (
                     <option key={s.key} value={s.key}>
@@ -150,7 +186,7 @@ function ShopPage() {
                 </p>
               </div>
             ) : (
-              <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-5 xl:grid-cols-3">
                 {results.map((m) => (
                   <MedicineCard key={m.slug} medicine={m} />
                 ))}
@@ -197,15 +233,16 @@ function FilterChip({
   children: React.ReactNode;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
       onClick={onClick}
       className={cn(
-        "min-h-9 rounded-full border px-4 text-sm transition-colors",
-        active ? "border-leaf bg-mint text-forest" : "border-border text-muted-foreground",
+        "min-h-10 rounded-full px-4 text-sm font-medium",
+        active ? "border-leaf bg-mint text-forest hover:bg-mint" : "text-muted-foreground",
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 }
