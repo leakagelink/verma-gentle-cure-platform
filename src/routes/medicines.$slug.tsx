@@ -55,10 +55,18 @@ function ProductPage() {
   const discount = Math.round(((medicine.mrp - medicine.price) / medicine.mrp) * 100);
 
   return (
-    <section className="container-page grid gap-12 py-12 lg:grid-cols-2 lg:py-16">
-      <div>
-        <div className="h-80 rounded-[2rem] border border-border gradient-leaf lg:h-[28rem]" />
-        <div className="mt-4 flex gap-3">
+    <section className="container-page grid gap-8 py-6 sm:py-12 lg:grid-cols-2 lg:gap-12 lg:py-16">
+      <div className="min-w-0">
+        <div className="h-64 overflow-hidden rounded-[2rem] border border-border surface-ivory sm:h-80 lg:h-[28rem]">
+          <img
+            src={productImage(medicine.category)}
+            alt={medicine.name}
+            width={800}
+            height={800}
+            className="size-full object-cover"
+          />
+        </div>
+        <div className="mt-3 flex gap-3 sm:mt-4">
           {[0, 1, 2].map((i) => (
             <button
               key={i}
@@ -66,10 +74,19 @@ function ProductPage() {
               onClick={() => setActiveImage(i)}
               aria-label={`View image ${i + 1}`}
               className={cn(
-                "h-20 flex-1 rounded-2xl border gradient-leaf opacity-70",
+                "h-16 flex-1 overflow-hidden rounded-2xl border opacity-70 sm:h-20",
                 activeImage === i ? "border-leaf opacity-100" : "border-border",
               )}
-            />
+            >
+              <img
+                src={productImage(medicine.category)}
+                alt=""
+                loading="lazy"
+                width={800}
+                height={800}
+                className="size-full object-cover"
+              />
+            </button>
           ))}
         </div>
       </div>
