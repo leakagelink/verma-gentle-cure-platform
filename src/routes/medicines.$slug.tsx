@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { StockBadge } from "@/components/shop/MedicineCard";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-store";
+import { productImage } from "@/lib/product-images";
 import { useProduct } from "@/lib/products";
 import { MEDICINES, MEDICINE_CATEGORIES, PRODUCT_DISCLAIMER, formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
