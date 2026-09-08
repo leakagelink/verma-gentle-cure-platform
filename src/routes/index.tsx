@@ -98,17 +98,20 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <>
-      <Hero />
-      <TrustStrip />
-      <AboutDoctor />
-      <Services />
-      <HowItWorks />
-      <HealthConditions />
-      <WhyUs />
-      <Testimonials />
-      <BlogPreview />
-      <Faq />
-      <FinalCta />
+      <MobileHome />
+      <div className="hidden md:block">
+        <Hero />
+        <TrustStrip />
+        <AboutDoctor />
+        <Services />
+        <HowItWorks />
+        <HealthConditions />
+        <WhyUs />
+        <Testimonials />
+        <BlogPreview />
+        <Faq />
+        <FinalCta />
+      </div>
     </>
   );
 }
