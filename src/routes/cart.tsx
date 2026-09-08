@@ -43,10 +43,10 @@ function CartPage() {
   return (
     <>
       <PageHero eyebrow="Cart" title="Your cart" />
-      <section className="container-page grid gap-8 py-12 lg:grid-cols-[1.4fr_0.6fr]">
-        <div>
+      <section className="container-page grid gap-6 py-6 sm:py-12 lg:grid-cols-[1.4fr_0.6fr] lg:gap-8">
+        <div className="min-w-0">
           {items.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-border p-14 text-center">
+            <div className="rounded-3xl border border-dashed border-border p-8 text-center sm:p-14">
               <ShoppingBag className="mx-auto size-8 text-muted-foreground" />
               <p className="mt-4 font-semibold text-navy">Your cart is empty</p>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -57,16 +57,32 @@ function CartPage() {
               </Button>
             </div>
           ) : (
-            <ul className="space-y-4">
+            <ul className="space-y-3 sm:space-y-4">
               {items.map(({ medicine, qty }) => (
-                <li key={medicine.slug} className="card-premium flex gap-4 p-4">
-                  <span className="size-20 shrink-0 rounded-2xl gradient-leaf" aria-hidden />
+                <li key={medicine.slug} className="card-premium flex gap-3 p-3 sm:gap-4 sm:p-4">
+                  <img
+                    src={productImage(medicine.category)}
+                    alt={medicine.name}
+                    loading="lazy"
+                    width={800}
+                    height={800}
+                    className="size-16 shrink-0 rounded-2xl object-cover sm:size-20"
+                  />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-navy">{medicine.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {medicine.brand} · {medicine.pack}
-                    </p>
-                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-navy sm:text-base">
+                          {medicine.name}
+                        </p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {medicine.brand} · {medicine.pack}
+                        </p>
+                      </div>
+                      <p className="shrink-0 font-display text-base text-navy sm:text-lg">
+                        {formatINR(medicine.price * qty)}
+                      </p>
+                    </div>
+                    <div className="mt-2.5 flex items-center justify-between gap-2 sm:mt-3">
                       <div className="flex items-center rounded-full border border-border">
                         <button
                           type="button"
@@ -89,22 +105,21 @@ function CartPage() {
                       <button
                         type="button"
                         onClick={() => remove(medicine.slug)}
+                        aria-label={`Remove ${medicine.name}`}
                         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive"
                       >
-                        <Trash2 className="size-4" /> Remove
+                        <Trash2 className="size-4" />
+                        <span className="hidden sm:inline">Remove</span>
                       </button>
                     </div>
                   </div>
-                  <p className="font-display text-lg text-navy">
-                    {formatINR(medicine.price * qty)}
-                  </p>
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        <aside className="h-fit rounded-3xl border border-border surface-ivory p-6 lg:sticky lg:top-24">
+        <aside className="h-fit min-w-0 rounded-3xl border border-border surface-ivory p-4 sm:p-6 lg:sticky lg:top-24">
           <h2 className="text-lg text-navy">Order summary</h2>
           <dl className="mt-5 space-y-3 text-sm">
             <Row k="Subtotal" v={formatINR(subtotal)} />
