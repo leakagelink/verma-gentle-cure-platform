@@ -31,6 +31,7 @@
 - [x] Compact booking progress with sticky action controls
 - [x] Mobile-optimized account, appointment and order layouts
 - [x] Standalone web-app manifest and mobile device metadata
+- [x] Reduced mobile page height with denser sections and swipeable content rows
 
 
 ## Phase 4 — Admin & operations

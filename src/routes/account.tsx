@@ -146,8 +146,8 @@ function AccountPage() {
         </Button>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <form onSubmit={save} className="card-premium space-y-4 p-5 sm:p-6">
+      <div className="mt-5 grid gap-4 sm:mt-8 sm:gap-6 lg:grid-cols-[1.3fr_1fr]">
+        <form onSubmit={save} className="card-premium space-y-3 p-4 sm:space-y-4 sm:p-6">
           <h2 className="text-xl">Your details</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
@@ -201,8 +201,8 @@ function AccountPage() {
           </Button>
         </form>
 
-        <div className="space-y-4">
-          <Link to="/appointments" className="card-premium flex items-center gap-3 p-5">
+        <div className="space-y-2 sm:space-y-4">
+          <Link to="/appointments" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <CalendarDays className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">My appointments & prescriptions</span>
@@ -211,7 +211,7 @@ function AccountPage() {
               </span>
             </span>
           </Link>
-          <Link to="/orders" className="card-premium flex items-center gap-3 p-5">
+          <Link to="/orders" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <Package className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">My orders</span>
@@ -221,7 +221,7 @@ function AccountPage() {
             </span>
           </Link>
           {isCareTeam && (
-            <Link to="/doctor" className="card-premium flex items-center gap-3 p-5">
+            <Link to="/doctor" className="card-premium flex items-center gap-3 p-4 sm:p-5">
               <Stethoscope className="size-5 text-leaf" />
               <span>
                 <span className="block font-semibold">Doctor dashboard</span>
@@ -232,7 +232,7 @@ function AccountPage() {
             </Link>
           )}
           {isCareTeam && (
-            <Link to="/admin" className="card-premium flex items-center gap-3 p-5">
+            <Link to="/admin" className="card-premium flex items-center gap-3 p-4 sm:p-5">
               <Package className="size-5 text-leaf" />
               <span>
                 <span className="block font-semibold">Store admin</span>
@@ -242,21 +242,21 @@ function AccountPage() {
               </span>
             </Link>
           )}
-          <Link to="/book-appointment" className="card-premium flex items-center gap-3 p-5">
+          <Link to="/book-appointment" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <CalendarDays className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">Book a consultation</span>
               <span className="block text-sm text-muted-foreground">Video, audio or in-clinic</span>
             </span>
           </Link>
-          <Link to="/medicines" className="card-premium flex items-center gap-3 p-5">
+          <Link to="/medicines" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <Package className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">Medicine shop</span>
               <span className="block text-sm text-muted-foreground">Browse and order</span>
             </span>
           </Link>
-          <Link to="/consultation" className="card-premium flex items-center gap-3 p-5">
+          <Link to="/consultation" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <Stethoscope className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">How consultation works</span>

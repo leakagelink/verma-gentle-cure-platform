@@ -193,21 +193,21 @@ function ShopPage() {
               </div>
             )}
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="hide-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-3">
               {MEDICINE_CATEGORIES.map((c) => (
                 <Link
                   key={c.slug}
                   to="/medicines/category/$slug"
                   params={{ slug: c.slug }}
-                  className="card-premium p-5"
+                  className="card-premium w-[72vw] shrink-0 snap-start p-4 sm:w-auto sm:p-5"
                 >
                   <p className="font-semibold text-navy">{c.name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground sm:line-clamp-none sm:text-sm">{c.description}</p>
                 </Link>
               ))}
             </div>
 
-            <p className="mt-10 rounded-2xl border border-border surface-ivory p-5 text-xs leading-relaxed text-muted-foreground">
+            <p className="mt-7 rounded-xl border border-border surface-ivory p-4 text-xs leading-relaxed text-muted-foreground sm:mt-10 sm:rounded-2xl sm:p-5">
               {PRODUCT_DISCLAIMER}
             </p>
           </div>

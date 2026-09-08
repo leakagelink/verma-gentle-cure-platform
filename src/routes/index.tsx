@@ -120,13 +120,13 @@ function Hero() {
         aria-hidden
         className="pointer-events-none absolute -left-32 top-10 size-96 leaf-blob bg-mint/60 blur-3xl"
       />
-      <div className="container-page relative grid items-center gap-12 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+      <div className="container-page relative grid items-center gap-7 py-8 sm:gap-10 sm:py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-leaf/30 bg-card px-3.5 py-1.5 text-xs font-semibold text-forest">
             <span className="size-1.5 rounded-full bg-lime" />
             Online consultation available today
           </span>
-          <h1 className="mt-6 text-4xl leading-[1.08] text-navy text-balance-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 text-3xl leading-[1.08] text-navy text-balance-tight sm:mt-6 sm:text-5xl lg:text-6xl">
             Natural Healing.
             <br />
             <span className="text-forest">Personalized Care.</span>
@@ -134,12 +134,12 @@ function Hero() {
           <p className="mt-3 font-display text-lg text-teal">
             Personalized homeopathic consultation designed around you.
           </p>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">
             Connect with a qualified homeopathic doctor, discuss your health concerns, and receive
             personalized consultation and treatment recommendations.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="h-13 rounded-full px-7 text-base">
+          <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:gap-3">
+            <Button asChild size="lg" className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base">
               <Link to="/book-appointment">
                 Book Online Consultation <ArrowRight className="size-4" />
               </Link>
@@ -148,12 +148,12 @@ function Hero() {
               asChild
               size="lg"
               variant="outline"
-              className="h-13 rounded-full border-navy/25 px-7 text-base text-navy"
+              className="h-12 rounded-xl border-navy/25 px-3 text-sm text-navy sm:h-13 sm:rounded-full sm:px-7 sm:text-base"
             >
               <Link to="/medicines">Explore Medicines</Link>
             </Button>
           </div>
-          <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-border pt-6">
+          <dl className="mt-6 grid max-w-lg grid-cols-3 gap-3 border-t border-border pt-4 sm:mt-10 sm:gap-4 sm:pt-6">
             {[
               ["20+ yrs", "Clinical practice"],
               ["Secure", "Medical records"],
@@ -174,10 +174,10 @@ function Hero() {
               alt="Homeopathic globules, glass vials and fresh leaves on a warm ivory surface"
               width={1280}
               height={1600}
-              className="h-[26rem] w-full object-cover lg:h-[34rem]"
+              className="h-64 w-full object-cover sm:h-[26rem] lg:h-[34rem]"
             />
           </div>
-          <div className="absolute -bottom-6 left-4 right-4 rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-soft)] sm:left-8 sm:right-auto sm:w-72">
+          <div className="absolute -bottom-4 left-3 right-3 rounded-xl border border-border bg-card p-3 shadow-[var(--shadow-soft)] sm:-bottom-6 sm:left-8 sm:right-auto sm:w-72 sm:rounded-2xl sm:p-4">
             <div className="flex items-center gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-full bg-mint text-forest">
                 <CalendarDays className="size-5" />
@@ -196,12 +196,12 @@ function Hero() {
 
 function TrustStrip() {
   return (
-    <section className="container-page py-16 lg:py-20">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <section className="container-page py-10 sm:py-16 lg:py-20">
+      <div className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {TRUST_POINTS.map((point) => {
           const Icon = ICONS[point.icon as keyof typeof ICONS];
           return (
-            <div key={point.title} className="card-premium flex items-start gap-4 p-5">
+            <div key={point.title} className="card-premium flex w-[82vw] shrink-0 snap-start items-start gap-3 p-4 sm:w-auto sm:p-5">
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-mint text-forest">
                 <Icon className="size-5" />
               </span>
@@ -219,8 +219,8 @@ function TrustStrip() {
 
 function AboutDoctor() {
   return (
-    <section className="surface-ivory py-16 lg:py-24">
-      <div className="container-page grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+    <section className="surface-ivory py-10 sm:py-16 lg:py-24">
+      <div className="container-page grid items-center gap-7 sm:gap-12 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="relative">
           <div className="overflow-hidden rounded-[2rem] border border-border bg-card">
             <img
@@ -229,7 +229,7 @@ function AboutDoctor() {
               loading="lazy"
               width={1024}
               height={1280}
-              className="h-[28rem] w-full object-cover object-top"
+              className="h-72 w-full object-cover object-top sm:h-[28rem]"
             />
           </div>
           <span className="absolute -right-3 bottom-6 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-navy shadow-[var(--shadow-soft)]">
@@ -243,7 +243,7 @@ function AboutDoctor() {
             title="Dr. Rajshree Verma"
             description="Homeopathic physician with two decades of clinical practice, known for detailed case-taking and an unhurried, patient-first consultation style."
           />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-4">
             {[
               ["Qualifications", "BHMS, with continued clinical education in classical homeopathy"],
               ["Experience", "20+ years of consulting practice across chronic and acute cases"],
@@ -253,11 +253,11 @@ function AboutDoctor() {
               ],
               ["Approach", "Detailed history, clear explanations, structured follow-up reviews"],
             ].map(([title, body]) => (
-              <div key={title} className="rounded-2xl border border-border bg-card p-5">
+              <div key={title} className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
                   {title}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:line-clamp-none sm:text-sm">{body}</p>
               </div>
             ))}
           </div>
@@ -274,17 +274,17 @@ function AboutDoctor() {
 
 function Services() {
   return (
-    <section className="container-page py-16 lg:py-24">
+    <section className="container-page py-10 sm:py-16 lg:py-24">
       <SectionHeading
         eyebrow="Services"
         title="Care that continues beyond the consultation"
         description="From the first conversation to your follow-up review and medicine delivery."
       />
-      <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {SERVICES.map((service) => {
           const Icon = ICONS[service.icon as keyof typeof ICONS];
           return (
-            <article key={service.slug} className="card-premium group flex flex-col p-6">
+            <article key={service.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col p-5 sm:w-auto sm:p-6">
               <span className="grid size-12 place-items-center rounded-2xl bg-mint text-forest transition-colors group-hover:bg-leaf group-hover:text-leaf-foreground">
                 <Icon className="size-5" />
               </span>
@@ -309,7 +309,7 @@ function Services() {
 
 function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-navy py-16 text-navy-foreground lg:py-24">
+    <section className="relative overflow-hidden bg-navy py-10 text-navy-foreground sm:py-16 lg:py-24">
       <div className="container-page">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">How it works</p>
@@ -317,9 +317,9 @@ function HowItWorks() {
             Four simple steps from booking to treatment plan
           </h2>
         </div>
-        <ol className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <ol className="hide-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="relative rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
+            <li key={step.title} className="relative w-[76vw] shrink-0 snap-start rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:w-auto sm:p-6">
               <span className="grid size-10 place-items-center rounded-full gradient-leaf font-display text-base text-navy">
                 {i + 1}
               </span>
@@ -341,18 +341,18 @@ function HowItWorks() {
 
 function HealthConditions() {
   return (
-    <section className="container-page py-16 lg:py-24">
+    <section className="container-page py-10 sm:py-16 lg:py-24">
       <SectionHeading
         eyebrow="Health conditions"
         title="Areas we commonly consult on"
         description="Every case is assessed individually. Outcomes vary depending on individual circumstances."
       />
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
         {CONDITIONS.map((condition) => (
           <Link
             key={condition.slug}
             to="/treatments"
-            className="card-premium group relative overflow-hidden p-6"
+            className="card-premium group relative w-[78vw] shrink-0 snap-start overflow-hidden p-5 sm:w-auto sm:p-6"
           >
             <span
               aria-hidden
@@ -376,21 +376,21 @@ function HealthConditions() {
 
 function WhyUs() {
   return (
-    <section className="surface-ivory py-16 lg:py-24">
-      <div className="container-page grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+    <section className="surface-ivory py-10 sm:py-16 lg:py-24">
+      <div className="container-page grid gap-7 sm:gap-12 lg:grid-cols-[0.85fr_1.15fr]">
         <SectionHeading
           eyebrow="Why Verma Gentle Cure"
           title="A consultation that actually listens"
           description="The platform exists to support the consultation, not replace it. Everything here is built around the conversation you have with your doctor."
         />
-        <div className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:rounded-3xl">
           {WHY_US.map((item, i) => (
-            <div key={item.title} className="bg-card p-6">
+            <div key={item.title} className="bg-card p-4 sm:p-6">
               <p className="font-display text-2xl text-lime">
                 {String(i + 1).padStart(2, "0")}
               </p>
               <h3 className="mt-3 font-semibold text-navy">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:line-clamp-none sm:text-sm">
                 {item.description}
               </p>
             </div>
@@ -403,13 +403,13 @@ function WhyUs() {
 
 function Testimonials() {
   return (
-    <section className="container-page py-16 lg:py-24">
+    <section className="container-page py-10 sm:py-16 lg:py-24">
       <SectionHeading
         eyebrow="Patient experiences"
         title="In the words of our patients"
         description="Individual experiences shared with consent. Results may vary depending on individual circumstances."
       />
-      <Carousel opts={{ align: "start" }} className="mt-10">
+      <Carousel opts={{ align: "start" }} className="mt-6 sm:mt-10">
         <CarouselContent>
           {TESTIMONIALS.map((t) => (
             <CarouselItem key={t.name} className="sm:basis-1/2 lg:basis-1/3">
@@ -443,15 +443,15 @@ function Testimonials() {
 
 function BlogPreview() {
   return (
-    <section className="surface-ivory py-16 lg:py-24">
+    <section className="surface-ivory py-10 sm:py-16 lg:py-24">
       <div className="container-page">
         <SectionHeading
           eyebrow="Health journal"
           title="Latest health and wellness articles"
         />
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:gap-6 sm:overflow-visible sm:px-0 md:grid-cols-3">
           {BLOG_POSTS.slice(0, 3).map((post) => (
-            <article key={post.slug} className="card-premium group flex flex-col overflow-hidden">
+            <article key={post.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden sm:w-auto">
               <div className="h-40 gradient-leaf" aria-hidden />
               <div className="flex flex-1 flex-col p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
@@ -484,8 +484,8 @@ function BlogPreview() {
 
 function Faq() {
   return (
-    <section className="container-page py-16 lg:py-24">
-      <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+    <section className="container-page py-10 sm:py-16 lg:py-24">
+      <div className="grid gap-6 sm:gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <SectionHeading eyebrow="FAQ" title="Questions patients ask us" />
         <Accordion type="single" collapsible className="w-full">
           {FAQS.map((faq) => (
@@ -507,7 +507,7 @@ function Faq() {
 function FinalCta() {
   return (
     <section className="container-page pb-8">
-      <div className="relative overflow-hidden rounded-[2rem] gradient-hero px-6 py-14 text-center text-navy-foreground lg:px-16 lg:py-20">
+      <div className="relative overflow-hidden rounded-2xl gradient-hero px-5 py-9 text-center text-navy-foreground sm:rounded-[2rem] sm:px-6 sm:py-14 lg:px-16 lg:py-20">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-16 -top-16 size-64 leaf-blob bg-lime/20 blur-2xl"

@@ -98,7 +98,7 @@ function OrdersPage() {
             </Button>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-3 sm:space-y-5">
             {orders.map((order) => (
               <article key={order.id} className="card-premium p-4 sm:p-6">
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
@@ -120,7 +120,7 @@ function OrdersPage() {
                   </span>
                 </div>
 
-                <ul className="mt-5 space-y-2 border-t border-border pt-4 text-sm">
+                <ul className="mt-4 space-y-1.5 border-t border-border pt-3 text-sm sm:mt-5 sm:space-y-2 sm:pt-4">
                   {(itemsByOrder[order.id] ?? []).map((item) => (
                     <li key={item.id} className="flex justify-between gap-4">
                       <span className="min-w-0 text-muted-foreground">
@@ -131,7 +131,7 @@ function OrdersPage() {
                   ))}
                 </ul>
 
-                <dl className="mt-4 grid gap-2 border-t border-border pt-4 text-sm sm:grid-cols-4">
+                <dl className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3 text-sm sm:mt-4 sm:grid-cols-4 sm:pt-4">
                   <Cell k="Subtotal" v={formatINR(order.subtotal)} />
                   <Cell k="Discount" v={order.discount ? `− ${formatINR(order.discount)}` : "—"} />
                   <Cell k="Delivery" v={order.delivery_fee ? formatINR(order.delivery_fee) : "Free"} />

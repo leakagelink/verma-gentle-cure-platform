@@ -9,7 +9,7 @@ export function MobileTabBar() {
     { to: "/", label: "Home", icon: Home, exact: true },
     { to: "/consultation", label: "Consult", icon: Stethoscope, exact: false },
     { to: "/medicines", label: "Shop", icon: Pill, exact: false },
-    { to: "/book-appointment", label: "Appointments", icon: CalendarDays, exact: false },
+    { to: "/book-appointment", label: "Book", icon: CalendarDays, exact: false },
     { to: user ? "/account" : "/auth", label: "Account", icon: UserRound, exact: false },
   ] as const;
   return (
@@ -23,10 +23,10 @@ export function MobileTabBar() {
             <Link
               to={to}
               activeOptions={{ exact }}
-              className="group flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-1.5 text-[0.65rem] font-medium text-muted-foreground transition-colors active:scale-95"
+              className="group flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 py-1 text-[0.65rem] font-medium text-muted-foreground transition-colors active:scale-95"
               activeProps={{ className: "text-forest" }}
             >
-              <span className="grid h-7 min-w-12 place-items-center rounded-full transition-colors group-data-[status=active]:bg-mint">
+              <span className="grid h-7 min-w-11 place-items-center rounded-full transition-colors group-data-[status=active]:bg-mint">
                 <Icon className="size-5" />
               </span>
               <span className="truncate">{label}</span>
