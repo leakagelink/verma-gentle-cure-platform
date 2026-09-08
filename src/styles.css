@@ -175,6 +175,8 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1,
@@ -233,9 +235,21 @@
   width: 100%;
   margin-inline: auto;
   max-width: 80rem;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
 
   @media (min-width: 1024px) {
     padding-inline: 2rem;
+  }
+}
+
+@utility hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
