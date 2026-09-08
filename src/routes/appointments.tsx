@@ -117,7 +117,7 @@ function AppointmentsPage() {
             You have no appointments yet. Book your first consultation with {CLINIC.doctor}.
           </p>
         ) : (
-          <ul className="mt-6 grid gap-4">
+          <ul className="mt-4 grid gap-3 sm:mt-6 sm:gap-4">
             {appointments.map((appt) => (
               <li key={appt.id} className="card-premium p-4 sm:p-6">
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
@@ -139,7 +139,7 @@ function AppointmentsPage() {
                     {STATUS_LABEL[appt.status]}
                   </span>
                 </div>
-                <p className="mt-4 whitespace-pre-line text-sm text-muted-foreground">
+                <p className="mt-3 line-clamp-2 whitespace-pre-line text-sm text-muted-foreground sm:mt-4 sm:line-clamp-none">
                   {appt.concern}
                 </p>
                 {appt.doctor_notes && (
@@ -167,7 +167,7 @@ function AppointmentsPage() {
           </ul>
         )}
 
-        <h2 className="mt-14 flex items-center gap-2 text-xl text-navy">
+        <h2 className="mt-9 flex items-center gap-2 text-xl text-navy sm:mt-14">
           <FileText className="size-5 text-leaf" /> Digital prescriptions
         </h2>
         {loading ? null : prescriptions.length === 0 ? (
@@ -175,11 +175,11 @@ function AppointmentsPage() {
             Prescriptions issued after your consultation will appear here.
           </p>
         ) : (
-          <ul className="mt-6 grid gap-4">
+          <ul className="mt-4 grid gap-3 sm:mt-6 sm:gap-4">
             {prescriptions.map((rx) => {
               const medicines = parseMedicines(rx.medicines);
               return (
-                <li key={rx.id} className="card-premium p-6">
+                <li key={rx.id} className="card-premium p-4 sm:p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="font-display text-lg text-navy">{rx.prescription_no}</p>
                     <p className="text-xs text-muted-foreground">{formatDateTime(rx.created_at)}</p>

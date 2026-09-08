@@ -138,14 +138,14 @@ function ShopPage() {
             {filters}
           </aside>
 
-          <div>
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 sm:flex sm:flex-wrap sm:justify-between sm:gap-3">
-              <p className="truncate text-sm text-muted-foreground">
+          <div className="min-w-0 max-w-full overflow-hidden">
+            <div className="flex min-w-0 items-center gap-2 sm:flex-wrap sm:justify-between sm:gap-3">
+              <p className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
                 {results.length} {results.length === 1 ? "product" : "products"}
               </p>
               <Drawer>
                 <DrawerTrigger asChild>
-                  <Button variant="outline" className="h-10 rounded-full px-3 lg:hidden">
+                  <Button variant="outline" className="h-10 shrink-0 rounded-full px-3 lg:hidden">
                     <SlidersHorizontal className="size-4" /> Filters
                   </Button>
                 </DrawerTrigger>
@@ -162,12 +162,12 @@ function ShopPage() {
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
-              <div className="flex items-center gap-2">
+              <div className="w-28 shrink-0 sm:w-auto">
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as typeof sort)}
                   aria-label="Sort products"
-                  className="min-h-10 max-w-32 rounded-full border border-border bg-card px-3 text-sm text-navy sm:max-w-none sm:px-4"
+                  className="min-h-10 w-full min-w-0 rounded-full border border-border bg-card px-2 text-xs text-navy sm:w-auto sm:px-4 sm:text-sm"
                 >
                   {SORTS.map((s) => (
                     <option key={s.key} value={s.key}>
@@ -193,21 +193,21 @@ function ShopPage() {
               </div>
             )}
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="hide-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-3">
               {MEDICINE_CATEGORIES.map((c) => (
                 <Link
                   key={c.slug}
                   to="/medicines/category/$slug"
                   params={{ slug: c.slug }}
-                  className="card-premium p-5"
+                  className="card-premium w-[72vw] shrink-0 snap-start p-4 sm:w-auto sm:p-5"
                 >
                   <p className="font-semibold text-navy">{c.name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground sm:line-clamp-none sm:text-sm">{c.description}</p>
                 </Link>
               ))}
             </div>
 
-            <p className="mt-10 rounded-2xl border border-border surface-ivory p-5 text-xs leading-relaxed text-muted-foreground">
+            <p className="mt-7 rounded-xl border border-border surface-ivory p-4 text-xs leading-relaxed text-muted-foreground sm:mt-10 sm:rounded-2xl sm:p-5">
               {PRODUCT_DISCLAIMER}
             </p>
           </div>

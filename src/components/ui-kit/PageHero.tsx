@@ -17,19 +17,19 @@ export function PageHero({
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-32 size-80 leaf-blob bg-mint/70 blur-2xl"
       />
-      <div className="container-page relative py-7 sm:py-10 lg:py-20">
+      <div className="container-page relative py-5 sm:py-10 lg:py-20">
         {eyebrow && (
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-leaf">{eyebrow}</p>
         )}
-        <h1 className="mt-2 max-w-3xl text-2xl leading-tight text-navy text-balance-tight sm:mt-3 sm:text-4xl lg:text-5xl">
+        <h1 className="mt-1.5 max-w-3xl text-xl leading-tight text-navy text-balance-tight sm:mt-3 sm:text-4xl lg:text-5xl">
           {title}
         </h1>
         {description && (
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">
+          <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">
             {description}
           </p>
         )}
-        {children && <div className="mt-5 sm:mt-7">{children}</div>}
+        {children && <div className="mt-3 sm:mt-7">{children}</div>}
       </div>
     </section>
   );
@@ -51,9 +51,9 @@ export function SectionHeading({
       {eyebrow && (
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-leaf">{eyebrow}</p>
       )}
-      <h2 className="mt-3 text-2xl text-navy text-balance-tight sm:text-3xl lg:text-4xl">{title}</h2>
+      <h2 className="mt-2 text-xl text-navy text-balance-tight sm:mt-3 sm:text-3xl lg:text-4xl">{title}</h2>
       {description && (
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">{description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:mt-3 sm:text-base">{description}</p>
       )}
     </div>
   );
