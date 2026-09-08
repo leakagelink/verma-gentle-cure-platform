@@ -175,6 +175,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
     overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
   }
