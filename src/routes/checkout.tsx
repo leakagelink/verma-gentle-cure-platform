@@ -44,9 +44,16 @@ function CheckoutPage() {
   const { settings } = useStoreSettings();
   const navigate = useNavigate();
 
-  const [placed, setPlaced] = useState<{ orderNo: string; method: PaymentMethod } | null>(null);
+  const [placed, setPlaced] = useState<{
+    orderNo: string;
+    method: PaymentMethod;
+    paid: boolean;
+  } | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("cod");
   const [saving, setSaving] = useState(false);
+  const startPay = useServerFn(startOnlinePayment);
+  const confirmPay = useServerFn(confirmOnlinePayment);
+  const failPay = useServerFn(failOnlinePayment);
   const [coupon, setCoupon] = useState<{ code: string; rate: number } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
