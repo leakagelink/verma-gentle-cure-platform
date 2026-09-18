@@ -174,7 +174,7 @@ function AppointmentsPage() {
         )}
 
         <h2 className="mt-9 flex items-center gap-2 text-xl text-navy sm:mt-14">
-          <FileText className="size-5 text-leaf" /> Digital prescriptions
+          <FileText className="size-5 text-leaf" /> Prescription timeline
         </h2>
         {loading ? null : prescriptions.length === 0 ? (
           <p className="mt-6 rounded-2xl border border-border surface-ivory p-6 text-sm text-muted-foreground">
