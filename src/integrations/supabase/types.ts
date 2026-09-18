@@ -83,6 +83,169 @@ export type Database = {
         }
         Relationships: []
       }
+      case_clinical_notes: {
+        Row: {
+          assessment: string
+          case_record_id: string
+          confidential_notes: string
+          created_at: string
+          doctor_id: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          assessment?: string
+          case_record_id: string
+          confidential_notes?: string
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          assessment?: string
+          case_record_id?: string
+          confidential_notes?: string
+          created_at?: string
+          doctor_id?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_clinical_notes_case_record_id_fkey"
+            columns: ["case_record_id"]
+            isOneToOne: false
+            referencedRelation: "case_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_records: {
+        Row: {
+          age: string
+          allergies: string
+          appetite: string
+          appointment_id: string | null
+          attachments: Json
+          chief_complaint: string
+          child_behaviour: string
+          child_birth_history: string
+          child_development: string
+          child_vaccination: string
+          complaint_duration: string
+          created_at: string
+          current_medicines: string
+          current_symptoms: string
+          daily_routine: string
+          digestion: string
+          emotional_state: string
+          family_history: string
+          gender: string
+          id: string
+          lifestyle: string
+          menstrual_history: string
+          mental_health_notes: string
+          occupation: string
+          past_medical_history: string
+          patient_id: string
+          patient_name: string
+          phone: string
+          previous_treatment: string
+          reproductive_history: string
+          sleep: string
+          status: string
+          submitted_at: string | null
+          surgical_history: string
+          thirst: string
+          updated_at: string
+        }
+        Insert: {
+          age?: string
+          allergies?: string
+          appetite?: string
+          appointment_id?: string | null
+          attachments?: Json
+          chief_complaint?: string
+          child_behaviour?: string
+          child_birth_history?: string
+          child_development?: string
+          child_vaccination?: string
+          complaint_duration?: string
+          created_at?: string
+          current_medicines?: string
+          current_symptoms?: string
+          daily_routine?: string
+          digestion?: string
+          emotional_state?: string
+          family_history?: string
+          gender?: string
+          id?: string
+          lifestyle?: string
+          menstrual_history?: string
+          mental_health_notes?: string
+          occupation?: string
+          past_medical_history?: string
+          patient_id: string
+          patient_name?: string
+          phone?: string
+          previous_treatment?: string
+          reproductive_history?: string
+          sleep?: string
+          status?: string
+          submitted_at?: string | null
+          surgical_history?: string
+          thirst?: string
+          updated_at?: string
+        }
+        Update: {
+          age?: string
+          allergies?: string
+          appetite?: string
+          appointment_id?: string | null
+          attachments?: Json
+          chief_complaint?: string
+          child_behaviour?: string
+          child_birth_history?: string
+          child_development?: string
+          child_vaccination?: string
+          complaint_duration?: string
+          created_at?: string
+          current_medicines?: string
+          current_symptoms?: string
+          daily_routine?: string
+          digestion?: string
+          emotional_state?: string
+          family_history?: string
+          gender?: string
+          id?: string
+          lifestyle?: string
+          menstrual_history?: string
+          mental_health_notes?: string
+          occupation?: string
+          past_medical_history?: string
+          patient_id?: string
+          patient_name?: string
+          phone?: string
+          previous_treatment?: string
+          reproductive_history?: string
+          sleep?: string
+          status?: string
+          submitted_at?: string | null
+          surgical_history?: string
+          thirst?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_records_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
