@@ -211,6 +211,16 @@ function AccountPage() {
               </span>
             </span>
           </Link>
+          <Link to="/case-form" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+            <ClipboardList className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">My case-taking form</span>
+              <span className="block text-sm text-muted-foreground">
+                Share your detailed case history and reports before the consultation
+              </span>
+            </span>
+          </Link>
+
           <Link to="/orders" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <Package className="size-5 text-leaf" />
             <span>
