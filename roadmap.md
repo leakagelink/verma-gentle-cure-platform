@@ -44,3 +44,10 @@
 - [ ] Admin dashboard with charts and all management modules
 - [ ] CMS for homepage, services, conditions, testimonials, FAQ, blog, SEO fields
 - [ ] Notification layer (email / SMS / WhatsApp / push) behind an integration interface
+
+## Payment & billing (done)
+- payments table with receipt numbers, RLS, refund fields, attempts
+- /billing patient view: pending fees, UPI/card/net-banking submission, retry, receipts, refund status
+- /receipts/$id printable receipt & invoice with share/download
+- /finance admin dashboard: collections, cash entry at desk, refund status, notes
+- pending: real online gateway (Razorpay/Cashfree) — India seller, built-in payments unavailable
