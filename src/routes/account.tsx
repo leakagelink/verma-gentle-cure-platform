@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
+import { CalendarDays, ClipboardList, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
