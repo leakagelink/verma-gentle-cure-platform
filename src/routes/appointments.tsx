@@ -105,9 +105,15 @@ function AppointmentsPage() {
           <h2 className="flex items-center gap-2 text-xl text-navy">
             <CalendarDays className="size-5 text-leaf" /> Appointments
           </h2>
-          <Button asChild className="rounded-full">
-            <Link to="/book-appointment">Book new consultation</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/case-form">Case form</Link>
+            </Button>
+            <Button asChild className="rounded-full">
+              <Link to="/book-appointment">Book new consultation</Link>
+            </Button>
+          </div>
+
         </div>
 
         {loading ? (
