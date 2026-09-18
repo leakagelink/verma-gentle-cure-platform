@@ -11,8 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  DOCTOR_DEFAULTS,
   EMPTY_MEDICINE,
   formatDateLong,
+  parseMedicines,
+  signatureCode,
   MODE_LABEL,
   PAYMENT_LABEL,
   STATUS_CLASS,
