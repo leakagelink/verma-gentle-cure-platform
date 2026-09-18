@@ -383,6 +383,7 @@ export type Database = {
           created_at: string
           failure_reason: string | null
           gateway: string | null
+          gateway_order_id: string | null
           gateway_payment_id: string | null
           id: string
           kind: string
@@ -406,6 +407,7 @@ export type Database = {
           created_at?: string
           failure_reason?: string | null
           gateway?: string | null
+          gateway_order_id?: string | null
           gateway_payment_id?: string | null
           id?: string
           kind?: string
@@ -429,6 +431,7 @@ export type Database = {
           created_at?: string
           failure_reason?: string | null
           gateway?: string | null
+          gateway_order_id?: string | null
           gateway_payment_id?: string | null
           id?: string
           kind?: string
