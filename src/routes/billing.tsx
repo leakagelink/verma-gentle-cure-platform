@@ -10,6 +10,7 @@ import {
   getPaymentConfig,
   startOnlinePayment,
 } from "@/lib/razorpay.functions";
+import { loadCheckout } from "@/lib/razorpay-checkout";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
