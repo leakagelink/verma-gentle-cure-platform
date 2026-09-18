@@ -197,6 +197,7 @@ function BillingPage() {
           <PayPanel
             due={payFor}
             userId={user.id}
+            online={online}
             attempt={
               payments.filter(
                 (p) =>
