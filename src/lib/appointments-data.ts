@@ -2,6 +2,36 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type AppointmentRow = Database["public"]["Tables"]["appointments"]["Row"];
 export type PrescriptionRow = Database["public"]["Tables"]["prescriptions"]["Row"];
+export type PrescriptionAuditRow =
+  Database["public"]["Tables"]["prescription_audit"]["Row"];
+
+export const DOCTOR_DEFAULTS = {
+  name: "Dr. Rajshree Verma",
+  qualification: "BHMS — Homeopathic Physician",
+  registration: "",
+};
+
+/** Short, non-sensitive patient reference shown on the prescription. */
+export function patientCode(patientId: string) {
+  return `VGC-${patientId.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+}
+
+export function signatureCode() {
+  const random =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : String(Date.now());
+  return `SIG-${random.replace(/-/g, "").slice(0, 10).toUpperCase()}`;
+}
+
+export const AUDIT_FIELD_LABEL: Record<string, string> = {
+  diagnosis: "Assessment",
+  advice: "Advice",
+  diet_advice: "Diet advice",
+  general_care: "General care",
+  medicines: "Medicines",
+  follow_up_date: "Follow-up date",
+};
 export type AppointmentStatus = Database["public"]["Enums"]["appointment_status"];
 export type ConsultationMode = Database["public"]["Enums"]["consultation_mode"];
 export type PaymentStatus = Database["public"]["Enums"]["payment_status"];

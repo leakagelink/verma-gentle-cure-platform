@@ -375,45 +375,122 @@ export type Database = {
         }
         Relationships: []
       }
+      prescription_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          changed_fields: string[]
+          created_at: string
+          id: string
+          patient_id: string
+          prescription_id: string
+          snapshot: Json
+          version: number
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          changed_fields?: string[]
+          created_at?: string
+          id?: string
+          patient_id: string
+          prescription_id: string
+          snapshot?: Json
+          version?: number
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          changed_fields?: string[]
+          created_at?: string
+          id?: string
+          patient_id?: string
+          prescription_id?: string
+          snapshot?: Json
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_audit_prescription_id_fkey"
+            columns: ["prescription_id"]
+            isOneToOne: false
+            referencedRelation: "prescriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prescriptions: {
         Row: {
           advice: string | null
           appointment_id: string | null
+          consultation_mode:
+            | Database["public"]["Enums"]["consultation_mode"]
+            | null
           created_at: string
           diagnosis: string
+          diet_advice: string | null
           doctor_id: string | null
+          doctor_name: string
+          doctor_qualification: string
+          doctor_registration_no: string
           follow_up_date: string | null
+          general_care: string | null
           id: string
           medicines: Json
           patient_id: string
           prescription_no: string
+          signature_code: string | null
+          signed_at: string | null
           updated_at: string
+          version: number
         }
         Insert: {
           advice?: string | null
           appointment_id?: string | null
+          consultation_mode?:
+            | Database["public"]["Enums"]["consultation_mode"]
+            | null
           created_at?: string
           diagnosis?: string
+          diet_advice?: string | null
           doctor_id?: string | null
+          doctor_name?: string
+          doctor_qualification?: string
+          doctor_registration_no?: string
           follow_up_date?: string | null
+          general_care?: string | null
           id?: string
           medicines?: Json
           patient_id: string
           prescription_no?: string
+          signature_code?: string | null
+          signed_at?: string | null
           updated_at?: string
+          version?: number
         }
         Update: {
           advice?: string | null
           appointment_id?: string | null
+          consultation_mode?:
+            | Database["public"]["Enums"]["consultation_mode"]
+            | null
           created_at?: string
           diagnosis?: string
+          diet_advice?: string | null
           doctor_id?: string | null
+          doctor_name?: string
+          doctor_qualification?: string
+          doctor_registration_no?: string
           follow_up_date?: string | null
+          general_care?: string | null
           id?: string
           medicines?: Json
           patient_id?: string
           prescription_no?: string
+          signature_code?: string | null
+          signed_at?: string | null
           updated_at?: string
+          version?: number
         }
         Relationships: [
           {
