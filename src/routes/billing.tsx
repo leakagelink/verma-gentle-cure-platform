@@ -1,7 +1,15 @@
+import { useServerFn } from "@tanstack/react-start";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { IndianRupee, ReceiptText, RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+
+import {
+  confirmOnlinePayment,
+  failOnlinePayment,
+  getPaymentConfig,
+  startOnlinePayment,
+} from "@/lib/razorpay.functions";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -64,10 +72,16 @@ function BillingPage() {
   const [dues, setDues] = useState<Due[]>([]);
   const [busy, setBusy] = useState(true);
   const [payFor, setPayFor] = useState<Due | null>(null);
+  const [online, setOnline] = useState(false);
+  const config = useServerFn(getPaymentConfig);
 
   useEffect(() => {
     if (!loading && !user) void navigate({ to: "/auth" });
   }, [loading, user, navigate]);
+
+  useEffect(() => {
+    void config().then((c) => setOnline(c.online));
+  }, [config]);
 
   const load = useCallback(async () => {
     if (!user) return;
@@ -183,6 +197,7 @@ function BillingPage() {
           <PayPanel
             due={payFor}
             userId={user.id}
+            online={online}
             attempt={
               payments.filter(
                 (p) =>
@@ -394,6 +409,19 @@ function PayPanel({
         <h3 className="text-lg text-navy">Pay {formatMoney(due.amount)}</h3>
         <p className="mt-1 text-sm text-muted-foreground">{due.label}</p>
       </div>
+
+      {online && (
+        <div className="rounded-2xl border border-border surface-ivory p-4">
+          <p className="text-sm text-navy">Pay securely by UPI, card or net banking</p>
+          <Button
+            className="mt-3 rounded-full"
+            disabled={opening}
+            onClick={() => void payOnline()}
+          >
+            {opening ? "Opening…" : `Pay ${formatMoney(due.amount)} online`}
+          </Button>
+        </div>
+      )}
 
       <div className="space-y-1.5">
         <Label className="text-sm text-navy">Payment method</Label>
