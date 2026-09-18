@@ -72,10 +72,16 @@ function BillingPage() {
   const [dues, setDues] = useState<Due[]>([]);
   const [busy, setBusy] = useState(true);
   const [payFor, setPayFor] = useState<Due | null>(null);
+  const [online, setOnline] = useState(false);
+  const config = useServerFn(getPaymentConfig);
 
   useEffect(() => {
     if (!loading && !user) void navigate({ to: "/auth" });
   }, [loading, user, navigate]);
+
+  useEffect(() => {
+    void config().then((c) => setOnline(c.online));
+  }, [config]);
 
   const load = useCallback(async () => {
     if (!user) return;
