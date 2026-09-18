@@ -21,7 +21,7 @@
 - [x] Checkout saves real orders with items, coupon, delivery fee and totals
 - [x] Customer order tracking (/orders) and store admin order management (/admin)
 - [x] COD configurable (on/off, min/max order) plus delivery fee and free-delivery threshold
-- [ ] Payment gateway integration layer (Razorpay / Cashfree / UPI) once credentials are supplied
+- [x] Payment gateway (Razorpay UPI/cards/net-banking) live — keys stored securely, verified with a real order
 - [ ] File uploads (reports) with storage buckets
 
 ## Mobile app experience (done)
@@ -50,6 +50,7 @@
 - /billing patient view: pending fees, UPI/card/net-banking submission, retry, receipts, refund status
 - /receipts/$id printable receipt & invoice with share/download
 - /finance admin dashboard: collections, cash entry at desk, refund status, notes
-- pending: real online gateway (Razorpay/Cashfree) — India seller, built-in payments unavailable
 
-- Razorpay online payment wired (needs RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET)
+- Razorpay online payment wired and verified: keys saved (secure store), test order created successfully
+- note: user supplied a LIVE key (rzp_live_...) — real money is charged; switch to a test key while testing
+
