@@ -487,12 +487,30 @@ function PrescriptionForm({
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="space-y-1.5">
-          <Label className="text-sm text-navy">Advice</Label>
+          <Label className="text-sm text-navy">Medicine instructions / advice</Label>
           <Textarea
             rows={2}
             value={advice}
             onChange={(e) => setAdvice(e.target.value)}
-            placeholder="Diet, lifestyle and care advice"
+            placeholder="How to take the medicines, precautions"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">Diet advice</Label>
+          <Textarea
+            rows={2}
+            value={diet}
+            onChange={(e) => setDiet(e.target.value)}
+            placeholder="Foods to prefer or avoid"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">General care</Label>
+          <Textarea
+            rows={2}
+            value={generalCare}
+            onChange={(e) => setGeneralCare(e.target.value)}
+            placeholder="Routine, sleep, activity and self-care guidance"
           />
         </div>
         <div className="space-y-1.5">
@@ -502,7 +520,7 @@ function PrescriptionForm({
       </div>
 
       <Button className="mt-5 rounded-full" onClick={() => void save()} disabled={saving}>
-        {saving ? "Saving…" : "Issue prescription"}
+        {saving ? "Saving…" : existingId ? "Save changes" : "Issue prescription"}
       </Button>
     </div>
   );
