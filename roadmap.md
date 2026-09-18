@@ -51,3 +51,5 @@
 - /receipts/$id printable receipt & invoice with share/download
 - /finance admin dashboard: collections, cash entry at desk, refund status, notes
 - pending: real online gateway (Razorpay/Cashfree) — India seller, built-in payments unavailable
+
+- Razorpay online payment wired (needs RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET)
