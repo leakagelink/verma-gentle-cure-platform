@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -111,22 +110,6 @@ function AuthPage() {
     }
   };
 
-  const handleGoogle = async () => {
-    setBusy(true);
-    try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
-      if (result.error) {
-        toast.error("Google sign-in could not be completed. Please try again.");
-        return;
-      }
-      if (result.redirected) return;
-      void navigate({ to: "/account" });
-    } finally {
-      setBusy(false);
-    }
-  };
 
   const handleReset = async () => {
     if (!/^\S+@\S+\.\S+$/.test(email)) {
@@ -238,19 +221,6 @@ function AuthPage() {
           </Button>
         </form>
 
-        <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wide text-muted-foreground">
-          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          disabled={busy}
-          onClick={handleGoogle}
-          className="h-12 w-full rounded-full"
-        >
-          Continue with Google
-        </Button>
 
         <p className="mt-5 text-sm text-muted-foreground">
           {mode === "login" ? "Forgot your password? " : "Already registered? "}
