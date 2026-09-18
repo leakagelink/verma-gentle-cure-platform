@@ -443,7 +443,11 @@ function CheckoutPage() {
             onClick={() => void placeOrder()}
             disabled={saving}
           >
-            {saving ? "Placing order…" : "Place order"}
+            {saving
+              ? "Placing order…"
+              : method === "cod"
+                ? "Place order"
+                : `Place order & pay ${formatINR(total)}`}
           </Button>
         </aside>
       </section>
