@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,6 +13,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart-store";
 import { COUPON_STORAGE_KEY, useStoreSettings, type PaymentMethod } from "@/lib/products";
+import { loadCheckout } from "@/lib/razorpay-checkout";
+import {
+  confirmOnlinePayment,
+  failOnlinePayment,
+  startOnlinePayment,
+} from "@/lib/razorpay.functions";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
