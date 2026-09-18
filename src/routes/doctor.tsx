@@ -136,7 +136,15 @@ function DoctorDashboardPage() {
       />
 
       <section className="container-page py-12">
+        <div className="mb-6">
+          <Button asChild variant="outline" className="rounded-full">
+            <Link to="/case-records">
+              <ClipboardList className="size-4" /> Patient case records
+            </Link>
+          </Button>
+        </div>
         <div className="flex flex-wrap gap-2">
+
           {(["all", ...STATUSES] as const).map((value) => (
             <button
               key={value}
