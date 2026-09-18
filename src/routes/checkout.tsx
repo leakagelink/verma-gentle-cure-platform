@@ -254,10 +254,15 @@ function CheckoutPage() {
         <h1 className="mt-5 text-3xl text-navy">Order placed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Order ID <strong className="text-navy">{placed.orderNo}</strong> · Payment status:{" "}
-          {placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
+          {placed.paid ? "Paid" : placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild className="rounded-full">
+          {!placed.paid && placed.method !== "cod" && (
+            <Button asChild className="rounded-full">
+              <Link to="/billing">Pay now</Link>
+            </Button>
+          )}
+          <Button asChild variant={placed.paid ? "default" : "outline"} className="rounded-full">
             <Link to="/orders">Track my orders</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
