@@ -401,8 +401,8 @@ function CheckoutPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            Payment options are managed by the clinic. Orders paid online or by UPI are recorded with
-            payment status Pending until the gateway is connected.
+            Payment options are managed by the clinic. Choosing UPI or online payment opens the
+            secure payment window as soon as you place the order.
           </p>
         </div>
 
