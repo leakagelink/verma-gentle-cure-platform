@@ -410,6 +410,19 @@ function PayPanel({
         <p className="mt-1 text-sm text-muted-foreground">{due.label}</p>
       </div>
 
+      {online && (
+        <div className="rounded-2xl border border-border surface-ivory p-4">
+          <p className="text-sm text-navy">Pay securely by UPI, card or net banking</p>
+          <Button
+            className="mt-3 rounded-full"
+            disabled={opening}
+            onClick={() => void payOnline()}
+          >
+            {opening ? "Opening…" : `Pay ${formatMoney(due.amount)} online`}
+          </Button>
+        </div>
+      )}
+
       <div className="space-y-1.5">
         <Label className="text-sm text-navy">Payment method</Label>
         <div className="flex flex-wrap gap-2">
