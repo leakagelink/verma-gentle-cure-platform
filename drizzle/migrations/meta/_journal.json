@@ -15,6 +15,13 @@
       "when": 1789740426976,
       "tag": "0001_payments_and_billing",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789740965254,
+      "tag": "0002_payments_gateway_order_id",
+      "breakpoints": true
     }
   ]
 }
