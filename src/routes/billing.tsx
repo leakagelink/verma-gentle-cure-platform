@@ -10,6 +10,7 @@ import {
   getPaymentConfig,
   startOnlinePayment,
 } from "@/lib/razorpay.functions";
+import { loadCheckout } from "@/lib/razorpay-checkout";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -274,23 +275,6 @@ function BillingPage() {
   );
 }
 
-declare global {
-  interface Window {
-    Razorpay?: new (options: Record<string, unknown>) => { open: () => void };
-  }
-}
-
-function loadCheckout() {
-  return new Promise<boolean>((resolve) => {
-    if (typeof window === "undefined") return resolve(false);
-    if (window.Razorpay) return resolve(true);
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-}
 
 function PayPanel({
   due,

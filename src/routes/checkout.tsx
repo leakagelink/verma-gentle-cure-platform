@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,6 +13,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/lib/cart-store";
 import { COUPON_STORAGE_KEY, useStoreSettings, type PaymentMethod } from "@/lib/products";
+import { loadCheckout } from "@/lib/razorpay-checkout";
+import {
+  confirmOnlinePayment,
+  failOnlinePayment,
+  startOnlinePayment,
+} from "@/lib/razorpay.functions";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
@@ -37,9 +44,16 @@ function CheckoutPage() {
   const { settings } = useStoreSettings();
   const navigate = useNavigate();
 
-  const [placed, setPlaced] = useState<{ orderNo: string; method: PaymentMethod } | null>(null);
+  const [placed, setPlaced] = useState<{
+    orderNo: string;
+    method: PaymentMethod;
+    paid: boolean;
+  } | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("cod");
   const [saving, setSaving] = useState(false);
+  const startPay = useServerFn(startOnlinePayment);
+  const confirmPay = useServerFn(confirmOnlinePayment);
+  const failPay = useServerFn(failOnlinePayment);
   const [coupon, setCoupon] = useState<{ code: string; rate: number } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
@@ -158,14 +172,77 @@ function CheckoutPage() {
       toast.error("Order saved, but some items could not be added. Our team will call you.");
     }
 
-    setPlaced({ orderNo: order.order_no, method });
     clear();
     try {
       localStorage.removeItem(COUPON_STORAGE_KEY);
     } catch {
       /* ignore */
     }
+
+    if (method !== "cod") {
+      const paid = await payNow(order.id, order.order_no);
+      setPlaced({ orderNo: order.order_no, method, paid });
+      return;
+    }
+
+    setPlaced({ orderNo: order.order_no, method, paid: false });
     toast.success("Order placed");
+  }
+
+  /** Opens the Razorpay window right after the order is created. */
+  async function payNow(orderId: string, orderNo: string) {
+    try {
+      const ready = await loadCheckout();
+      if (!ready) throw new Error("Could not open the payment window");
+      const session = await startPay({ data: { kind: "order", orderId } });
+      return await new Promise<boolean>((resolve) => {
+        const rz = new window.Razorpay!({
+          key: session.keyId,
+          amount: session.amount * 100,
+          currency: "INR",
+          name: "Verma Gentle Cure",
+          description: `Medicine order ${orderNo}`,
+          order_id: session.orderId,
+          prefill: { name: form.name.trim(), email: form.email.trim(), contact: form.mobile.trim() },
+          handler: async (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) => {
+            try {
+              await confirmPay({
+                data: {
+                  paymentId: session.paymentId,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  signature: response.razorpay_signature,
+                  method: method === "upi" ? "upi" : "card",
+                },
+              });
+              toast.success("Payment successful — your receipt is ready.");
+              resolve(true);
+            } catch {
+              toast.error("Payment could not be verified. Please contact the clinic.");
+              resolve(false);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              void failPay({
+                data: { paymentId: session.paymentId, reason: "Cancelled by patient" },
+              });
+              toast.error("Payment cancelled — you can pay again from Payments & receipts.");
+              resolve(false);
+            },
+          },
+          theme: { color: "#063B52" },
+        });
+        rz.open();
+      });
+    } catch {
+      toast.error("Could not open the payment window. You can pay from Payments & receipts.");
+      return false;
+    }
   }
 
   if (placed) {
@@ -177,10 +254,15 @@ function CheckoutPage() {
         <h1 className="mt-5 text-3xl text-navy">Order placed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Order ID <strong className="text-navy">{placed.orderNo}</strong> · Payment status:{" "}
-          {placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
+          {placed.paid ? "Paid" : placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild className="rounded-full">
+          {!placed.paid && placed.method !== "cod" && (
+            <Button asChild className="rounded-full">
+              <Link to="/billing">Pay now</Link>
+            </Button>
+          )}
+          <Button asChild variant={placed.paid ? "default" : "outline"} className="rounded-full">
             <Link to="/orders">Track my orders</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
@@ -319,8 +401,8 @@ function CheckoutPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            Payment options are managed by the clinic. Orders paid online or by UPI are recorded with
-            payment status Pending until the gateway is connected.
+            Payment options are managed by the clinic. Choosing UPI or online payment opens the
+            secure payment window as soon as you place the order.
           </p>
         </div>
 
@@ -361,7 +443,11 @@ function CheckoutPage() {
             onClick={() => void placeOrder()}
             disabled={saving}
           >
-            {saving ? "Placing order…" : "Place order"}
+            {saving
+              ? "Placing order…"
+              : method === "cod"
+                ? "Place order"
+                : `Place order & pay ${formatINR(total)}`}
           </Button>
         </aside>
       </section>
