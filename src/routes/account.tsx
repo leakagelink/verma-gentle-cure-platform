@@ -261,6 +261,17 @@ function AccountPage() {
               </span>
             </Link>
           )}
+          {isCareTeam && (
+            <Link to="/finance" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+              <IndianRupee className="size-5 text-leaf" />
+              <span>
+                <span className="block font-semibold">Financial dashboard</span>
+                <span className="block text-sm text-muted-foreground">
+                  Collections, cash entries, receipts and refunds
+                </span>
+              </span>
+            </Link>
+          )}
           <Link to="/book-appointment" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <CalendarDays className="size-5 text-leaf" />
             <span>
