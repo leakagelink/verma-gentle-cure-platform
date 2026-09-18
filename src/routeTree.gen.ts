@@ -17,6 +17,7 @@ import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as CaseFormRouteImport } from './routes/case-form'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -74,6 +75,11 @@ const BookAppointmentRoute = BookAppointmentRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseFormRoute = CaseFormRouteImport.update({
+  id: '/case-form',
+  path: '/case-form',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
@@ -263,6 +272,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
     | '/checkout'
     | '/consultation'
     | '/contact'
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
     | '/checkout'
     | '/consultation'
     | '/contact'
@@ -319,6 +330,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
     | '/checkout'
     | '/consultation'
     | '/contact'
@@ -348,6 +360,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
+  CaseFormRoute: typeof CaseFormRoute
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
@@ -424,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-form': {
+      id: '/case-form'
+      path: '/case-form'
+      fullPath: '/case-form'
+      preLoaderRoute: typeof CaseFormRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -564,6 +584,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,
+  CaseFormRoute: CaseFormRoute,
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
