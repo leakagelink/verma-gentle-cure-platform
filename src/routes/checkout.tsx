@@ -172,14 +172,77 @@ function CheckoutPage() {
       toast.error("Order saved, but some items could not be added. Our team will call you.");
     }
 
-    setPlaced({ orderNo: order.order_no, method });
     clear();
     try {
       localStorage.removeItem(COUPON_STORAGE_KEY);
     } catch {
       /* ignore */
     }
+
+    if (method !== "cod") {
+      const paid = await payNow(order.id, order.order_no);
+      setPlaced({ orderNo: order.order_no, method, paid });
+      return;
+    }
+
+    setPlaced({ orderNo: order.order_no, method, paid: false });
     toast.success("Order placed");
+  }
+
+  /** Opens the Razorpay window right after the order is created. */
+  async function payNow(orderId: string, orderNo: string) {
+    try {
+      const ready = await loadCheckout();
+      if (!ready) throw new Error("Could not open the payment window");
+      const session = await startPay({ data: { kind: "order", orderId } });
+      return await new Promise<boolean>((resolve) => {
+        const rz = new window.Razorpay!({
+          key: session.keyId,
+          amount: session.amount * 100,
+          currency: "INR",
+          name: "Verma Gentle Cure",
+          description: `Medicine order ${orderNo}`,
+          order_id: session.orderId,
+          prefill: { name: form.name.trim(), email: form.email.trim(), contact: form.mobile.trim() },
+          handler: async (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) => {
+            try {
+              await confirmPay({
+                data: {
+                  paymentId: session.paymentId,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  signature: response.razorpay_signature,
+                  method: method === "upi" ? "upi" : "card",
+                },
+              });
+              toast.success("Payment successful — your receipt is ready.");
+              resolve(true);
+            } catch {
+              toast.error("Payment could not be verified. Please contact the clinic.");
+              resolve(false);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              void failPay({
+                data: { paymentId: session.paymentId, reason: "Cancelled by patient" },
+              });
+              toast.error("Payment cancelled — you can pay again from Payments & receipts.");
+              resolve(false);
+            },
+          },
+          theme: { color: "#063B52" },
+        });
+        rz.open();
+      });
+    } catch {
+      toast.error("Could not open the payment window. You can pay from Payments & receipts.");
+      return false;
+    }
   }
 
   if (placed) {
