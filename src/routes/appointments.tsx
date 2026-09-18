@@ -231,7 +231,7 @@ function AppointmentsPage() {
                   <div className="mt-5">
                     <Button asChild variant="outline" className="rounded-full">
                       <Link to="/prescriptions/$id" params={{ id: rx.id }}>
-                        View / print prescription
+                        View / download / share
                       </Link>
                     </Button>
                   </div>
