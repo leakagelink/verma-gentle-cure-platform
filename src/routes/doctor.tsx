@@ -304,11 +304,44 @@ function PrescriptionForm({
   doctorId: string | null;
   onDone: () => void;
 }) {
+  const [existingId, setExistingId] = useState<string | null>(null);
   const [diagnosis, setDiagnosis] = useState("");
   const [advice, setAdvice] = useState("");
+  const [diet, setDiet] = useState("");
+  const [generalCare, setGeneralCare] = useState("");
+  const [qualification, setQualification] = useState(DOCTOR_DEFAULTS.qualification);
+  const [registration, setRegistration] = useState(DOCTOR_DEFAULTS.registration);
   const [followUp, setFollowUp] = useState("");
   const [medicines, setMedicines] = useState<PrescriptionMedicine[]>([{ ...EMPTY_MEDICINE }]);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    void (async () => {
+      const { data } = await supabase
+        .from("prescriptions")
+        .select("*")
+        .eq("appointment_id", appointment.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!active || !data) return;
+      setExistingId(data.id);
+      setDiagnosis(data.diagnosis ?? "");
+      setAdvice(data.advice ?? "");
+      setDiet(data.diet_advice ?? "");
+      setGeneralCare(data.general_care ?? "");
+      setQualification(data.doctor_qualification || DOCTOR_DEFAULTS.qualification);
+      setRegistration(data.doctor_registration_no || "");
+      setFollowUp(data.follow_up_date ?? "");
+      const list = parseMedicines(data.medicines);
+      if (list.length > 0) setMedicines(list);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [appointment.id]);
+
 
   function updateMedicine(index: number, key: keyof PrescriptionMedicine, value: string) {
     setMedicines((list) =>
