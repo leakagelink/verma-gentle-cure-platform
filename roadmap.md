@@ -34,7 +34,13 @@
 - [x] Reduced mobile page height with denser sections and swipeable content rows
 
 
+## Digital case-taking (done)
+- [x] Patient case form (/case-form): complaint, history, generals, lifestyle, mind, women's and child sections
+- [x] Report/prescription/photo uploads to the private patient-reports bucket
+- [x] Care-team case review (/case-records) with confidential clinical notes and assessment
+
 ## Phase 4 — Admin & operations
+
 - [ ] Admin dashboard with charts and all management modules
 - [ ] CMS for homepage, services, conditions, testimonials, FAQ, blog, SEO fields
 - [ ] Notification layer (email / SMS / WhatsApp / push) behind an integration interface
