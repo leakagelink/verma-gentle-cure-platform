@@ -109,6 +109,9 @@ function AppointmentsPage() {
             <Button asChild variant="outline" className="rounded-full">
               <Link to="/case-form">Case form</Link>
             </Button>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/billing">Payments</Link>
+            </Button>
             <Button asChild className="rounded-full">
               <Link to="/book-appointment">Book new consultation</Link>
             </Button>
