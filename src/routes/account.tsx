@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, ClipboardList, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
+import { CalendarDays, ClipboardList, IndianRupee, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -230,6 +230,15 @@ function AccountPage() {
               </span>
             </span>
           </Link>
+          <Link to="/billing" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+            <IndianRupee className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">Payments & receipts</span>
+              <span className="block text-sm text-muted-foreground">
+                Fees, bills, receipts, invoices and refund status
+              </span>
+            </span>
+          </Link>
           {isCareTeam && (
             <Link to="/doctor" className="card-premium flex items-center gap-3 p-4 sm:p-5">
               <Stethoscope className="size-5 text-leaf" />
@@ -248,6 +257,17 @@ function AccountPage() {
                 <span className="block font-semibold">Store admin</span>
                 <span className="block text-sm text-muted-foreground">
                   Manage orders, delivery and payment options
+                </span>
+              </span>
+            </Link>
+          )}
+          {isCareTeam && (
+            <Link to="/finance" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+              <IndianRupee className="size-5 text-leaf" />
+              <span>
+                <span className="block font-semibold">Financial dashboard</span>
+                <span className="block text-sm text-muted-foreground">
+                  Collections, cash entries, receipts and refunds
                 </span>
               </span>
             </Link>

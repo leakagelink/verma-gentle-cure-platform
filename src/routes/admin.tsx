@@ -150,6 +150,11 @@ function AdminPage() {
         description="Update delivery progress, payment status and the payment options offered at checkout."
       />
       <section className="container-page space-y-10 py-12">
+        <div className="flex flex-wrap gap-2">
+          <Button asChild variant="outline" className="rounded-full">
+            <Link to="/finance">Financial dashboard</Link>
+          </Button>
+        </div>
         <div className="card-premium p-6">
           <h2 className="text-lg text-navy">Payment & delivery options</h2>
           <p className="mt-1 text-sm text-muted-foreground">

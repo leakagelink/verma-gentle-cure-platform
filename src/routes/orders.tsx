@@ -84,6 +84,11 @@ function OrdersPage() {
         description="Every medicine order placed from your account, with its current delivery and payment status."
       />
       <section className="container-page py-6 sm:py-12">
+        <div className="mb-4 flex flex-wrap gap-2">
+          <Button asChild variant="outline" className="rounded-full">
+            <Link to="/billing">Payments & receipts</Link>
+          </Button>
+        </div>
         {busy ? (
           <p className="text-sm text-muted-foreground">Loading your orders…</p>
         ) : orders.length === 0 ? (

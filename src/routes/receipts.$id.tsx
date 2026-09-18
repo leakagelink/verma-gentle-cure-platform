@@ -3,7 +3,7 @@ import { Download, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { Logo } from "@/components/ui-kit/Logo";
+import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
