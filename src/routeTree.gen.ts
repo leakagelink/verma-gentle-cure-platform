@@ -15,6 +15,7 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CaseFormRouteImport } from './routes/case-form'
@@ -66,6 +67,11 @@ const AppointmentsRoute = AppointmentsRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookAppointmentRoute = BookAppointmentRouteImport.update({
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -339,6 +350,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
+  BillingRoute: typeof BillingRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
   CaseFormRoute: typeof CaseFormRoute
@@ -436,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book-appointment': {
@@ -602,6 +622,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
+  BillingRoute: BillingRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,
   CaseFormRoute: CaseFormRoute,
