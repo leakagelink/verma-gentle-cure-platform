@@ -375,6 +375,93 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          appointment_id: string | null
+          attempt: number
+          created_at: string
+          failure_reason: string | null
+          gateway: string | null
+          gateway_payment_id: string | null
+          id: string
+          kind: string
+          method: string
+          notes: string | null
+          order_id: string | null
+          payer_name: string
+          receipt_no: string
+          recorded_by: string | null
+          refund_amount: number
+          refund_note: string | null
+          refund_status: string
+          status: Database["public"]["Enums"]["payment_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          appointment_id?: string | null
+          attempt?: number
+          created_at?: string
+          failure_reason?: string | null
+          gateway?: string | null
+          gateway_payment_id?: string | null
+          id?: string
+          kind?: string
+          method?: string
+          notes?: string | null
+          order_id?: string | null
+          payer_name?: string
+          receipt_no?: string
+          recorded_by?: string | null
+          refund_amount?: number
+          refund_note?: string | null
+          refund_status?: string
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          appointment_id?: string | null
+          attempt?: number
+          created_at?: string
+          failure_reason?: string | null
+          gateway?: string | null
+          gateway_payment_id?: string | null
+          id?: string
+          kind?: string
+          method?: string
+          notes?: string | null
+          order_id?: string | null
+          payer_name?: string
+          receipt_no?: string
+          recorded_by?: string | null
+          refund_amount?: number
+          refund_note?: string | null
+          refund_status?: string
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prescription_audit: {
         Row: {
           action: string

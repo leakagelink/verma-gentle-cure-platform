@@ -15,6 +15,7 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CaseFormRouteImport } from './routes/case-form'
@@ -24,6 +25,7 @@ import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FinanceRouteImport } from './routes/finance'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
@@ -36,6 +38,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as MedicinesIndexRouteImport } from './routes/medicines.index'
 import { Route as MedicinesSlugRouteImport } from './routes/medicines.$slug'
 import { Route as PrescriptionsIdRouteImport } from './routes/prescriptions.$id'
+import { Route as ReceiptsIdRouteImport } from './routes/receipts.$id'
 import { Route as MedicinesCategorySlugRouteImport } from './routes/medicines.category.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -66,6 +69,11 @@ const AppointmentsRoute = AppointmentsRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookAppointmentRoute = BookAppointmentRouteImport.update({
@@ -111,6 +119,11 @@ const DoctorRoute = DoctorRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceRoute = FinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
@@ -173,6 +186,11 @@ const PrescriptionsIdRoute = PrescriptionsIdRouteImport.update({
   path: '/prescriptions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReceiptsIdRoute = ReceiptsIdRouteImport.update({
+  id: '/receipts/$id',
+  path: '/receipts/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
   id: '/medicines/category/$slug',
   path: '/medicines/category/$slug',
@@ -186,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -195,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -205,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -216,6 +237,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -225,6 +247,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -235,6 +258,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog': typeof BlogIndexRoute
   '/medicines': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -247,6 +271,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
   '/case-form': typeof CaseFormRoute
@@ -256,6 +281,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
@@ -266,6 +292,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -279,6 +306,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -288,6 +316,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/finance'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
@@ -298,6 +327,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
@@ -309,6 +339,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -318,6 +349,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/finance'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
@@ -328,6 +360,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog'
     | '/medicines'
     | '/medicines/category/$slug'
@@ -339,6 +372,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
     | '/case-form'
@@ -348,6 +382,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/doctor'
     | '/faq'
+    | '/finance'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
@@ -358,6 +393,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
@@ -370,6 +406,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
+  BillingRoute: typeof BillingRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
   CaseFormRoute: typeof CaseFormRoute
@@ -379,6 +416,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
+  FinanceRoute: typeof FinanceRoute
   OrdersRoute: typeof OrdersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
@@ -389,6 +427,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   MedicinesSlugRoute: typeof MedicinesSlugRoute
   PrescriptionsIdRoute: typeof PrescriptionsIdRoute
+  ReceiptsIdRoute: typeof ReceiptsIdRoute
   BlogIndexRoute: typeof BlogIndexRoute
   MedicinesIndexRoute: typeof MedicinesIndexRoute
   MedicinesCategorySlugRoute: typeof MedicinesCategorySlugRoute
@@ -436,6 +475,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book-appointment': {
@@ -499,6 +545,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders': {
@@ -585,6 +638,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrescriptionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/receipts/$id': {
+      id: '/receipts/$id'
+      path: '/receipts/$id'
+      fullPath: '/receipts/$id'
+      preLoaderRoute: typeof ReceiptsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/medicines/category/$slug': {
       id: '/medicines/category/$slug'
       path: '/medicines/category/$slug'
@@ -602,6 +662,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
+  BillingRoute: BillingRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,
   CaseFormRoute: CaseFormRoute,
@@ -611,6 +672,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
+  FinanceRoute: FinanceRoute,
   OrdersRoute: OrdersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
@@ -621,6 +683,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   MedicinesSlugRoute: MedicinesSlugRoute,
   PrescriptionsIdRoute: PrescriptionsIdRoute,
+  ReceiptsIdRoute: ReceiptsIdRoute,
   BlogIndexRoute: BlogIndexRoute,
   MedicinesIndexRoute: MedicinesIndexRoute,
   MedicinesCategorySlugRoute: MedicinesCategorySlugRoute,
