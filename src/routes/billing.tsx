@@ -259,22 +259,106 @@ function BillingPage() {
   );
 }
 
+declare global {
+  interface Window {
+    Razorpay?: new (options: Record<string, unknown>) => { open: () => void };
+  }
+}
+
+function loadCheckout() {
+  return new Promise<boolean>((resolve) => {
+    if (typeof window === "undefined") return resolve(false);
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 function PayPanel({
   due,
   userId,
   attempt,
+  online,
   onClose,
   onDone,
 }: {
   due: Due;
   userId: string;
   attempt: number;
+  online: boolean;
   onClose: () => void;
   onDone: () => void;
 }) {
   const [method, setMethod] = useState<PayMethod>("upi");
   const [reference, setReference] = useState("");
   const [saving, setSaving] = useState(false);
+  const [opening, setOpening] = useState(false);
+  const startPay = useServerFn(startOnlinePayment);
+  const confirmPay = useServerFn(confirmOnlinePayment);
+  const failPay = useServerFn(failOnlinePayment);
+
+  async function payOnline() {
+    setOpening(true);
+    try {
+      const ready = await loadCheckout();
+      if (!ready) throw new Error("Could not open the payment window");
+      const session = await startPay({
+        data: {
+          kind: due.kind,
+          appointmentId: due.appointment_id,
+          orderId: due.order_id,
+        },
+      });
+      const rz = new window.Razorpay!({
+        key: session.keyId,
+        amount: session.amount * 100,
+        currency: "INR",
+        name: "Verma Gentle Cure",
+        description: session.label,
+        order_id: session.orderId,
+        handler: async (response: {
+          razorpay_payment_id: string;
+          razorpay_order_id: string;
+          razorpay_signature: string;
+        }) => {
+          try {
+            await confirmPay({
+              data: {
+                paymentId: session.paymentId,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+              },
+            });
+            toast.success("Payment successful — your receipt is ready.");
+            onDone();
+          } catch {
+            toast.error("Payment could not be verified. Please contact the clinic.");
+            onDone();
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            void failPay({ data: { paymentId: session.paymentId, reason: "Cancelled by patient" } });
+            onDone();
+          },
+        },
+        theme: { color: "#063B52" },
+      });
+      rz.open();
+    } catch (error) {
+      toast.error(
+        error instanceof Error && error.message.includes("not configured")
+          ? "Online payment is not switched on yet. Use the reference option below."
+          : "Could not start the online payment. Please try again.",
+      );
+    } finally {
+      setOpening(false);
+    }
+  }
 
   async function submit() {
     if (reference.trim().length < 4) {
