@@ -159,7 +159,7 @@ function Hero() {
           </div>
           <dl className="mt-6 grid max-w-lg grid-cols-3 gap-3 border-t border-border pt-4 sm:mt-10 sm:gap-4 sm:pt-6">
             {[
-              ["20+ yrs", "Clinical practice"],
+              ["6 yrs", "Clinical practice"],
               ["Secure", "Medical records"],
               ["Pan-India", "Medicine delivery"],
             ].map(([k, v]) => (
@@ -245,12 +245,12 @@ function AboutDoctor() {
           <SectionHeading
             eyebrow="About the doctor"
             title="Dr. Rajshree Verma"
-            description="Homeopathic physician with two decades of clinical practice, known for detailed case-taking and an unhurried, patient-first consultation style."
+            description="Homeopathic physician with 6 years of clinical experience, known for detailed case-taking and an unhurried, patient-first consultation style."
           />
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-4">
             {[
               ["Qualifications", "BHMS, with continued clinical education in classical homeopathy"],
-              ["Experience", "20+ years of consulting practice across chronic and acute cases"],
+              ["Experience", "6 years of clinical experience across chronic and acute cases"],
               [
                 "Areas of focus",
                 "Chronic conditions, skin & hair, women's wellness, children's care",

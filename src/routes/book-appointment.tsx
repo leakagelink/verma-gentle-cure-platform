@@ -282,7 +282,7 @@ function BookAppointmentPage() {
                   <span className="min-w-0">
                     <span className="block font-semibold text-navy">{CLINIC.doctor}</span>
                     <span className="block text-sm text-muted-foreground">
-                      BHMS · Homeopathic Physician · 20+ years
+                      BHMS · Homeopathic Physician · 6 years
                     </span>
                   </span>
                 </button>

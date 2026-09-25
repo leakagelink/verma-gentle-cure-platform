@@ -142,7 +142,7 @@ export function MobileHome() {
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-navy">Dr. Rajshree Verma</p>
-            <p className="truncate text-xs text-muted-foreground">BHMS · 20+ years experience</p>
+            <p className="truncate text-xs text-muted-foreground">BHMS · 6 years experience</p>
             <Link
               to="/about-doctor"
               className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-leaf"
