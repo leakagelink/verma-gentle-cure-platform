@@ -324,5 +324,5 @@ export const AWARDS = [
   { year: "2026", title: "Rabindra Ratna Puraskar", body: "Awarded to Dr. Rajshree Verma" },
   { year: "2026", title: "Bharat Kamal Puraskar", body: "Awarded to Dr. Rajshree Verma" },
   { year: "2026", title: "Legend of Bharat", body: "Awarded to Dr. Rajshree Verma" },
-  { year: "", title: "Indian Icon Awards", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "Honour", title: "Indian Icon Awards", body: "Awarded to Dr. Rajshree Verma" },
 ];
