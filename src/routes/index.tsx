@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Award,
   BadgeCheck,
   BellRing,
   CalendarDays,
@@ -33,6 +34,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
+  AWARDS,
   BLOG_POSTS,
   CLINIC,
   CONDITIONS,
@@ -107,6 +109,7 @@ function HomePage() {
         <HowItWorks />
         <HealthConditions />
         <WhyUs />
+        <Awards />
         <Testimonials />
         <BlogPreview />
         <Faq />
@@ -529,6 +532,30 @@ function FinalCta() {
           >
             <Link to="/book-appointment">Book Consultation</Link>
           </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Awards() {
+  return (
+    <section className="py-16 lg:py-20">
+      <div className="container-page">
+        <SectionHeading
+          eyebrow="Recognition"
+          title="Awards & Recognition"
+          description="Honours received personally by Dr. Rajshree Verma."
+        />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {AWARDS.map((a) => (
+            <article key={a.title} className="card-premium border-t-2 border-t-lime p-5">
+              <Award className="size-6 text-lime" />
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{a.year}</p>
+              <h3 className="mt-1 font-display text-lg text-navy">{a.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{a.body}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>
