@@ -18,7 +18,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about-doctor", label: "About Doctor" },
+  { to: "/about-doctor", label: "About Dr. Verma" },
   { to: "/consultation", label: "Consultation" },
   { to: "/treatments", label: "Treatments" },
   { to: "/medicines", label: "Medicines" },
