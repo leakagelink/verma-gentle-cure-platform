@@ -34,7 +34,7 @@ function AboutDoctorPage() {
       <PageHero
         eyebrow="About the doctor"
         title="Dr. Rajshree Verma"
-        description="BHMS · Homeopathic Physician · 20+ years of clinical practice at Verma Gentle Cure."
+        description="BHMS · Homeopathic Physician · 6 years of clinical experience at Verma Gentle Cure."
       >
         <Button asChild size="lg" className="h-12 rounded-full px-6">
           <Link to="/book-appointment">Book a consultation</Link>
@@ -57,7 +57,7 @@ function AboutDoctorPage() {
             <h2 className="text-2xl text-navy">Biography</h2>
             <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted-foreground">
               <p>
-                Dr. Rajshree Verma has practised classical homeopathy for over two decades, with a
+                Dr. Rajshree Verma has practised classical homeopathy for 6 years, with a
                 consulting style built on long, detailed case-taking. Patients frequently describe
                 the first consultation as the first time their full history has been heard in one
                 sitting.
@@ -79,7 +79,7 @@ function AboutDoctorPage() {
           <div className="grid gap-4 sm:grid-cols-3">
             {[
               { icon: GraduationCap, title: "Qualification", body: "BHMS, classical homeopathy" },
-              { icon: Stethoscope, title: "Experience", body: "20+ years in practice" },
+              { icon: Stethoscope, title: "Experience", body: "6 years of clinical experience" },
               { icon: Award, title: "Recognition", body: "Regional & state honours" },
             ].map(({ icon: Icon, title, body }) => (
               <div key={title} className="card-premium p-5">

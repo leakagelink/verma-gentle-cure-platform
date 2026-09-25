@@ -5,7 +5,7 @@ export const CLINIC = {
   domain: "vermagentlecure.com",
   phone: "+91 98765 43210",
   email: "care@vermagentlecure.com",
-  address: "Verma Gentle Cure Homeopathic Clinic, Civil Lines, Kanpur, Uttar Pradesh, India",
+  address: "G3, 1st Floor, Sarala Complex, Kadma Market, Jamshedpur, Jharkhand – 831005",
   hours: "Mon – Sat · 10:00 AM – 7:00 PM · Sunday by appointment",
   disclaimer:
     "Information on this platform is provided for general awareness and is not a substitute for professional medical advice, diagnosis or treatment. Results may vary depending on individual circumstances. Always consult a qualified healthcare professional regarding a medical condition.",
@@ -179,7 +179,7 @@ export const TESTIMONIALS = [
   },
   {
     name: "R. Mehta",
-    location: "Kanpur",
+    location: "Jamshedpur",
     category: "Chronic Conditions",
     quote:
       "What stood out was how much history was taken before anything was recommended. It felt like an actual medical consultation, not a sale.",
@@ -318,7 +318,11 @@ export const FAQS = [
 ];
 
 export const AWARDS = [
-  { year: "2023", title: "Recognition for Community Health Camps", body: "Kanpur regional homeopathic association" },
-  { year: "2020", title: "Excellence in Patient Care", body: "State homeopathic practitioners forum" },
-  { year: "2016", title: "Clinical Case Study Presentation", body: "National homeopathy conference" },
+  { year: "2026", title: "Rashtriya Pratibha Samman", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "2026", title: "Indian Literature Award", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "2026", title: "Param Vibhushan Sewa Ratna Puraskar", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "2026", title: "Rabindra Ratna Puraskar", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "2026", title: "Bharat Kamal Puraskar", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "2026", title: "Legend of Bharat", body: "Awarded to Dr. Rajshree Verma" },
+  { year: "", title: "Indian Icon Awards", body: "Awarded to Dr. Rajshree Verma" },
 ];
