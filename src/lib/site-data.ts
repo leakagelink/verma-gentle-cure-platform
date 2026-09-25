@@ -69,30 +69,30 @@ export const SERVICES: Service[] = [
 ];
 
 export const TRUST_POINTS = [
-  { title: "Professional Consultation", description: "Qualified homeopathic physician", icon: "BadgeCheck" },
+  { title: "6 Years of Clinical Experience", description: "Dr. Rajshree Verma, Homeopathic Physician", icon: "BadgeCheck" },
+  { title: "Patient-Centred Approach", description: "Decisions explained in plain language", icon: "LifeBuoy" },
+  { title: "Jamshedpur Clinic", description: "Kadma Market, Jamshedpur, Jharkhand", icon: "Stethoscope" },
   { title: "Personalized Care", description: "Every case studied individually", icon: "UserRoundCheck" },
   { title: "Online Consultation", description: "Video and audio appointments", icon: "Video" },
   { title: "Medicine Delivery", description: "Dispatched across India", icon: "Truck" },
-  { title: "Secure Payments", description: "Encrypted checkout", icon: "ShieldCheck" },
-  { title: "Patient Support", description: "Help before and after visits", icon: "LifeBuoy" },
 ];
 
 export const STEPS = [
   {
-    title: "Book Consultation",
-    description: "Choose a new or follow-up consultation, pick a doctor, date and time slot.",
+    title: "Detailed Case Study",
+    description: "Your concern, symptoms, history, lifestyle and reports are recorded in detail.",
   },
   {
-    title: "Share Your Health Information",
-    description: "Add your concern, symptoms, history and upload any reports securely.",
+    title: "Individualized Analysis",
+    description: "The doctor studies your complete case to understand you as an individual.",
   },
   {
-    title: "Consult With Doctor",
-    description: "Join a video or audio consultation at your scheduled time.",
+    title: "Personalized Treatment Plan",
+    description: "A digital prescription with dosage guidance, diet and general-care advice.",
   },
   {
-    title: "Receive Your Treatment Plan",
-    description: "Get a digital prescription with dosage guidance and a follow-up date.",
+    title: "Follow-Up Care",
+    description: "Scheduled reviews so the plan can be adjusted as your response is observed.",
   },
 ];
 
