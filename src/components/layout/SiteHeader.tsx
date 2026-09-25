@@ -69,7 +69,7 @@ export function SiteHeader() {
             </Link>
           </Button>
           <Button asChild className="hidden rounded-full lg:inline-flex">
-            <Link to="/book-appointment">Book Consultation</Link>
+            <Link to="/book-appointment">Book Appointment</Link>
           </Button>
           <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
             <DrawerTrigger asChild>
