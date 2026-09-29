@@ -70,6 +70,7 @@ export function SiteHeader() {
               <UserRound className="size-5" />
             </Link>
           </Button>
+          <a href={CLINIC.phoneHref} className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-navy hover:bg-mint/60 2xl:inline-flex"><Phone className="size-4" /> {CLINIC.phone}</a>
           <Button asChild className="hidden rounded-full lg:inline-flex">
             <Link to="/book-appointment">Book Appointment</Link>
           </Button>
