@@ -42,6 +42,7 @@ import {
   SERVICES,
   STEPS,
   TESTIMONIALS,
+  TIMELINE,
   TRUST_POINTS,
   WHY_US,
 } from "@/lib/site-data";
@@ -89,6 +90,9 @@ export const Route = createFileRoute("/")({
           medicalSpecialty: "Homeopathic",
           address: CLINIC.address,
           telephone: CLINIC.phone,
+          foundingDate: "2026-03-23",
+          founder: { "@type": "Person", name: "Dr. Rajshree Verma" },
+          parentOrganization: { "@type": "Organization", name: CLINIC.corporate },
           email: CLINIC.email,
         }),
       },
@@ -110,6 +114,7 @@ function HomePage() {
         <HealthConditions />
         <WhyUs />
         <Awards />
+        <HomeTimeline />
         <Testimonials />
         <BlogPreview />
         <Faq />
@@ -130,18 +135,22 @@ function Hero() {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-leaf/30 bg-card px-3.5 py-1.5 text-xs font-semibold text-forest">
             <span className="size-1.5 rounded-full bg-lime" />
-            Verma Gentle Cure
+            Gentle Care. Individual Attention.
           </span>
           <h1 className="mt-4 text-3xl leading-[1.08] text-navy text-balance-tight sm:mt-6 sm:text-5xl lg:text-6xl">
-            Personalized Homeopathic Consultation with a{" "}
-            <span className="text-forest">Patient-Centred Approach</span>
+            Welcome to <span className="text-forest">Verma Gentle Cure</span>
           </h1>
           <p className="mt-3 font-display text-lg text-teal">
-            Dr. Rajshree Verma · Homeopathic Physician · 6 Years of Clinical Experience
+            Dr. Rajshree Verma (BHMS) · Homeopathic Physician · 6 Years of Experience
           </p>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">
-            A Jamshedpur homeopathic clinic offering unhurried, detailed consultations in person
-            and online, with clear explanations and structured follow-up.
+            Verma Gentle Cure is a homeopathic healthcare clinic in Jamshedpur founded by Dr.
+            Rajshree Verma (BHMS). Our approach emphasizes individualized consultation,
+            compassionate care and attention to the patient's overall health needs.
+          </p>
+          <p className="mt-3 text-sm font-semibold text-navy">
+            <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> ·{" "}
+            <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp: {CLINIC.whatsapp}</a>
           </p>
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:gap-3">
             <Button asChild size="lg" className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base">
@@ -160,9 +169,9 @@ function Hero() {
           </div>
           <dl className="mt-6 grid max-w-lg grid-cols-3 gap-3 border-t border-border pt-4 sm:mt-10 sm:gap-4 sm:pt-6">
             {[
-              ["6 yrs", "Clinical practice"],
-              ["Secure", "Medical records"],
-              ["Pan-India", "Medicine delivery"],
+              ["6 yrs", "Professional experience"],
+              ["23 Mar 2026", "Clinic inaugurated"],
+              ["Media", "Featured"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="font-display text-lg text-navy">{k}</dt>
@@ -246,12 +255,12 @@ function AboutDoctor() {
           <SectionHeading
             eyebrow="About the doctor"
             title="Dr. Rajshree Verma"
-            description="Homeopathic physician with 6 years of clinical experience, known for detailed case-taking and an unhurried, patient-first consultation style."
+            description="Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle Cure, with 6 years of experience and an individualized, compassionate approach."
           />
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-4">
             {[
               ["Qualifications", "BHMS, with continued clinical education in classical homeopathy"],
-              ["Experience", "6 years of clinical experience across chronic and acute cases"],
+              ["Experience", "6 years of professional experience"],
               [
                 "Areas of focus",
                 "Chronic conditions, skin & hair, women's wellness, children's care",
@@ -545,7 +554,7 @@ function Awards() {
         <SectionHeading
           eyebrow="Recognition"
           title="Awards & Recognition"
-          description="Honours received personally by Dr. Rajshree Verma."
+          description="Honours received personally by Dr. Rajshree Verma, listed with the awarding organization."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {AWARDS.map((a) => (
@@ -553,9 +562,32 @@ function Awards() {
               <Award className="size-6 text-lime" />
               <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{a.year}</p>
               <h3 className="mt-1 font-display text-lg text-navy">{a.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{a.body}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{a.org}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{a.category}</p>
             </article>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeTimeline() {
+  return (
+    <section className="surface-ivory py-16 lg:py-20">
+      <div className="container-page">
+        <SectionHeading eyebrow="Milestones" title="Our journey so far" />
+        <ol className="relative mx-auto mt-10 max-w-2xl border-l-2 border-mint pl-6">
+          {TIMELINE.map((t) => (
+            <li key={t.date + t.text} className="relative pb-6 last:pb-0">
+              <span className={`absolute -left-[1.95rem] top-1 size-3.5 rounded-full border-2 border-background ${t.milestone ? "bg-lime" : "bg-forest"}`} />
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-leaf">{t.date}</p>
+              <p className={`mt-1 text-sm ${t.milestone ? "font-semibold text-navy" : "text-foreground"}`}>{t.text}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-8 text-center">
+          <Link to="/media-recognition" className="text-sm font-semibold text-leaf">View Media & Recognition →</Link>
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { CalendarDays, Clock, Mail, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -42,9 +43,20 @@ function ContactPage() {
       />
       <section className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_1fr]">
         <div className="space-y-4">
+          <div className="card-premium p-5">
+            <p className="font-display text-xl text-navy">{CLINIC.name}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{CLINIC.doctor} ({CLINIC.qualification}) · Homeopathic Physician</p>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Button asChild className="rounded-full"><a href={CLINIC.phoneHref}><Phone className="size-4" /> Call Clinic</a></Button>
+              <Button asChild variant="outline" className="rounded-full"><a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> WhatsApp Us</a></Button>
+              <Button asChild variant="outline" className="rounded-full"><Link to="/book-appointment"><CalendarDays className="size-4" /> Book Appointment</Link></Button>
+              <Button asChild variant="outline" className="rounded-full"><a href={CLINIC.mapsHref} target="_blank" rel="noopener noreferrer"><Navigation className="size-4" /> Get Directions</a></Button>
+            </div>
+          </div>
           {[
             { icon: MapPin, title: "Clinic address", body: CLINIC.address },
-            { icon: Phone, title: "Phone", body: CLINIC.phone },
+            { icon: Phone, title: "Clinic Phone", body: CLINIC.phone },
+            { icon: MessageCircle, title: "WhatsApp", body: CLINIC.whatsapp },
             { icon: Mail, title: "Email", body: CLINIC.email },
             { icon: Clock, title: "Consultation hours", body: CLINIC.hours },
           ].map(({ icon: Icon, title, body }) => (

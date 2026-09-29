@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
+import { FloatingContact } from "@/components/layout/FloatingContact";
 import { CartProvider } from "@/lib/cart-store";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
@@ -147,6 +148,7 @@ function RootComponent() {
             </main>
             <SiteFooter />
             <MobileTabBar />
+            <FloatingContact />
           </div>
           <Toaster />
         </CartProvider>

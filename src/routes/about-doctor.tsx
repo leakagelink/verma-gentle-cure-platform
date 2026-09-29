@@ -34,7 +34,7 @@ function AboutDoctorPage() {
       <PageHero
         eyebrow="About the doctor"
         title="Dr. Rajshree Verma"
-        description="BHMS · Homeopathic Physician · 6 years of clinical experience at Verma Gentle Cure."
+        description="BHMS · Homeopathic Physician · 6 years of experience · Founder, Verma Gentle Cure."
       >
         <Button asChild size="lg" className="h-12 rounded-full px-6">
           <Link to="/book-appointment">Book a consultation</Link>
@@ -56,31 +56,21 @@ function AboutDoctorPage() {
           <div>
             <h2 className="text-2xl text-navy">Biography</h2>
             <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted-foreground">
-              <p>
-                Dr. Rajshree Verma has practised classical homeopathy for 6 years, with a
-                consulting style built on long, detailed case-taking. Patients frequently describe
-                the first consultation as the first time their full history has been heard in one
-                sitting.
-              </p>
-              <p>
-                Her practice covers chronic and recurring complaints, skin and hair concerns,
-                women's health, and paediatric consultation. Each case is assessed individually,
-                with a clear explanation of what is being recommended and what to observe before
-                the review appointment.
-              </p>
-              <p>
-                Alongside clinic consultations at {CLINIC.address.split(",")[1]?.trim() ?? "the clinic"},
-                she consults online so that patients outside the city can maintain continuity of
-                care.
+              <p>Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle Cure, Jamshedpur.</p>
+              <p>Her professional approach emphasizes individualized consultation and compassionate patient care.</p>
+              <p>Beyond clinical practice, her profile also includes work in literature and education, along with awards, media features and professional/academic recognition.</p>
+              <p>Her healthcare interview on the future role of homeopathy was carried by multiple publications in March 2026, while the inauguration of Verma Gentle Cure on 23 March 2026 also received coverage across several local and regional media platforms.</p>
+              <p className="font-semibold text-navy">
+                <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> · <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp: {CLINIC.whatsapp}</a>
               </p>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              { icon: GraduationCap, title: "Qualification", body: "BHMS, classical homeopathy" },
-              { icon: Stethoscope, title: "Experience", body: "6 years of clinical experience" },
-              { icon: Award, title: "Recognition", body: "Regional & state honours" },
+              { icon: GraduationCap, title: "Qualification", body: "BHMS" },
+              { icon: Stethoscope, title: "Experience", body: "6 years" },
+              { icon: Award, title: "Recognition", body: "Awards, media & literary" },
             ].map(({ icon: Icon, title, body }) => (
               <div key={title} className="card-premium p-5">
                 <Icon className="size-5 text-leaf" />
@@ -94,13 +84,15 @@ function AboutDoctorPage() {
 
       <section className="surface-ivory py-16">
         <div className="container-page">
-          <SectionHeading eyebrow="Recognition" title="Awards and appreciation" />
+          <SectionHeading eyebrow="Recognition" title="Awards, Honours & Recognitions" />
+          <p className="mt-3 text-center"><Link to="/media-recognition" className="text-sm font-semibold text-leaf">View full Media & Recognition →</Link></p>
           <ul className="mt-8 grid gap-4 md:grid-cols-3">
             {AWARDS.map((a) => (
               <li key={a.title} className="card-premium p-6">
                 <p className="font-display text-2xl text-lime">{a.year}</p>
                 <p className="mt-2 font-semibold text-navy">{a.title}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{a.body}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{a.org}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{a.category}{a.date ? ` · ${a.date}` : ""}</p>
               </li>
             ))}
           </ul>
