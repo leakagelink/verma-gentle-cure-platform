@@ -10,9 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
+import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AppointmentPolicyRouteImport } from './routes/appointment-policy'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BillingRouteImport } from './routes/billing'
@@ -23,15 +26,19 @@ import { Route as CaseRecordsRouteImport } from './routes/case-records'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CorporateInformationRouteImport } from './routes/corporate-information'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinanceRouteImport } from './routes/finance'
+import { Route as MediaRecognitionRouteImport } from './routes/media-recognition'
+import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ShippingPolicyRouteImport } from './routes/shipping-policy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TreatmentsRouteImport } from './routes/treatments'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -46,9 +53,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutDoctorRoute = AboutDoctorRouteImport.update({
   id: '/about-doctor',
   path: '/about-doctor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessibilityRoute = AccessibilityRouteImport.update({
+  id: '/accessibility',
+  path: '/accessibility',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -59,6 +76,11 @@ const AccountRoute = AccountRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppointmentPolicyRoute = AppointmentPolicyRouteImport.update({
+  id: '/appointment-policy',
+  path: '/appointment-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppointmentsRoute = AppointmentsRouteImport.update({
@@ -111,6 +133,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CorporateInformationRoute = CorporateInformationRouteImport.update({
+  id: '/corporate-information',
+  path: '/corporate-information',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorRoute = DoctorRouteImport.update({
   id: '/doctor',
   path: '/doctor',
@@ -124,6 +151,16 @@ const FaqRoute = FaqRouteImport.update({
 const FinanceRoute = FinanceRouteImport.update({
   id: '/finance',
   path: '/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRecognitionRoute = MediaRecognitionRouteImport.update({
+  id: '/media-recognition',
+  path: '/media-recognition',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
+  id: '/medical-disclaimer',
+  path: '/medical-disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
@@ -154,6 +191,11 @@ const ShippingPolicyRoute = ShippingPolicyRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TreatmentsRoute = TreatmentsRouteImport.update({
@@ -199,9 +241,12 @@ const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/billing': typeof BillingRoute
@@ -212,15 +257,19 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
@@ -232,9 +281,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/billing': typeof BillingRoute
@@ -245,15 +297,19 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
@@ -266,9 +322,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
   '/billing': typeof BillingRoute
@@ -279,15 +338,19 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
@@ -301,9 +364,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
     | '/billing'
@@ -314,15 +380,19 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
     | '/doctor'
     | '/faq'
     | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
@@ -334,9 +404,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
     | '/billing'
@@ -347,15 +420,19 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
     | '/doctor'
     | '/faq'
     | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
@@ -367,9 +444,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
     | '/billing'
@@ -380,15 +460,19 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
     | '/doctor'
     | '/faq'
     | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
@@ -401,9 +485,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
+  AccessibilityRoute: typeof AccessibilityRoute
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
+  AppointmentPolicyRoute: typeof AppointmentPolicyRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
   BillingRoute: typeof BillingRoute
@@ -414,15 +501,19 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
+  CorporateInformationRoute: typeof CorporateInformationRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
   FinanceRoute: typeof FinanceRoute
+  MediaRecognitionRoute: typeof MediaRecognitionRoute
+  MedicalDisclaimerRoute: typeof MedicalDisclaimerRoute
   OrdersRoute: typeof OrdersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   ServicesRoute: typeof ServicesRoute
   ShippingPolicyRoute: typeof ShippingPolicyRoute
   TermsRoute: typeof TermsRoute
+  TestimonialsRoute: typeof TestimonialsRoute
   TreatmentsRoute: typeof TreatmentsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   MedicinesSlugRoute: typeof MedicinesSlugRoute
@@ -442,11 +533,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about-doctor': {
       id: '/about-doctor'
       path: '/about-doctor'
       fullPath: '/about-doctor'
       preLoaderRoute: typeof AboutDoctorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessibility': {
+      id: '/accessibility'
+      path: '/accessibility'
+      fullPath: '/accessibility'
+      preLoaderRoute: typeof AccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -461,6 +566,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/appointment-policy': {
+      id: '/appointment-policy'
+      path: '/appointment-policy'
+      fullPath: '/appointment-policy'
+      preLoaderRoute: typeof AppointmentPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appointments': {
@@ -533,6 +645,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/corporate-information': {
+      id: '/corporate-information'
+      path: '/corporate-information'
+      fullPath: '/corporate-information'
+      preLoaderRoute: typeof CorporateInformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctor': {
       id: '/doctor'
       path: '/doctor'
@@ -552,6 +671,20 @@ declare module '@tanstack/react-router' {
       path: '/finance'
       fullPath: '/finance'
       preLoaderRoute: typeof FinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media-recognition': {
+      id: '/media-recognition'
+      path: '/media-recognition'
+      fullPath: '/media-recognition'
+      preLoaderRoute: typeof MediaRecognitionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medical-disclaimer': {
+      id: '/medical-disclaimer'
+      path: '/medical-disclaimer'
+      fullPath: '/medical-disclaimer'
+      preLoaderRoute: typeof MedicalDisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders': {
@@ -594,6 +727,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/treatments': {
@@ -657,9 +797,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AboutDoctorRoute: AboutDoctorRoute,
+  AccessibilityRoute: AccessibilityRoute,
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
+  AppointmentPolicyRoute: AppointmentPolicyRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
   BillingRoute: BillingRoute,
@@ -670,15 +813,19 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
+  CorporateInformationRoute: CorporateInformationRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
   FinanceRoute: FinanceRoute,
+  MediaRecognitionRoute: MediaRecognitionRoute,
+  MedicalDisclaimerRoute: MedicalDisclaimerRoute,
   OrdersRoute: OrdersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   ServicesRoute: ServicesRoute,
   ShippingPolicyRoute: ShippingPolicyRoute,
   TermsRoute: TermsRoute,
+  TestimonialsRoute: TestimonialsRoute,
   TreatmentsRoute: TreatmentsRoute,
   BlogSlugRoute: BlogSlugRoute,
   MedicinesSlugRoute: MedicinesSlugRoute,
