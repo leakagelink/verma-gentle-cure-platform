@@ -105,7 +105,7 @@ export function SiteHeader() {
                 ))}
                 <a href={CLINIC.phoneHref} className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><Phone className="size-4" /> Call Clinic</a>
                 <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><MessageCircle className="size-4" /> WhatsApp</a>
-                {[["/testimonials","Testimonials"],["/book-appointment","Book Appointment"],["/medical-disclaimer","Medical Disclaimer"],["/privacy-policy","Privacy Policy"],["/terms","Terms & Conditions"],["/appointment-policy","Cancellation Policy"],["/accessibility","Accessibility"],["/corporate-information","Corporate Information"],["/faq","FAQ"]].map(([to,label]) => (
+                {([["/testimonials","Testimonials"],["/book-appointment","Book Appointment"],["/medical-disclaimer","Medical Disclaimer"],["/privacy-policy","Privacy Policy"],["/terms","Terms & Conditions"],["/appointment-policy","Cancellation Policy"],["/accessibility","Accessibility"],["/corporate-information","Corporate Information"],["/faq","FAQ"]] as const).map(([to,label]) => (
                   <DrawerClose asChild key={to}>
                     <Link to={to} className="flex min-h-11 items-center rounded-xl px-4 text-xs text-muted-foreground active:bg-mint/60">{label}</Link>
                   </DrawerClose>

@@ -255,12 +255,12 @@ function AboutDoctor() {
           <SectionHeading
             eyebrow="About the doctor"
             title="Dr. Rajshree Verma"
-            description="Homeopathic physician with 6 years of clinical experience, known for detailed case-taking and an unhurried, patient-first consultation style."
+            description="Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle Cure, with 6 years of experience and an individualized, compassionate approach."
           />
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-4">
             {[
               ["Qualifications", "BHMS, with continued clinical education in classical homeopathy"],
-              ["Experience", "6 years of clinical experience across chronic and acute cases"],
+              ["Experience", "6 years of professional experience"],
               [
                 "Areas of focus",
                 "Chronic conditions, skin & hair, women's wellness, children's care",

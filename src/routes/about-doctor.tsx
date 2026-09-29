@@ -34,7 +34,7 @@ function AboutDoctorPage() {
       <PageHero
         eyebrow="About the doctor"
         title="Dr. Rajshree Verma"
-        description="BHMS · Homeopathic Physician · 6 years of clinical experience at Verma Gentle Cure."
+        description="BHMS · Homeopathic Physician · 6 years of experience · Founder, Verma Gentle Cure."
       >
         <Button asChild size="lg" className="h-12 rounded-full px-6">
           <Link to="/book-appointment">Book a consultation</Link>

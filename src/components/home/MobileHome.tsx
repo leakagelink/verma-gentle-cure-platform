@@ -149,7 +149,7 @@ export function MobileHome() {
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-navy">Dr. Rajshree Verma</p>
-            <p className="truncate text-xs text-muted-foreground">Homeopathic Physician · 6 Years of Clinical Experience</p>
+            <p className="truncate text-xs text-muted-foreground">BHMS · Homeopathic Physician · 6 Years of Experience</p>
             <Link
               to="/about-doctor"
               className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-leaf"
