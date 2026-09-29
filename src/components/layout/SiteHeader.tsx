@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
+import { Menu, MessageCircle, Phone, ShoppingBag, UserRound, X } from "lucide-react";
+import { CLINIC } from "@/lib/site-data";
 import { useState } from "react";
 
 import { Logo } from "@/components/brand/Logo";
@@ -18,11 +19,12 @@ import { useAuth } from "@/hooks/useAuth";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about-doctor", label: "About Dr. Verma" },
-  { to: "/consultation", label: "Consultation" },
+  { to: "/about", label: "About" },
+  { to: "/about-doctor", label: "Dr. Rajshree Verma" },
   { to: "/treatments", label: "Treatments" },
+  { to: "/media-recognition", label: "Media & Recognition" },
   { to: "/medicines", label: "Medicines" },
-  { to: "/blog", label: "Blog" },
+  { to: "/blog", label: "Health Articles" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -38,13 +40,13 @@ export function SiteHeader() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
           {NAV.map((item) => (
             <Link
               key={item.to}
               to={item.to}
               activeOptions={{ exact: item.to === "/" }}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-mint/60 hover:text-navy"
+              className="rounded-full px-2.5 py-2 text-[0.82rem] font-medium text-muted-foreground transition-colors hover:bg-mint/60 hover:text-navy"
               activeProps={{ className: "bg-mint text-navy" }}
             >
               {item.label}
@@ -73,11 +75,11 @@ export function SiteHeader() {
           </Button>
           <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
             <DrawerTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full lg:hidden" aria-label="More">
+              <Button variant="ghost" size="icon" className="rounded-full xl:hidden" aria-label="More">
                 <Menu className="size-5" />
               </Button>
             </DrawerTrigger>
-            <DrawerContent className="max-h-[82dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] lg:hidden">
+            <DrawerContent className="max-h-[82dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] xl:hidden">
               <DrawerHeader className="grid grid-cols-[minmax(0,1fr)_auto] items-center text-left">
                 <div className="min-w-0">
                   <DrawerTitle className="font-display text-xl text-navy">Explore</DrawerTitle>
@@ -98,6 +100,13 @@ export function SiteHeader() {
                     >
                       {item.label}
                     </Link>
+                  </DrawerClose>
+                ))}
+                <a href={CLINIC.phoneHref} className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><Phone className="size-4" /> Call Clinic</a>
+                <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><MessageCircle className="size-4" /> WhatsApp</a>
+                {[["/testimonials","Testimonials"],["/book-appointment","Book Appointment"],["/medical-disclaimer","Medical Disclaimer"],["/privacy-policy","Privacy Policy"],["/terms","Terms & Conditions"],["/appointment-policy","Cancellation Policy"],["/accessibility","Accessibility"],["/corporate-information","Corporate Information"],["/faq","FAQ"]].map(([to,label]) => (
+                  <DrawerClose asChild key={to}>
+                    <Link to={to} className="flex min-h-11 items-center rounded-xl px-4 text-xs text-muted-foreground active:bg-mint/60">{label}</Link>
                   </DrawerClose>
                 ))}
                 <DrawerClose asChild>
