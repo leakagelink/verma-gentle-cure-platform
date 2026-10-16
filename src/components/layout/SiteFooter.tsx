@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, Youtube } from "lucide-react";
+import { Instagram, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { Logo } from "@/components/brand/Logo";
 import { CLINIC } from "@/lib/site-data";
@@ -40,17 +40,15 @@ export function SiteFooter() {
             Patient-centred, individualized homeopathic healthcare in Jamshedpur, founded by Dr.
             Rajshree Verma (BHMS).
           </p>
-          <div className="flex gap-2">
-            {[Instagram, Facebook, Youtube].map((Icon, i) => (
-              <span
-                key={i}
-                className="grid size-9 place-items-center rounded-full border border-border bg-card text-navy"
-                aria-hidden
-              >
-                <Icon className="size-4" />
-              </span>
-            ))}
-          </div>
+          <a
+            href={CLINIC.instagramHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-leaf"
+          >
+            <Instagram className="size-4 text-leaf" />
+            Instagram: {CLINIC.instagram}
+          </a>
         </div>
 
         <div>
@@ -100,6 +98,12 @@ export function SiteFooter() {
               <MessageCircle className="mt-0.5 size-4 shrink-0 text-leaf" />
               <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
                 WhatsApp: {CLINIC.whatsapp}
+              </a>
+            </li>
+            <li className="flex gap-2.5">
+              <Instagram className="mt-0.5 size-4 shrink-0 text-leaf" />
+              <a href={CLINIC.instagramHref} target="_blank" rel="noopener noreferrer">
+                Instagram: {CLINIC.instagram}
               </a>
             </li>
             <li className="flex gap-2.5">
