@@ -58,6 +58,7 @@ export function MobileHome() {
             A homeopathic healthcare clinic in Jamshedpur founded by Dr. Rajshree Verma (BHMS),
             emphasizing individualized consultation and compassionate care.
           </p>
+          <ContactLine className="mt-3" />
           <div className="mt-4 grid grid-cols-2 gap-2">
             <Button asChild className="h-12 rounded-xl text-sm font-semibold">
               <Link to="/book-appointment">
