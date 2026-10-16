@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { MobileHome } from "@/components/home/MobileHome";
 import { SectionHeading } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -184,10 +185,10 @@ function Hero() {
         <div className="relative">
           <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-[var(--shadow-lift)]">
             <img
-              src={doctorImage}
+              src={heroPortrait.url}
               alt="Dr. Rajshree Verma, Homeopathic Physician at Verma Gentle Cure"
               width={1024}
-              height={1280}
+              height={1536}
               className="h-64 w-full object-cover object-top sm:h-[26rem] lg:h-[34rem]"
             />
           </div>
