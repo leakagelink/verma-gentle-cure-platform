@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, Phone, Youtube } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, Youtube } from "lucide-react";
 
 import { Logo } from "@/components/brand/Logo";
 import { CLINIC } from "@/lib/site-data";
@@ -97,8 +97,7 @@ export function SiteFooter() {
               <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a>
             </li>
             <li className="flex gap-2.5">
-              <Phone className="mt-0.5 size-4 shrink-0 text-leaf" />
-              <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp: {CLINIC.whatsapp}</a>
+              <MessageCircle className="mt-0.5 size-4 shrink-0 text-leaf" />
             </li>
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 size-4 shrink-0 text-leaf" />
