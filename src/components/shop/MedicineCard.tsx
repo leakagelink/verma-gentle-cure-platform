@@ -60,7 +60,8 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
         <p className="mt-1 text-xs text-muted-foreground">{medicine.pack}</p>
         <p className="mt-2 hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
           <Star className="size-3.5 fill-lime text-lime" />
-          {medicine.rating} · {medicine.reviews} reviews
+          {medicine.rating}
+          {medicine.reviews > 0 ? ` · ${medicine.reviews} reviews` : ""}
         </p>
         <div className="mt-4 flex flex-1 items-end justify-between gap-3">
           <div>
