@@ -1,4 +1,4 @@
-import { MessageCircle, Phone } from "lucide-react";
+import { Instagram, MessageCircle, Phone } from "lucide-react";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { CLINIC } from "@/lib/site-data";
@@ -44,6 +44,14 @@ export function LegalPage({
             className="inline-flex items-center gap-2"
           >
             <MessageCircle className="size-4 text-leaf" /> WhatsApp: {CLINIC.whatsapp}
+          </a>
+          <a
+            href={CLINIC.instagramHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2"
+          >
+            <Instagram className="size-4 text-leaf" /> Instagram: {CLINIC.instagram}
           </a>
         </div>
       </section>

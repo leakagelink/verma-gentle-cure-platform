@@ -94,6 +94,7 @@ export const Route = createFileRoute("/")({
           founder: { "@type": "Person", name: "Dr. Rajshree Verma" },
           parentOrganization: { "@type": "Organization", name: CLINIC.corporate },
           email: CLINIC.email,
+          sameAs: [CLINIC.instagramHref],
         }),
       },
     ],
