@@ -12,7 +12,6 @@ import {
   Video,
 } from "lucide-react";
 
-import doctorImage from "@/assets/dr-rajshree-verma.jpg";
 import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { productImage } from "@/lib/product-images";
@@ -141,11 +140,11 @@ export function MobileHome() {
       <section className="container-page mt-7">
         <div className="flex items-center gap-3 rounded-2xl border border-border surface-ivory p-3">
           <img
-            src={doctorImage}
+            src={heroPortrait.url}
             alt="Dr. Rajshree Verma"
             loading="lazy"
-            width={512}
-            height={512}
+            width={1024}
+            height={1536}
             className="size-16 shrink-0 rounded-2xl object-cover object-top"
           />
           <div className="min-w-0 flex-1">
