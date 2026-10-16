@@ -29,6 +29,13 @@
       "when": 1792164269880,
       "tag": "0003_homeopathic_kits_catalogue_and_shipping_charges",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792164500961,
+      "tag": "0004_real_kit_names_and_photos",
+      "breakpoints": true
     }
   ]
 }

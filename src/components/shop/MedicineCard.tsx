@@ -37,7 +37,7 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
         aria-label={medicine.name}
       >
         <img
-          src={productImage(medicine.category)}
+          src={productImage(medicine.slug)}
           alt={medicine.name}
           loading="lazy"
           width={800}
