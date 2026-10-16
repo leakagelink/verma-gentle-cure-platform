@@ -87,7 +87,7 @@ export function SiteFooter() {
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-navy">Clinic</h3>
-          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+          <ul className="mt-4 space-y-3 text-sm text-muted-foreground lg:pr-20">
             <li className="flex gap-2.5">
               <MapPin className="mt-0.5 size-4 shrink-0 text-leaf" />
               <span>{CLINIC.address}</span>
@@ -113,10 +113,10 @@ export function SiteFooter() {
 
       <div className="border-t border-border">
         <div className="container-page space-y-3 py-8">
-          <p className="text-xs leading-relaxed text-muted-foreground">
+          <p className="text-xs leading-relaxed text-muted-foreground lg:pr-20">
             <span className="font-semibold text-navy">Medical disclaimer:</span> {CLINIC.disclaimer}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground lg:pr-20">
             © {new Date().getFullYear()} {CLINIC.name} — {CLINIC.corporateLine}. All rights reserved.
           </p>
         </div>
