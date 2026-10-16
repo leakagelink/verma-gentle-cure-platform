@@ -60,7 +60,7 @@ function ProductPage() {
       <div className="min-w-0">
         <div className="h-64 overflow-hidden rounded-[2rem] border border-border surface-ivory sm:h-80 lg:h-[28rem]">
           <img
-            src={productImage(medicine.category)}
+            src={productImage(medicine.slug)}
             alt={medicine.name}
             width={800}
             height={800}
@@ -80,7 +80,7 @@ function ProductPage() {
               )}
             >
               <img
-                src={productImage(medicine.category)}
+                src={productImage(medicine.slug)}
                 alt=""
                 loading="lazy"
                 width={800}

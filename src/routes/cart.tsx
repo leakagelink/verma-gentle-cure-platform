@@ -62,7 +62,7 @@ function CartPage() {
               {items.map(({ medicine, qty }) => (
                 <li key={medicine.slug} className="card-premium flex gap-3 p-3 sm:gap-4 sm:p-4">
                   <img
-                    src={productImage(medicine.category)}
+                    src={productImage(medicine.slug)}
                     alt={medicine.name}
                     loading="lazy"
                     width={800}
