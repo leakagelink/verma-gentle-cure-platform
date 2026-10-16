@@ -112,7 +112,8 @@ function ReceiptPage() {
           <Logo />
           <div className="text-right text-xs text-muted-foreground">
             <p className="font-display text-base text-navy">{CLINIC.name}</p>
-            <p>{CLINIC.phone}</p>
+            <p>Call: {CLINIC.phone}</p>
+            <p>WhatsApp: {CLINIC.whatsapp}</p>
             <p>{CLINIC.email}</p>
           </div>
         </header>

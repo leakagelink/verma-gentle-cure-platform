@@ -141,7 +141,8 @@ function PrescriptionPage() {
                 <p className="font-semibold text-navy">{rx.doctor_name || CLINIC.doctor}</p>
                 {rx.doctor_qualification && <p>{rx.doctor_qualification}</p>}
                 {rx.doctor_registration_no && <p>Reg. No. {rx.doctor_registration_no}</p>}
-                <p>{CLINIC.phone}</p>
+                <p>Call: {CLINIC.phone}</p>
+                <p>WhatsApp: {CLINIC.whatsapp}</p>
                 <p>{CLINIC.email}</p>
               </div>
             </header>

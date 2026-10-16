@@ -46,7 +46,7 @@ export function ContactButtons({ className = "" }: { className?: string }) {
 /** Compact band shown on every page (above the footer) so both numbers are always on screen. */
 export function ContactBand() {
   return (
-    <section className="mt-16 border-y border-border surface-ivory">
+    <section className="mt-16 border-y border-border surface-ivory print:hidden">
       <div className="container-page flex flex-wrap items-center justify-between gap-3 py-4">
         <div className="min-w-0">
           <p className="font-display text-base text-navy">
