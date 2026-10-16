@@ -47,14 +47,16 @@ export function ContactButtons({ className = "" }: { className?: string }) {
 export function ContactBand() {
   return (
     <section className="mt-16 border-y border-border surface-ivory print:hidden">
-      <div className="container-page flex flex-wrap items-center justify-between gap-3 py-4">
-        <div className="min-w-0">
-          <p className="font-display text-base text-navy">
-            Any question? Call the clinic or message us on WhatsApp.
-          </p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{CLINIC.hours}</p>
+      <div className="container-page py-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 pr-16 lg:pr-0">
+          <div className="min-w-0">
+            <p className="font-display text-base text-navy">
+              Any question? Call the clinic or message us on WhatsApp.
+            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{CLINIC.hours}</p>
+          </div>
+          <ContactButtons />
         </div>
-        <ContactButtons />
       </div>
     </section>
   );
