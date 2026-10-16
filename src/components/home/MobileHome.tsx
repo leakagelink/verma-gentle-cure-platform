@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
+import { ContactLine } from "@/components/layout/ClinicContact";
 import { Button } from "@/components/ui/button";
 import { productImage } from "@/lib/product-images";
 import { MEDICINE_CATEGORIES } from "@/lib/shop-data";
