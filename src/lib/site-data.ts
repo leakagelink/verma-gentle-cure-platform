@@ -8,6 +8,8 @@ export const CLINIC = {
   phoneHref: "tel:06574506627",
   whatsapp: "+91 84091 70482",
   whatsappHref: "https://wa.me/918409170482",
+  instagram: "@vermagentlecure",
+  instagramHref: "https://www.instagram.com/vermagentlecure/",
   corporate: "Vermaverse OPC Private Limited",
   corporateLine: "A Healthcare Initiative of Vermaverse OPC Private Limited",
   inaugurated: "23 March 2026",
