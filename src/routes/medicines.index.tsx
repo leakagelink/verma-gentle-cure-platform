@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/medicines/")({
   head: () => ({
     meta: [
-      { title: "Homeopathic Medicine Shop — Dilutions, Tinctures & Care | Verma Gentle Cure" },
+      { title: "Homeopathic Medicine Kits — ₹1,500 per Kit | Verma Gentle Cure" },
       {
         name: "description",
         content:
