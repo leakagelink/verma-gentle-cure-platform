@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -15,6 +16,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { FloatingContact } from "@/components/layout/FloatingContact";
+import { ContactBand } from "@/components/layout/ClinicContact";
 import { CartProvider } from "@/lib/cart-store";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
@@ -41,7 +43,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -146,6 +148,7 @@ function RootComponent() {
               {/* Required: nested routes render here. */}
               <Outlet />
             </main>
+            <ContactBand />
             <SiteFooter />
             <MobileTabBar />
             <FloatingContact />

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
+import { ContactLine } from "@/components/layout/ClinicContact";
 import { Button } from "@/components/ui/button";
 import { productImage } from "@/lib/product-images";
 import { MEDICINE_CATEGORIES } from "@/lib/shop-data";
@@ -58,6 +59,7 @@ export function MobileHome() {
             A homeopathic healthcare clinic in Jamshedpur founded by Dr. Rajshree Verma (BHMS),
             emphasizing individualized consultation and compassionate care.
           </p>
+          <ContactLine className="mt-3" />
           <div className="mt-4 grid grid-cols-2 gap-2">
             <Button asChild className="h-12 rounded-xl text-sm font-semibold">
               <Link to="/book-appointment">

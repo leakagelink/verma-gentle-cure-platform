@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { ContactLine } from "@/components/layout/ClinicContact";
+
 export function PageHero({
   eyebrow,
   title,
@@ -29,6 +31,7 @@ export function PageHero({
             {description}
           </p>
         )}
+        <ContactLine className="mt-3 sm:mt-5" />
         {children && <div className="mt-3 sm:mt-7">{children}</div>}
       </div>
     </section>
