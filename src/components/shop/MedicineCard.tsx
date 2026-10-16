@@ -65,9 +65,13 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
         <div className="mt-4 flex flex-1 items-end justify-between gap-3">
           <div>
             <p className="font-display text-lg text-navy sm:text-xl">{formatINR(medicine.price)}</p>
-            <p className="text-[0.65rem] text-muted-foreground sm:text-xs">
-              <s>{formatINR(medicine.mrp)}</s> · {discount}% off
-            </p>
+            {medicine.mrp > medicine.price ? (
+              <p className="text-[0.65rem] text-muted-foreground sm:text-xs">
+                <s>{formatINR(medicine.mrp)}</s> · {discount}% off
+              </p>
+            ) : (
+              <p className="text-[0.65rem] text-muted-foreground sm:text-xs">+ ₹125 shipping</p>
+            )}
           </div>
         </div>
         <div className="mt-3 flex gap-2 sm:mt-4">
