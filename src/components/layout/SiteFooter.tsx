@@ -98,6 +98,9 @@ export function SiteFooter() {
             </li>
             <li className="flex gap-2.5">
               <MessageCircle className="mt-0.5 size-4 shrink-0 text-leaf" />
+              <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
+                WhatsApp: {CLINIC.whatsapp}
+              </a>
             </li>
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 size-4 shrink-0 text-leaf" />
