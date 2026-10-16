@@ -116,7 +116,8 @@ function ProductPage() {
         <h1 className="mt-2 text-3xl text-navy">{medicine.name}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <span className="flex items-center gap-1">
-            <Star className="size-4 fill-lime text-lime" /> {medicine.rating} ({medicine.reviews})
+            <Star className="size-4 fill-lime text-lime" /> {medicine.rating}
+            {medicine.reviews > 0 ? ` (${medicine.reviews})` : ""}
           </span>
           <StockBadge stock={medicine.stock} />
           <span>{medicine.pack}</span>
@@ -124,9 +125,12 @@ function ProductPage() {
 
         <div className="mt-6 flex items-end gap-3">
           <p className="font-display text-3xl text-navy">{formatINR(medicine.price)}</p>
-          <p className="pb-1 text-sm text-muted-foreground">
-            <s>{formatINR(medicine.mrp)}</s> · {discount}% off
-          </p>
+          {medicine.mrp > medicine.price && (
+            <p className="pb-1 text-sm text-muted-foreground">
+              <s>{formatINR(medicine.mrp)}</s> · {discount}% off
+            </p>
+          )}
+          <p className="pb-1 text-sm text-muted-foreground">+ ₹125 shipping</p>
         </div>
 
         <div className="mt-7 flex flex-wrap items-center gap-3">

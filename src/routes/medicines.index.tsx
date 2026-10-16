@@ -23,16 +23,16 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/medicines/")({
   head: () => ({
     meta: [
-      { title: "Homeopathic Medicine Shop — Dilutions, Tinctures & Care | Verma Gentle Cure" },
+      { title: "Homeopathic Medicine Kits — ₹1,500 per Kit | Verma Gentle Cure" },
       {
         name: "description",
         content:
-          "Buy authentic homeopathic medicines, mother tinctures, biochemic tablets, personal care and supplements with delivery across India.",
+          "Buy curated homeopathic medicine kits at ₹1,500 per kit plus ₹125 shipping, prepared under the clinic's guidance and delivered across India.",
       },
       { property: "og:title", content: "Medicine Shop | Verma Gentle Cure" },
       {
         property: "og:description",
-        content: "Authentic homeopathic medicines with delivery across India.",
+        content: "Curated homeopathic medicine kits with delivery across India.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/medicines" },
@@ -128,8 +128,8 @@ function ShopPage() {
     <>
       <PageHero
         eyebrow="Medicine shop"
-        title="Authentic homeopathic medicines, delivered"
-        description="Dilutions, mother tinctures, biochemic tablets, personal care and daily wellness supplements."
+        title="Homeopathic medicine kits, delivered"
+        description="Curated remedy kits prepared under the clinic's guidance — ₹1,500 per kit plus ₹125 shipping across India."
       />
 
       <section className="container-page py-6 sm:py-12">
