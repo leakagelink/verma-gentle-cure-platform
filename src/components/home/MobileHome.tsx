@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { productImage } from "@/lib/product-images";
 import { MEDICINE_CATEGORIES } from "@/lib/shop-data";
@@ -41,10 +42,10 @@ export function MobileHome() {
           <div className="relative mt-4">
             <span aria-hidden className="absolute inset-x-6 -bottom-2 top-6 rounded-[2rem] bg-mint" />
             <img
-              src={doctorImage}
+              src={heroPortrait.url}
               alt="Dr. Rajshree Verma, Homeopathic Physician"
               width={1024}
-              height={1280}
+              height={1536}
               className="relative h-72 w-full rounded-[1.75rem] border border-border object-cover object-top shadow-[var(--shadow-soft)]"
             />
             <div className="absolute bottom-3 left-3 right-3 rounded-2xl border border-border bg-card/95 p-3 backdrop-blur">
