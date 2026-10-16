@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, GraduationCap, Stethoscope } from "lucide-react";
 
-import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { PageHero, SectionHeading } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
 import { AWARDS, CLINIC } from "@/lib/site-data";
@@ -44,11 +44,11 @@ function AboutDoctorPage() {
       <section className="container-page grid gap-12 py-16 lg:grid-cols-[0.85fr_1.15fr]">
         <div className="overflow-hidden rounded-[2rem] border border-border bg-card">
           <img
-            src={doctorImage}
+            src={heroPortrait.url}
             alt="Dr. Rajshree Verma"
             loading="lazy"
             width={1024}
-            height={1280}
+            height={1536}
             className="h-[30rem] w-full object-cover object-top"
           />
         </div>

@@ -16,7 +16,6 @@ import {
   Video,
 } from "lucide-react";
 
-import doctorImage from "@/assets/dr-rajshree-verma.jpg";
 import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { MobileHome } from "@/components/home/MobileHome";
 import { SectionHeading } from "@/components/ui-kit/PageHero";
@@ -239,11 +238,11 @@ function AboutDoctor() {
         <div className="relative">
           <div className="overflow-hidden rounded-[2rem] border border-border bg-card">
             <img
-              src={doctorImage}
+              src={heroPortrait.url}
               alt="Dr. Rajshree Verma, homeopathic physician"
               loading="lazy"
               width={1024}
-              height={1280}
+              height={1536}
               className="h-72 w-full object-cover object-top sm:h-[28rem]"
             />
           </div>
