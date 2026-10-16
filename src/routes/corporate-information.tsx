@@ -20,7 +20,7 @@ export const Route = createFileRoute("/corporate-information")({
       intro="Verma Gentle Cure is a healthcare initiative of Vermaverse OPC Private Limited."
       sections={[
         { heading: "Corporate entity", body: ["Verma Gentle Cure — A Healthcare Initiative of Vermaverse OPC Private Limited.", "Founder: Dr. Rajshree Verma (BHMS), Homeopathic Physician."] },
-        { heading: "Clinic", body: ["G3, 1st Floor, Sarala Complex, Kadma Market, Jamshedpur, Jharkhand.", "Clinic Phone: 0657-4506627 · WhatsApp: +91 84091 70482.", "Established / Inaugurated: 23 March 2026."] },
+        { heading: "Clinic", body: ["G3, 1st Floor, Sarala Complex, Kadma Market, Jamshedpur, Jharkhand.", "Clinic Phone: 0657-4506627 · WhatsApp: +91 84091 70482.", "Instagram: @vermagentlecure — instagram.com/vermagentlecure.", "Established / Inaugurated: 23 March 2026."] },
       ]}
     />
   ),

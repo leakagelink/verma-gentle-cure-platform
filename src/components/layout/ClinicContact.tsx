@@ -1,11 +1,11 @@
-import { MessageCircle, Phone } from "lucide-react";
+import { Instagram, MessageCircle, Phone } from "lucide-react";
 
 import { CLINIC } from "@/lib/site-data";
 
 /**
- * One source of truth for the clinic's two contact channels:
- * the landline (Call Clinic) and WhatsApp. Used across every page so
- * both numbers are always mentioned together.
+ * One source of truth for the clinic's contact channels: the landline
+ * (Call Clinic), WhatsApp and the Instagram page. Used across every page
+ * so all three are always mentioned together.
  */
 
 export function ContactLine({ className = "" }: { className?: string }) {
@@ -15,6 +15,10 @@ export function ContactLine({ className = "" }: { className?: string }) {
       <span className="font-normal text-muted-foreground"> · </span>
       <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
         WhatsApp: {CLINIC.whatsapp}
+      </a>
+      <span className="font-normal text-muted-foreground"> · </span>
+      <a href={CLINIC.instagramHref} target="_blank" rel="noopener noreferrer">
+        Instagram: {CLINIC.instagram}
       </a>
     </p>
   );
@@ -39,6 +43,15 @@ export function ContactButtons({ className = "" }: { className?: string }) {
         <MessageCircle className="size-4 text-leaf" />
         WhatsApp: {CLINIC.whatsapp}
       </a>
+      <a
+        href={CLINIC.instagramHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-leaf"
+      >
+        <Instagram className="size-4 text-leaf" />
+        Instagram: {CLINIC.instagram}
+      </a>
     </div>
   );
 }
@@ -51,7 +64,7 @@ export function ContactBand() {
         <div className="flex flex-wrap items-center justify-between gap-3 pr-16 lg:pr-0">
           <div className="min-w-0">
             <p className="font-display text-base text-navy">
-              Any question? Call the clinic or message us on WhatsApp.
+              Any question? Call the clinic, message us on WhatsApp or follow us on Instagram.
             </p>
             <p className="mt-0.5 text-xs text-muted-foreground">{CLINIC.hours}</p>
           </div>
