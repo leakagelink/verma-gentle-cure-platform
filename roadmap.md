@@ -1,5 +1,11 @@
 # Verma Gentle Cure — build roadmap
 
+## Google Play policy readiness
+- [ ] Add public and in-app account/data deletion request flow with staff review queue.
+- [ ] Update health disclosures, privacy details and registration consent.
+- [ ] Verify flows and provide Android / Play Console submission checklist.
+- [ ] Final Android bundle, verified clinical credentials, retention policy and Play Console declarations — require owner inputs.
+
 ## Phase 1 — Foundation (done)
 - [x] Logo-derived design system (navy/teal/forest/leaf/lime/mint/ivory tokens, Fraunces + Manrope)
 - [x] Mobile-first shell: sticky header, app-like mobile menu, bottom tab bar, premium footer
