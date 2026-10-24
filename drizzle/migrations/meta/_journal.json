@@ -50,6 +50,13 @@
       "when": 1792852277642,
       "tag": "0006_health_consent_and_financial_immutability",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792852670872,
+      "tag": "0007_gateway_uniqueness_and_atomic_stock_restore",
+      "breakpoints": true
     }
   ]
 }
