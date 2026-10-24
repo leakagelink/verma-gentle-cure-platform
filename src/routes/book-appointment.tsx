@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CLINIC, CONSULT_FEES } from "@/lib/site-data";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
+import { HEALTH_NOTICE_VERSION } from "@/lib/upload-security";
 import { hasPrivacyConsent } from "@/lib/privacy-rules";
 
 export const Route = createFileRoute("/book-appointment")({
@@ -154,6 +155,8 @@ function BookAppointmentPage() {
       .from("appointments")
       .insert({
         patient_id: user.id,
+        health_consent_at: new Date().toISOString(),
+        health_notice_version: HEALTH_NOTICE_VERSION,
         patient_name: form.fullName.trim(),
         phone: form.mobile.trim(),
         email: form.email.trim(),

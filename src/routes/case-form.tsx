@@ -15,13 +15,13 @@ import {
   CASE_SECTIONS,
   EMPTY_CASE_FORM,
   formatFileSize,
-  MAX_FILE_BYTES,
   parseAttachments,
   toFormValues,
   type CaseAttachment,
   type CaseFormValues,
 } from "@/lib/case-form-data";
 import { CLINIC } from "@/lib/site-data";
+import { HEALTH_NOTICE_VERSION, validReport } from "@/lib/upload-security";
 import { hasPrivacyConsent } from "@/lib/privacy-rules";
 
 export const Route = createFileRoute("/case-form")({
@@ -128,6 +128,8 @@ function CaseFormPage() {
     const payload = {
       ...form,
       patient_id: user.id,
+      health_consent_at: new Date().toISOString(),
+      health_notice_version: HEALTH_NOTICE_VERSION,
       status: nextStatus,
       attachments: nextAttachments as unknown as never,
       ...(nextStatus === "submitted" ? { submitted_at: new Date().toISOString() } : {}),
@@ -197,12 +199,13 @@ function CaseFormPage() {
   async function uploadFiles(files: FileList | null) {
     if (!files || files.length === 0 || !user) return;
     if (!healthConsent) { toast.error("Please consent before uploading health reports."); return; }
+    if (attachments.length + files.length > 20) { toast.error("Attach at most 20 reports."); return; }
     setUploading(true);
+    const added: CaseAttachment[] = [];
     try {
-      const added: CaseAttachment[] = [];
       for (const file of Array.from(files)) {
-        if (file.size > MAX_FILE_BYTES) {
-          toast.error(`${file.name} is larger than 10 MB.`);
+        if (!validReport(file)) {
+          toast.error("Use a PDF, JPEG, PNG or WebP file up to 10 MB.");
           continue;
         }
         const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(-80);
@@ -219,11 +222,15 @@ function CaseFormPage() {
       }
       if (added.length > 0) {
         const next = [...attachments, ...added];
-        setAttachments(next);
         await persist(status, next);
+        setAttachments(next);
         toast.success(`${added.length} file(s) attached.`);
       }
     } catch {
+      if (added.length > 0) {
+        const cleanup = await supabase.storage.from(CASE_BUCKET).remove(added.map(a => a.path));
+        if (cleanup.error) toast.error("Upload cleanup could not complete. Please contact the clinic.");
+      }
       toast.error("Could not attach your files. Please try again.");
     } finally {
       setUploading(false);
@@ -232,14 +239,17 @@ function CaseFormPage() {
   }
 
   async function removeAttachment(target: CaseAttachment) {
+    if (!healthConsent) { toast.error("Please confirm consent before changing your saved report list."); return; }
     const next = attachments.filter((a) => a.path !== target.path);
-    setAttachments(next);
-    await supabase.storage.from(CASE_BUCKET).remove([target.path]);
     try {
       await persist(status, next);
-    } catch {
-      toast.error("Could not update your attachments.");
-    }
+      const removed = await supabase.storage.from(CASE_BUCKET).remove([target.path]);
+      if (removed.error) {
+        await persist(status, attachments);
+        throw new Error("File removal failed");
+      }
+      setAttachments(next);
+    } catch { toast.error("Could not remove this report. Please contact the clinic."); }
   }
 
   async function openAttachment(target: CaseAttachment) {
