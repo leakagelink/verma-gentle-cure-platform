@@ -32,7 +32,7 @@ export const Route = createFileRoute("/shipping-policy")({
         {
           heading: "Delivery charges",
           body: [
-            "A flat delivery charge of ₹49 applies to orders below ₹799. Orders of ₹799 and above are delivered free.",
+            "A flat shipping charge of ₹125 applies to each order. Each homeopathic kit costs ₹1,500. There is no free-shipping threshold.",
           ],
         },
         {

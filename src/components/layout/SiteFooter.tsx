@@ -19,6 +19,7 @@ const QUICK = [
 
 const LEGAL = [
   { to: "/privacy-policy", label: "Privacy Policy" },
+  { to: "/delete-account", label: "Account & Data Deletion" },
   { to: "/terms", label: "Terms & Conditions" },
   { to: "/medical-disclaimer", label: "Medical Disclaimer" },
   { to: "/appointment-policy", label: "Cancellation / Appointment Policy" },

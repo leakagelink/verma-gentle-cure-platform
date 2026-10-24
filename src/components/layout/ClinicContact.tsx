@@ -1,4 +1,5 @@
 import { Instagram, MessageCircle, Phone } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import { CLINIC } from "@/lib/site-data";
 
@@ -69,6 +70,10 @@ export function ContactBand() {
             <p className="mt-0.5 text-xs text-muted-foreground">{CLINIC.hours}</p>
           </div>
           <ContactButtons />
+        </div>
+        <div className="mt-3 space-y-2 pr-16 text-xs leading-relaxed text-muted-foreground lg:pr-0">
+          <p>The app is not a medical device and does not diagnose, treat, cure or prevent any medical condition. Consult a healthcare professional for medical advice, diagnosis or treatment. For emergencies, seek immediate medical assistance.</p>
+          <p className="flex flex-wrap gap-x-4 gap-y-2"><Link to="/privacy-policy" className="underline">Privacy policy</Link><Link to="/delete-account" className="underline">Account & data deletion</Link><Link to="/medical-disclaimer" className="underline">Medical disclaimer</Link></p>
         </div>
       </div>
     </section>

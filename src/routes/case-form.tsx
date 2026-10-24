@@ -22,6 +22,7 @@ import {
   type CaseFormValues,
 } from "@/lib/case-form-data";
 import { CLINIC } from "@/lib/site-data";
+import { hasPrivacyConsent } from "@/lib/privacy-rules";
 
 export const Route = createFileRoute("/case-form")({
   head: () => ({
@@ -59,6 +60,7 @@ function CaseFormPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [healthConsent, setHealthConsent] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) void navigate({ to: "/auth" });
@@ -120,6 +122,7 @@ function CaseFormPage() {
     nextAttachments: CaseAttachment[] = attachments,
   ) {
     if (!user) return null;
+    if (!hasPrivacyConsent(healthConsent)) throw new Error("Health data consent required.");
     const payload = {
       ...form,
       patient_id: user.id,
@@ -145,6 +148,7 @@ function CaseFormPage() {
 
   async function saveDraft() {
     if (busy) return;
+    if (!healthConsent) { toast.error("Please consent to sharing your health information first."); return; }
     setBusy(true);
     try {
       await persist("draft");
@@ -159,6 +163,7 @@ function CaseFormPage() {
   async function submitForm(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
+    if (!healthConsent) { toast.error("Please consent to sharing your health information first."); return; }
     if (form.patient_name.trim().length < 3) {
       toast.error("Please enter the patient's full name.");
       return;
@@ -189,6 +194,7 @@ function CaseFormPage() {
 
   async function uploadFiles(files: FileList | null) {
     if (!files || files.length === 0 || !user) return;
+    if (!healthConsent) { toast.error("Please consent before uploading health reports."); return; }
     setUploading(true);
     try {
       const added: CaseAttachment[] = [];
@@ -310,6 +316,12 @@ function CaseFormPage() {
             )}
 
             <form onSubmit={submitForm} className="mt-6 grid gap-5 sm:gap-6">
+              <fieldset className="space-y-3 rounded-lg border border-border bg-mint p-4">
+                <legend className="px-1 font-semibold">Your health information</legend>
+                <p className="text-sm leading-relaxed text-muted-foreground">This form collects symptoms, medical and family history, optional mental/reproductive health information and the reports/photos you choose to upload. Information is stored in access-controlled clinic records and shared with authorized care staff for consultation, not advertising. Optional questions may be left blank. The app is not a medical device and does not diagnose, treat, cure or prevent a condition; consult a healthcare professional for medical advice.</p>
+                <Label className="flex items-start gap-3"><input type="checkbox" checked={healthConsent} onChange={e => setHealthConsent(e.target.checked)} className="mt-1" /> I consent to storing and sharing this health information with the clinic for care, and have authority to share it for the patient.</Label>
+                <p className="text-xs"><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/delete-account" className="text-primary underline">Data deletion requests</Link></p>
+              </fieldset>
               {visibleSections.map((section) => (
                 <fieldset
                   key={section.id}
@@ -411,7 +423,7 @@ function CaseFormPage() {
                   type="button"
                   variant="outline"
                   className="h-12 rounded-full"
-                  disabled={uploading}
+                  disabled={uploading || !healthConsent}
                   onClick={() => fileRef.current?.click()}
                 >
                   <FileUp className="size-4" /> {uploading ? "Uploading…" : "Choose files"}
@@ -454,7 +466,7 @@ function CaseFormPage() {
                     type="button"
                     variant="outline"
                     className="h-12 flex-1 rounded-full sm:flex-none sm:px-8"
-                    disabled={busy}
+                    disabled={busy || !healthConsent}
                     onClick={() => void saveDraft()}
                   >
                     Save draft
@@ -462,7 +474,7 @@ function CaseFormPage() {
                   <Button
                     type="submit"
                     className="h-12 flex-1 rounded-full sm:flex-none sm:px-8"
-                    disabled={busy}
+                    disabled={busy || !healthConsent}
                   >
                     {busy ? "Sending…" : "Send to clinic"}
                   </Button>
