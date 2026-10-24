@@ -179,24 +179,54 @@ describe("direct PostgreSQL security regression", () => {
     await reset();
   });
   it("checkout derives ₹1500 plus ₹125 and deduplicates request IDs", async () => {
-    const product = await db.query<{ slug: string; stock: number }>("SELECT slug,stock FROM public.products WHERE is_active AND category='homeopathic-kits' LIMIT 1");
+    const product = await db.query<{ slug: string; stock: number }>(
+      "SELECT slug,stock FROM public.products WHERE is_active AND category='homeopathic-kits' LIMIT 1",
+    );
     const selected = product.rows[0];
     if (!selected) throw new Error("Test catalogue must contain a kit");
-    const payload = { customer_name: "Test Patient", phone: "9000000000", email: "test@example.invalid", address: "Synthetic Address", city: "Test", state: "Test", pincode: "831005", payment_method: "cod", coupon: null, notes: "", items: [{ slug: selected.slug, qty: 1 }] };
+    const payload = {
+      customer_name: "Test Patient",
+      phone: "9000000000",
+      email: "test@example.invalid",
+      address: "Synthetic Address",
+      city: "Test",
+      state: "Test",
+      pincode: "831005",
+      payment_method: "cod",
+      coupon: null,
+      notes: "",
+      items: [{ slug: selected.slug, qty: 1 }],
+    };
     await asPatient("SELECT 1");
-    const call = () => db.query<{ result: { id: string; total: number } }>("SELECT public.create_idempotent_order($1::jsonb,$2::uuid) result", [JSON.stringify(payload), "00000000-0000-4000-8000-000000000030"]);
-    const first = await call(); const repeated = await call();
+    const call = () =>
+      db.query<{ result: { id: string; total: number } }>(
+        "SELECT public.create_idempotent_order($1::jsonb,$2::uuid) result",
+        [JSON.stringify(payload), "00000000-0000-4000-8000-000000000030"],
+      );
+    const first = await call();
+    const repeated = await call();
     expect(first.rows[0]?.result.total).toBe(1625);
     expect(repeated.rows[0]?.result.id).toBe(first.rows[0]?.result.id);
-    await expect(db.query("SELECT public.create_idempotent_order($1::jsonb,$2::uuid)", [JSON.stringify({ ...payload, total: 1 }), "00000000-0000-4000-8000-000000000031"])).rejects.toThrow("Protected order fields");
+    await expect(
+      db.query("SELECT public.create_idempotent_order($1::jsonb,$2::uuid)", [
+        JSON.stringify({ ...payload, total: 1 }),
+        "00000000-0000-4000-8000-000000000031",
+      ]),
+    ).rejects.toThrow("Protected order fields");
     await reset();
-    const stock = await db.query<{ stock: number }>("SELECT stock FROM public.products WHERE slug=$1", [selected.slug]);
+    const stock = await db.query<{ stock: number }>(
+      "SELECT stock FROM public.products WHERE slug=$1",
+      [selected.slug],
+    );
     expect(stock.rows[0]?.stock).toBe(selected.stock - 1);
   });
   it("patients cannot read another patient's appointment", async () => {
     await asPatient("SELECT 1");
-    const result = await db.query("SELECT id FROM public.appointments WHERE patient_id=$1", [other]);
-    expect(result.rows).toHaveLength(0); await reset();
+    const result = await db.query("SELECT id FROM public.appointments WHERE patient_id=$1", [
+      other,
+    ]);
+    expect(result.rows).toHaveLength(0);
+    await reset();
   });
   it("assigned clinical access does not let a clinician overwrite consent evidence", async () => {
     await reset();
@@ -206,8 +236,13 @@ describe("direct PostgreSQL security regression", () => {
       SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false),set_config('request.jwt.claim.role','authenticated',false);
       UPDATE public.case_records SET health_notice_version='forged' WHERE patient_id='${patient}';`);
     await reset();
-    const result = await db.query<{ health_notice_version: string }>("SELECT health_notice_version FROM public.case_records WHERE patient_id=$1", [patient]);
+    const result = await db.query<{ health_notice_version: string }>(
+      "SELECT health_notice_version FROM public.case_records WHERE patient_id=$1",
+      [patient],
+    );
     expect(result.rows.length).toBeGreaterThan(0);
-    expect(result.rows.every(row => row.health_notice_version === "health-2026-10-24")).toBe(true);
+    expect(result.rows.every((row) => row.health_notice_version === "health-2026-10-24")).toBe(
+      true,
+    );
   });
 });
