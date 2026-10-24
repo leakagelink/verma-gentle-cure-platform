@@ -29,6 +29,9 @@ describe("direct PostgreSQL security regression", () => {
       ALTER TABLE public.case_records ENABLE ROW LEVEL SECURITY; CREATE POLICY own_case ON public.case_records FOR ALL TO authenticated USING(patient_id=auth.uid()) WITH CHECK(patient_id=auth.uid());
       CREATE TABLE public.clinical_assignments(patient_id uuid,doctor_id uuid,assigned_by uuid,UNIQUE(patient_id,doctor_id));
       ALTER TABLE public.appointments ADD COLUMN consultation_type text DEFAULT 'new';`);
+    await db.exec(`CREATE TABLE public.case_clinical_notes(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),case_record_id uuid,doctor_id uuid);
+      CREATE FUNCTION storage.foldername(text) RETURNS text[] LANGUAGE sql AS $$SELECT string_to_array($1,'/')$$;
+      GRANT USAGE ON SCHEMA storage TO authenticated; GRANT SELECT,INSERT ON storage.objects TO authenticated;`);
     // Financial types/tables precede recovered functions; consent depends on those functions.
     for (const path of readdirSync("drizzle/migrations")
       .filter((p) => p.endsWith(".sql"))
@@ -244,5 +247,44 @@ describe("direct PostgreSQL security regression", () => {
     expect(result.rows.every((row) => row.health_notice_version === "health-2026-10-24")).toBe(
       true,
     );
+  });
+  it("blocks automated deletion when medical records require retention review", async () => {
+    await reset();
+    await db.exec(`INSERT INTO public.user_roles(user_id,role) VALUES('${other}','admin');
+      INSERT INTO public.account_deletion_requests(id,user_id,scope) VALUES('00000000-0000-4000-8000-000000000040','${patient}','account');
+      SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`);
+    const claim = await db.query<{ result: { state: string } }>("SELECT public.claim_account_deletion('00000000-0000-4000-8000-000000000040') result");
+    expect(claim.rows[0]?.result.state).toBe("blocked");
+    await reset();
+    const remains = await db.query("SELECT id FROM public.appointments WHERE patient_id=$1", [patient]);
+    expect(remains.rows.length).toBeGreaterThan(0);
+  });
+  it("denies unauthorized deletion claims and direct completion forgery", async () => {
+    await expect(asPatient("SELECT public.claim_account_deletion('00000000-0000-4000-8000-000000000040')")).rejects.toThrow("Administrator");
+    await reset();
+    await expect(asPatient("UPDATE public.account_deletion_requests SET processing_state='completed' WHERE user_id=auth.uid()")).rejects.toThrow();
+    await reset();
+  });
+  it("token-bound deletion removes eligible synthetic profile data and prevents duplicate claims", async () => {
+    const disposable = '00000000-0000-4000-8000-000000000050';
+    const request = '00000000-0000-4000-8000-000000000051';
+    await reset();
+    await db.exec(`INSERT INTO auth.users(id) VALUES('${disposable}'); INSERT INTO public.account_deletion_requests(id,user_id,scope) VALUES('${request}','${disposable}','account');
+      SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`);
+    const claim = await db.query<{ result: { state: string; token: string } }>(`SELECT public.claim_account_deletion('${request}') result`);
+    const token = claim.rows[0]?.result.token;
+    expect(claim.rows[0]?.result.state).toBe('processing');
+    if (!token) throw new Error('Missing processing token');
+    await expect(db.exec(`SELECT public.claim_account_deletion('${request}')`)).rejects.toThrow('already processing');
+    await reset();
+    await db.exec("SELECT set_config('request.jwt.claim.role','service_role',false)");
+    await expect(db.exec(`SELECT public.purge_eligible_account_data('${request}','00000000-0000-4000-8000-000000000099')`)).rejects.toThrow();
+    await db.exec(`SELECT public.purge_eligible_account_data('${request}','${token}')`);
+    const profiles = await db.query('SELECT id FROM public.profiles WHERE id=$1',[disposable]);
+    const roles = await db.query('SELECT id FROM public.user_roles WHERE user_id=$1',[disposable]);
+    expect(profiles.rows).toHaveLength(0);
+    expect(roles.rows).toHaveLength(0);
+    const receipt = await db.query<{ processing_state: string }>('SELECT processing_state FROM public.account_deletion_requests WHERE id=$1',[request]);
+    expect(receipt.rows[0]?.processing_state).toBe('processing');
   });
 });
