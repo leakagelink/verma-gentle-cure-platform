@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { useAuth } from "@/hooks/useAuth";
-import { requestAccountDeletion } from "@/lib/privacy.functions";
+import { requestAccountDeletion, submitExternalDeletion } from "@/lib/privacy.functions";
 import { CLINIC } from "@/lib/site-data";
 
 export const Route = createFileRoute("/delete-account")({
@@ -24,6 +24,9 @@ export const Route = createFileRoute("/delete-account")({
 function DeleteAccountPage() {
   const { user, loading } = useAuth();
   const requestDeletion = useServerFn(requestAccountDeletion);
+  const externalDeletion = useServerFn(submitExternalDeletion);
+  const [contact, setContact] = useState("");
+  const [externalReceived, setExternalReceived] = useState(false);
   const [scope, setScope] = useState<"account" | "data">("account");
   const [confirmation, setConfirmation] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,6 +62,24 @@ function DeleteAccountPage() {
           {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
           <Button type="submit" variant="destructive" disabled={busy || confirmation !== "DELETE"}><Trash2 className="size-4" /> {busy ? "Submitting…" : "Request deletion"}</Button>
         </form> : <div className="space-y-3">
+          {externalReceived ? <p role="status">Request received for clinic ownership verification. No account or data has been deleted.</p> : <form className="space-y-4" onSubmit={async e => {
+            e.preventDefault(); if (busy) return; setBusy(true); setError("");
+            try { await externalDeletion({ data: { contact, scope, confirmation, website: "" } }); setExternalReceived(true); }
+            catch { setError("Could not receive your request. Please contact the clinic."); }
+            finally { setBusy(false); }
+          }}>
+            <Label htmlFor="external-contact">Registered email or mobile number</Label>
+            <Input id="external-contact" value={contact} maxLength={254} required onChange={e => setContact(e.target.value)} />
+            <fieldset className="space-y-2"><legend className="font-semibold">Request type</legend>
+              <Label className="flex items-center gap-3"><input type="radio" name="external-scope" checked={scope === "account"} onChange={() => setScope("account")} /> Delete account & associated data</Label>
+              <Label className="flex items-center gap-3"><input type="radio" name="external-scope" checked={scope === "data"} onChange={() => setScope("data")} /> Delete personal data only</Label>
+            </fieldset>
+            <Label htmlFor="external-confirmation">Type DELETE to request review</Label>
+            <Input id="external-confirmation" value={confirmation} required autoComplete="off" onChange={e => setConfirmation(e.target.value)} />
+            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+            <Button type="submit" variant="destructive" disabled={busy || confirmation !== "DELETE"}>{busy ? "Submitting…" : "Submit deletion request"}</Button>
+            <p className="text-sm text-muted-foreground">The clinic must verify ownership through your registered contact before processing. This form does not require sign-in.</p>
+          </form>}
           <Button asChild><Link to="/auth">Sign in to submit a verified request</Link></Button>
           <p className="text-sm text-muted-foreground">You can also request deletion without signing in or reinstalling the app: call the clinic or send “Account/data deletion request” on WhatsApp, with your registered email or phone number. Never send your password, OTP or medical reports. The clinic verifies ownership before deleting anything.</p>
         </div>}
