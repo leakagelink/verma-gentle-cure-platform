@@ -46,7 +46,8 @@ export const Route = createFileRoute("/admin")({
 const PAYMENT_STATES = ["pending", "paid", "refunded", "failed"] as const;
 
 function AdminPage() {
-  const { user, loading, isCareTeam, role } = useAuth();
+  const { user, loading, role } = useAuth();
+  const isCareTeam = role === "admin";
   const navigate = useNavigate();
   const { settings } = useStoreSettings();
 

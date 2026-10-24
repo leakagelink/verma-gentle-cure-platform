@@ -29,6 +29,8 @@ export const Route = createFileRoute("/medicines/$slug")({
         { property: "og:title", content: medicine.name },
         { property: "og:description", content: medicine.description },
         { property: "og:type", content: "product" },
+        { property: "og:image", content: productImage(medicine.slug) },
+        { name: "twitter:image", content: productImage(medicine.slug) },
       { name: "twitter:card", content: "summary" },
         { property: "og:url", content: `/medicines/${medicine.slug}` },
       ],
@@ -116,10 +118,10 @@ function ProductPage() {
         </p>
         <h1 className="mt-2 text-3xl text-navy">{medicine.name}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
+          {medicine.reviews > 0 && <span className="flex items-center gap-1">
             <Star className="size-4 fill-lime text-lime" /> {medicine.rating}
             {medicine.reviews > 0 ? ` (${medicine.reviews})` : ""}
-          </span>
+          </span>}
           <StockBadge stock={medicine.stock} />
           <span>{medicine.pack}</span>
         </div>

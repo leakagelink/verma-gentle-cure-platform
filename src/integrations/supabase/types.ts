@@ -51,6 +51,8 @@ export type Database = {
           email: string | null
           fee: number
           gender: string | null
+          health_consent_at: string | null
+          health_notice_version: string | null
           id: string
           medical_history: string | null
           mode: Database["public"]["Enums"]["consultation_mode"]
@@ -74,6 +76,8 @@ export type Database = {
           email?: string | null
           fee?: number
           gender?: string | null
+          health_consent_at?: string | null
+          health_notice_version?: string | null
           id?: string
           medical_history?: string | null
           mode?: Database["public"]["Enums"]["consultation_mode"]
@@ -97,6 +101,8 @@ export type Database = {
           email?: string | null
           fee?: number
           gender?: string | null
+          health_consent_at?: string | null
+          health_notice_version?: string | null
           id?: string
           medical_history?: string | null
           mode?: Database["public"]["Enums"]["consultation_mode"]
@@ -169,6 +175,8 @@ export type Database = {
           emotional_state: string
           family_history: string
           gender: string
+          health_consent_at: string | null
+          health_notice_version: string | null
           id: string
           lifestyle: string
           menstrual_history: string
@@ -207,6 +215,8 @@ export type Database = {
           emotional_state?: string
           family_history?: string
           gender?: string
+          health_consent_at?: string | null
+          health_notice_version?: string | null
           id?: string
           lifestyle?: string
           menstrual_history?: string
@@ -245,6 +255,8 @@ export type Database = {
           emotional_state?: string
           family_history?: string
           gender?: string
+          health_consent_at?: string | null
+          health_notice_version?: string | null
           id?: string
           lifestyle?: string
           menstrual_history?: string
@@ -801,6 +813,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_clinical_patient: {
+        Args: { _doctor: string; _patient: string }
+        Returns: undefined
+      }
       can_access_patient: { Args: { _patient: string }; Returns: boolean }
       create_trusted_order: { Args: { payload: Json }; Returns: Json }
       has_role: {

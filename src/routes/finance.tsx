@@ -51,7 +51,8 @@ export const Route = createFileRoute("/finance")({
 const STATUSES: PaymentStatus[] = ["pending", "paid", "failed", "refunded"];
 
 function FinancePage() {
-  const { user, loading, isCareTeam, role } = useAuth();
+  const { user, loading, role } = useAuth();
+  const isCareTeam = role === "admin";
   const navigate = useNavigate();
   const [rows, setRows] = useState<PaymentRow[]>([]);
   const [busy, setBusy] = useState(true);
@@ -268,16 +269,10 @@ function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string 
       return;
     }
     setSaving(true);
-    let userId = staffId;
-    if (patientEmail.trim()) {
-      const { data } = await supabase
-        .from("profiles")
-        .select("id, full_name")
-        .ilike("full_name", `%${patientEmail.trim()}%`)
-        .limit(1)
-        .maybeSingle();
-      if (data?.id) userId = data.id;
-    }
+    const { data: matched, error: lookupError } = await supabase.from("profiles")
+      .select("id").eq("id", patientEmail.trim()).maybeSingle();
+    if (lookupError || !matched) { setSaving(false); toast.error("Enter an exact registered patient ID."); return; }
+    const userId = matched.id;
     const { error } = await supabase.from("payments").insert({
       user_id: userId,
       kind,
@@ -314,11 +309,11 @@ function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string 
           <Input value={payerName} onChange={(e) => setPayerName(e.target.value)} />
         </div>
         <div className="space-y-1.5">
-          <Label className="text-sm text-navy">Link to patient profile (name search, optional)</Label>
+          <Label className="text-sm text-navy">Registered patient ID</Label>
           <Input
             value={patientEmail}
             onChange={(e) => setPatientEmail(e.target.value)}
-            placeholder="Registered patient name"
+            placeholder="Patient UUID"
           />
         </div>
         <div className="space-y-1.5">

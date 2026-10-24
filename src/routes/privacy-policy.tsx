@@ -46,7 +46,7 @@ export const Route = createFileRoute("/privacy-policy")({
         {
           heading: "Who can access it",
           body: [
-            "Medical records are visible to you and the treating doctor. Clinic administrators can access appointment and order records needed to run the service.",
+            "Medical records are visible to you, explicitly assigned clinic doctors and authorized administrators. Administrator access may include medical records for service operation, privacy requests and legally required record handling.",
             "Uploaded medical documents are held in access-controlled storage and are not publicly accessible.",
           ],
         },

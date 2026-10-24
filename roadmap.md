@@ -1,5 +1,12 @@
 # Verma Gentle Cure — build roadmap
 
+## Uploaded security audit
+- [x] Inspect repository and deployed authorization policies.
+- [x] Apply trusted commerce and clinical-access protections.
+- [ ] Verify available tests, privacy and upload safeguards; deliver audit/release instructions.
+- [ ] Authenticated end-to-end checks — requesting user has no matching signed-in account.
+- [ ] Deletion fulfillment, legal retention, Android AAB and Play declarations — require owner decisions and native project.
+
 ## Google Play policy readiness
 - [x] Add public and in-app account/data deletion request flow with staff review queue.
 - [x] Update health disclosures, privacy details and registration consent.

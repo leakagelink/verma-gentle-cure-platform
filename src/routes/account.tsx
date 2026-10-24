@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { ClinicalAssignments } from "@/components/account/ClinicalAssignments";
 import { DeletionRequests } from "@/components/account/DeletionRequests";
 
 export const Route = createFileRoute("/account")({
@@ -307,7 +308,7 @@ function AccountPage() {
         <Button asChild variant="outline"><Link to="/privacy-policy">Privacy policy</Link></Button>
         <Button asChild variant="outline"><Link to="/delete-account">Delete account / personal data</Link></Button>
       </div>
-      {verifiedRole === "admin" && <DeletionRequests />}
+      {verifiedRole === "admin" && <><ClinicalAssignments /><DeletionRequests /></>}
     </section>
   );
 }

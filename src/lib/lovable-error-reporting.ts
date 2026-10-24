@@ -25,34 +25,10 @@ declare global {
 
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
-  window.__lovableEvents?.captureException?.(
-    error,
-    {
-      source: "react_error_boundary",
-      route: window.location.pathname,
-      ...context,
-    },
-    {
-      mechanism: "react_error_boundary",
-      handled: false,
-      severity: "error",
-    },
-  );
-  // Prod React does not rethrow boundary-caught errors to window.onerror, so the
-  // editor's telemetry never sees them. Forward to lovable.js's reporting hook,
-  // which is present only inside the editor preview.
-  // Loaders and server fns commonly throw a raw Response; String(it) is the
-  // opaque "[object Response]", so pull out the status and URL instead.
-  const message =
-    error instanceof Response
-      ? `Response ${error.status}${error.url ? ` at ${error.url}` : ""}`
-      : error instanceof Error
-        ? error.message
-        : String(error);
-  const stack = error instanceof Error ? error.stack : undefined;
-  window.__lovableReportRuntimeError?.({
-    message,
-    ...(stack !== undefined && { stack }),
-    filename: window.location.pathname,
-  });
+  // Never export raw errors, identifiers, medical content or arbitrary context.
+  const safeError = new Error("Application request failed");
+  const safeContext = { source: "react_error_boundary", status: error instanceof Response ? error.status : 500 };
+  window.__lovableEvents?.captureException?.(safeError, safeContext, { mechanism: "react_error_boundary", handled: true, severity: "error" });
+  window.__lovableReportRuntimeError?.({ message: "Application request failed", filename: "application" });
+  void context;
 }
