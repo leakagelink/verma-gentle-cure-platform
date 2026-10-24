@@ -37,6 +37,8 @@ export const Route = createFileRoute("/appointments")({
         content: "Track your consultations and view digital prescriptions in one private place.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/appointments" },
     ],
     links: [{ rel: "canonical", href: "/appointments" }],

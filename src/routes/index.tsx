@@ -77,6 +77,7 @@ export const Route = createFileRoute("/")({
           "Personalised homeopathic consultation, digital prescriptions and authentic medicine delivery.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],

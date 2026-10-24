@@ -21,6 +21,7 @@ export const Route = createFileRoute("/faq")({
       { property: "og:title", content: "FAQ | Verma Gentle Cure" },
       { property: "og:description", content: "Common questions about consultation and delivery." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/faq" },
     ],
     links: [{ rel: "canonical", href: "/faq" }],

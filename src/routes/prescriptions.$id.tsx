@@ -34,6 +34,8 @@ export const Route = createFileRoute("/prescriptions/$id")({
         content: "A printable copy of your homeopathic prescription, care advice and follow-up date.",
       },
       { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
   component: PrescriptionPage,

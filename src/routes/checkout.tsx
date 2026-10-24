@@ -30,6 +30,7 @@ export const Route = createFileRoute("/checkout")({
       { property: "og:title", content: "Checkout | Verma Gentle Cure" },
       { property: "og:description", content: "Confirm delivery details and place your order." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/checkout" },
       { name: "robots", content: "noindex" },
     ],

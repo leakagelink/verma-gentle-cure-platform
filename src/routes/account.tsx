@@ -25,6 +25,8 @@ export const Route = createFileRoute("/account")({
         content: "Your patient profile, appointments, prescriptions and orders.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/account" },
     ],
     links: [{ rel: "canonical", href: "/account" }],

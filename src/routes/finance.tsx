@@ -39,6 +39,7 @@ export const Route = createFileRoute("/finance")({
       { property: "og:title", content: "Financial Dashboard | Verma Gentle Cure" },
       { property: "og:description", content: "Clinic collections, cash entries and refunds." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/finance" },
       { name: "robots", content: "noindex" },
     ],

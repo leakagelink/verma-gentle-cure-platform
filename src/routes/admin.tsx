@@ -34,6 +34,7 @@ export const Route = createFileRoute("/admin")({
       { property: "og:title", content: "Store Admin | Verma Gentle Cure" },
       { property: "og:description", content: "Order management and store settings." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/admin" },
       { name: "robots", content: "noindex" },
     ],
