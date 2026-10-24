@@ -29,8 +29,7 @@ describe("direct PostgreSQL security regression", () => {
       if (path.startsWith("0006_")) await db.exec(readFileSync("src/lib/__tests__/verified-baseline.sql", "utf8"));
       await db.exec(readFileSync(`drizzle/migrations/${path}`, "utf8"));
     }
-    await db.exec(`CREATE TRIGGER appointment_security BEFORE INSERT OR UPDATE ON public.appointments FOR EACH ROW EXECUTE FUNCTION public.guard_appointment_write();
-      CREATE TRIGGER payment_security BEFORE INSERT OR UPDATE ON public.payments FOR EACH ROW EXECUTE FUNCTION public.guard_payment_write();
+    await db.exec(`CREATE TRIGGER payment_security BEFORE INSERT OR UPDATE ON public.payments FOR EACH ROW EXECUTE FUNCTION public.guard_payment_write();
       INSERT INTO auth.users(id) VALUES('${patient}'),('${other}');
       SELECT set_config('request.jwt.claim.role','service_role',false);
       INSERT INTO public.appointments(id,patient_id,patient_name,phone,mode,appointment_date,slot,concern,fee) VALUES('00000000-0000-4000-8000-000000000010','${patient}','Test Patient','9000000000','video',current_date+1,'10:00 AM','Synthetic concern',700);`);
@@ -71,5 +70,28 @@ describe("direct PostgreSQL security regression", () => {
   });
   it("patients cannot invoke service-only settlement", async () => {
     await expect(asPatient(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000099','${patient}','order_test','pay_test',1,'card');`)).rejects.toThrow(); await reset();
+  });
+  it("cancellation RPC cannot cancel another patient's appointment", async () => {
+    await reset();
+    await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false); INSERT INTO public.appointments(id,patient_id,patient_name,phone,mode,appointment_date,slot,concern,fee) VALUES('00000000-0000-4000-8000-000000000011','${other}','Other Patient','9000000000','video',current_date+1,'10:00 AM','Synthetic concern',700);`);
+    await expect(asPatient("SELECT public.cancel_patient_appointment('00000000-0000-4000-8000-000000000011');")).rejects.toThrow("not cancellable"); await reset();
+  });
+  it("authoritative settlement is idempotent and updates both bill and payment", async () => {
+    await reset(); await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
+      INSERT INTO public.payments(id,user_id,kind,appointment_id,amount,method,status,gateway,gateway_order_id) VALUES('00000000-0000-4000-8000-000000000020','${patient}','consultation','00000000-0000-4000-8000-000000000010',700,'card','pending','razorpay','order_test');`);
+    const sql = `SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000020','${patient}','order_test','pay_test',700,'card');`;
+    await db.exec(sql); await db.exec(sql);
+    const result = await db.query<{ status: string; payment_status: string }>("SELECT p.status,a.payment_status FROM public.payments p JOIN public.appointments a ON a.id=p.appointment_id WHERE p.id='00000000-0000-4000-8000-000000000020'");
+    expect(result.rows[0]).toEqual({ status: "paid", payment_status: "paid" });
+    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000020','${patient}','order_wrong','pay_test',700,'card');`)).rejects.toThrow("binding");
+    await reset();
+  });
+  it("a failed final payment write rolls back the associated bill update", async () => {
+    await reset(); await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
+      INSERT INTO public.payments(id,user_id,kind,appointment_id,amount,method,status,gateway,gateway_order_id) VALUES('00000000-0000-4000-8000-000000000021','${other}','consultation','00000000-0000-4000-8000-000000000011',700,'card','pending','razorpay','order_rollback');`);
+    // The unique provider ID from the prior test forces a genuine final-write failure.
+    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000021','${other}','order_rollback','pay_test',700,'card');`)).rejects.toThrow();
+    const bill = await db.query<{ payment_status: string }>("SELECT payment_status FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000011'");
+    expect(bill.rows[0]?.payment_status).toBe("pending"); await reset();
   });
 });
