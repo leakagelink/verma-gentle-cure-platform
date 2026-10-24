@@ -36,6 +36,13 @@
       "when": 1792164500961,
       "tag": "0004_real_kit_names_and_photos",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792839992607,
+      "tag": "0005_account_data_deletion_requests",
+      "breakpoints": true
     }
   ]
 }

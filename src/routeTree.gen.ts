@@ -27,6 +27,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CorporateInformationRouteImport } from './routes/corporate-information'
+import { Route as DeleteAccountRouteImport } from './routes/delete-account'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinanceRouteImport } from './routes/finance'
@@ -35,6 +36,7 @@ import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaim
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ShippingPolicyRouteImport } from './routes/shipping-policy'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -138,6 +140,11 @@ const CorporateInformationRoute = CorporateInformationRouteImport.update({
   path: '/corporate-information',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeleteAccountRoute = DeleteAccountRouteImport.update({
+  id: '/delete-account',
+  path: '/delete-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorRoute = DoctorRouteImport.update({
   id: '/doctor',
   path: '/doctor',
@@ -176,6 +183,11 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
   id: '/refund-policy',
   path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -258,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -266,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
@@ -298,6 +312,7 @@ export interface FileRoutesByTo {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -306,6 +321,7 @@ export interface FileRoutesByTo {
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
@@ -339,6 +355,7 @@ export interface FileRoutesById {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -347,6 +364,7 @@ export interface FileRoutesById {
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
@@ -381,6 +399,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -389,6 +408,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
@@ -421,6 +441,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -429,6 +450,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
@@ -461,6 +483,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -469,6 +492,7 @@ export interface FileRouteTypes {
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
@@ -502,6 +526,7 @@ export interface RootRouteChildren {
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
   CorporateInformationRoute: typeof CorporateInformationRoute
+  DeleteAccountRoute: typeof DeleteAccountRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
   FinanceRoute: typeof FinanceRoute
@@ -510,6 +535,7 @@ export interface RootRouteChildren {
   OrdersRoute: typeof OrdersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   ShippingPolicyRoute: typeof ShippingPolicyRoute
   TermsRoute: typeof TermsRoute
@@ -652,6 +678,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CorporateInformationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/delete-account': {
+      id: '/delete-account'
+      path: '/delete-account'
+      fullPath: '/delete-account'
+      preLoaderRoute: typeof DeleteAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctor': {
       id: '/doctor'
       path: '/doctor'
@@ -706,6 +739,13 @@ declare module '@tanstack/react-router' {
       path: '/refund-policy'
       fullPath: '/refund-policy'
       preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -814,6 +854,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
   CorporateInformationRoute: CorporateInformationRoute,
+  DeleteAccountRoute: DeleteAccountRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
   FinanceRoute: FinanceRoute,
@@ -822,6 +863,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersRoute: OrdersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   ShippingPolicyRoute: ShippingPolicyRoute,
   TermsRoute: TermsRoute,

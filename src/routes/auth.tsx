@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { hasPrivacyConsent } from "@/lib/privacy-rules";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -37,6 +38,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [consent, setConsent] = useState(false);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const router = useRouter();
@@ -60,6 +62,10 @@ function AuthPage() {
       return;
     }
     if (mode === "register") {
+      if (!hasPrivacyConsent(consent)) {
+        toast.error("Please review and accept the privacy terms before registering.");
+        return;
+      }
       if (fullName.trim().length < 3) {
         toast.error("Please enter your full name.");
         return;
@@ -86,11 +92,11 @@ function AuthPage() {
         await router.invalidate();
         void navigate({ to: "/account" });
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/account`,
+            emailRedirectTo: window.location.origin,
             data: { full_name: fullName.trim(), phone: phone.trim() },
           },
         });
@@ -102,8 +108,8 @@ function AuthPage() {
           );
           return;
         }
-        toast.success("Account created. Check your email if confirmation is required.");
-        void navigate({ to: "/account" });
+        toast.success(data.session ? "Account created." : "Check your email to confirm your account before signing in.");
+        if (data.session) void navigate({ to: "/account" });
       }
     } finally {
       setBusy(false);
@@ -117,7 +123,7 @@ function AuthPage() {
       return;
     }
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/account`,
+      redirectTo: `${window.location.origin}/reset-password`,
     });
     if (error) {
       toast.error(error.message);
@@ -216,7 +222,11 @@ function AuthPage() {
               autoComplete={mode === "login" ? "current-password" : "new-password"}
             />
           </div>
-          <Button type="submit" disabled={busy} className="h-12 w-full rounded-full">
+          {mode === "register" && <div className="space-y-2 text-xs leading-relaxed text-muted-foreground">
+            <Label className="flex items-start gap-3"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} className="mt-1" /> I am an adult registering for myself or as a parent/legal guardian, and agree to the terms and processing of my account information for clinic services.</Label>
+            <p><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/terms" className="text-primary underline">Terms</Link> · <Link to="/medical-disclaimer" className="text-primary underline">Medical disclaimer</Link></p>
+          </div>}
+          <Button type="submit" disabled={busy || (mode === "register" && !consent)} className="h-12 w-full rounded-full">
             {busy ? "Please wait…" : mode === "login" ? "Login" : "Create account"}
           </Button>
         </form>
@@ -234,7 +244,7 @@ function AuthPage() {
         </p>
 
         <p className="mt-6 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
-          Your details are stored securely and only you can access your records. You can also{" "}
+          Your records are access-controlled and available to you and authorized clinic staff. You can also{" "}
           <Link to="/book-appointment" className="font-semibold text-leaf">
             book a consultation
           </Link>{" "}

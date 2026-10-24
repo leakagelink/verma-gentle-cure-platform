@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { DeletionRequests } from "@/components/account/DeletionRequests";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
@@ -42,7 +43,7 @@ type ProfileForm = {
 const empty: ProfileForm = { full_name: "", phone: "", date_of_birth: "", gender: "", city: "" };
 
 function AccountPage() {
-  const { user, loading, signOut, isCareTeam } = useAuth();
+  const { user, loading, signOut, isCareTeam, role: verifiedRole } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState<ProfileForm>(empty);
   const [role, setRole] = useState<string>("patient");
@@ -295,11 +296,16 @@ function AccountPage() {
           </Link>
           <p className="flex gap-2 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-leaf" />
-            Only you can see your profile, appointments, prescriptions and orders.
+            Your records are accessible to you and authorized clinic staff as needed for care and service.
           </p>
 
         </div>
       </div>
+      <div className="mt-8 flex flex-wrap gap-3 border-t border-border pt-6">
+        <Button asChild variant="outline"><Link to="/privacy-policy">Privacy policy</Link></Button>
+        <Button asChild variant="outline"><Link to="/delete-account">Delete account / personal data</Link></Button>
+      </div>
+      {verifiedRole === "admin" && <DeletionRequests />}
     </section>
   );
 }
