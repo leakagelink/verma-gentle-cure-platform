@@ -17,7 +17,8 @@ export const Route = createFileRoute("/cart")({
       { title: "Shopping Cart | Verma Gentle Cure" },
       {
         name: "description",
-        content: "Review the homeopathic medicines in your cart, apply a coupon and proceed to checkout.",
+        content:
+          "Review the homeopathic medicines in your cart, apply a coupon and proceed to checkout.",
       },
       { property: "og:title", content: "Shopping Cart | Verma Gentle Cure" },
       { property: "og:description", content: "Review your medicine order before checkout." },
@@ -39,7 +40,9 @@ function CartPage() {
 
   const discount = applied ? Math.round(subtotal * applied.rate) : 0;
   const delivery =
-    subtotal === 0 || subtotal - discount >= settings.free_delivery_over ? 0 : settings.delivery_fee;
+    subtotal === 0 || subtotal - discount >= settings.free_delivery_over
+      ? 0
+      : settings.delivery_fee;
   const total = Math.max(0, subtotal - discount + delivery);
 
   return (

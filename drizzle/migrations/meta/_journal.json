@@ -106,6 +106,13 @@
       "when": 1792860764355,
       "tag": "0014_verified_deletion_processing_and_public_intake",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792861130403,
+      "tag": "0015_version_clinical_scope_and_deletion_holds",
+      "breakpoints": true
     }
   ]
 }

@@ -62,7 +62,10 @@ function OrdersPage() {
       const { data: itemRows } = await supabase
         .from("order_items")
         .select("*")
-        .in("order_id", list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"]);
+        .in(
+          "order_id",
+          list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"],
+        );
       if (!active) return;
       const grouped: Record<string, OrderItemRow[]> = {};
       for (const item of itemRows ?? []) {
@@ -140,7 +143,10 @@ function OrdersPage() {
                 <dl className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3 text-sm sm:mt-4 sm:grid-cols-4 sm:pt-4">
                   <Cell k="Subtotal" v={formatINR(order.subtotal)} />
                   <Cell k="Discount" v={order.discount ? `− ${formatINR(order.discount)}` : "—"} />
-                  <Cell k="Delivery" v={order.delivery_fee ? formatINR(order.delivery_fee) : "Free"} />
+                  <Cell
+                    k="Delivery"
+                    v={order.delivery_fee ? formatINR(order.delivery_fee) : "Free"}
+                  />
                   <Cell k="Total" v={formatINR(order.total)} />
                 </dl>
 

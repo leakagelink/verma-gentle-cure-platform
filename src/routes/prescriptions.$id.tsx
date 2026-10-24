@@ -31,7 +31,8 @@ export const Route = createFileRoute("/prescriptions/$id")({
       { property: "og:title", content: "Digital Prescription | Verma Gentle Cure" },
       {
         property: "og:description",
-        content: "A printable copy of your homeopathic prescription, care advice and follow-up date.",
+        content:
+          "A printable copy of your homeopathic prescription, care advice and follow-up date.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
@@ -214,8 +215,7 @@ function PrescriptionPage() {
             )}
             {rx.general_care && (
               <p className="mt-2 text-sm text-muted-foreground">
-                <strong className="font-semibold text-navy">General care:</strong>{" "}
-                {rx.general_care}
+                <strong className="font-semibold text-navy">General care:</strong> {rx.general_care}
               </p>
             )}
             {rx.follow_up_date && (

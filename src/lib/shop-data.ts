@@ -34,12 +34,7 @@ export const KIT_SHIPPING = 125;
 const KIT_NOTE =
   "Each kit is prepared and checked at the Verma Gentle Cure clinic. Contents are selected for everyday family use and must be taken only under the guidance of our physician.";
 
-function kit(
-  slug: string,
-  name: string,
-  description: string,
-  contents: string,
-): Medicine {
+function kit(slug: string, name: string, description: string, contents: string): Medicine {
   return {
     slug,
     name,
@@ -53,7 +48,8 @@ function kit(
     pack: "Complete homeopathic kit",
     description: `${description} ${KIT_NOTE}`,
     ingredients: contents,
-    usage: "Use only as directed by the physician during consultation. Dosage and duration are advised individually.",
+    usage:
+      "Use only as directed by the physician during consultation. Dosage and duration are advised individually.",
   };
 }
 

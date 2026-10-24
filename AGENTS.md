@@ -20,3 +20,4 @@
 - Health writes consume owner/purpose-bound server-issued consent receipts; clinical updates preserve evidence rather than deriving consent from read access.
 - Checkout persists owner-bound request IDs and gateway initiation claims; ambiguous provider failures retain claims for manual reconciliation to prevent duplicate charging.
 - Lovable's managed migration tool is the sole schema deployment path; legacy SQL is a baseline reference and must not be independently replayed against production.
+- Deletion processing uses an administrator-authorized token claim, account freeze, storage/API removal and readback; medical/financial/clinician dependencies block automated processing until lawful retention is resolved, preventing cascading loss of required records.
