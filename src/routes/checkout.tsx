@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
@@ -53,6 +53,8 @@ function CheckoutPage() {
   } | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("cod");
   const [saving, setSaving] = useState(false);
+  const submission = useRef<{ fingerprint: string; id: string } | null>(null);
+  const submitting = useRef(false);
   const submitOrder = useServerFn(createOrder);
   const startPay = useServerFn(startOnlinePayment);
   const confirmPay = useServerFn(confirmOnlinePayment);
@@ -108,6 +110,7 @@ function CheckoutPage() {
     total > settings.cod_max_order;
 
   async function placeOrder() {
+    if (submitting.current) return;
     if (!user) {
       toast.error("Please sign in to place your order.");
       void navigate({ to: "/auth" });
@@ -132,21 +135,27 @@ function CheckoutPage() {
       return;
     }
 
+    submitting.current = true;
     setSaving(true);
+    const fingerprint = JSON.stringify({ form, method, coupon: coupon?.code, items: items.map(({ medicine, qty }) => [medicine.slug, qty]) });
+    if (submission.current?.fingerprint !== fingerprint) submission.current = { fingerprint, id: crypto.randomUUID() };
     let order: Awaited<ReturnType<typeof submitOrder>>;
     try {
       order = await submitOrder({ data: {
+        request_id: submission.current.id,
         customer_name: form.name.trim(), phone: form.mobile.trim(), email: form.email.trim(),
         address: form.address.trim(), city: form.city.trim(), state: form.state.trim(), pincode: form.pincode.trim(),
         payment_method: method, coupon: coupon?.code ?? null, notes: form.notes.trim(),
         items: items.map(({ medicine, qty }) => ({ slug: medicine.slug, qty })),
       } });
     } catch {
+      submitting.current = false;
       setSaving(false);
       toast.error("Could not place the order. Please check product availability and try again.");
       return;
     }
     setSaving(false);
+    submitting.current = false;
 
     clear();
     try {

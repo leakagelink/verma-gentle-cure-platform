@@ -34,13 +34,18 @@ export const startOnlinePayment = createServerFn({ method: "POST" })
       label = `Medicine order ${order.order_no}`;
     } else throw new Error("Invalid payment resource");
     if (!Number.isSafeInteger(amount) || amount <= 0) throw new Error("Nothing to pay");
-    // Reuse an unpaid gateway order so retries cannot create parallel charges.
+    // Reuse persisted attempts; a durable claim below serializes first initiation.
     let pending = context.supabase.from("payments").select("id, gateway_order_id, amount")
       .eq("user_id", context.userId).eq("gateway", "razorpay").in("status", ["pending", "failed"]);
     pending = data.kind === "order" && data.orderId ? pending.eq("order_id", data.orderId) : pending.eq("appointment_id", data.appointmentId ?? "");
     const prior = await pending.order("created_at", { ascending: false }).limit(1).maybeSingle();
     if (prior.error) throw new Error("Could not check payment attempts");
     if (prior.data?.gateway_order_id && prior.data.amount === amount) return { paymentId: prior.data.id, orderId: prior.data.gateway_order_id, amount, keyId, label };
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const resourceId = data.kind === "order" ? data.orderId : data.appointmentId;
+    if (!resourceId) throw new Error("Invalid payment resource");
+    const claim = await supabaseAdmin.rpc("claim_gateway_initiation", { _user: context.userId, _kind: data.kind, _resource: resourceId });
+    if (claim.error || !claim.data) throw new Error("Payment initialization is already recorded. Retry the existing payment or contact the clinic.");
     const res = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST", headers: { Authorization: `Basic ${btoa(`${keyId}:${keySecret}`)}`, "Content-Type": "application/json" },
       body: JSON.stringify({ amount: amount * 100, currency: "INR", receipt: `vgc-${crypto.randomUUID().slice(0, 30)}` }), signal: AbortSignal.timeout(15000),
@@ -48,13 +53,14 @@ export const startOnlinePayment = createServerFn({ method: "POST" })
     if (!res.ok) throw new Error("Could not start the payment. Please try again.");
     const order = z.object({ id: z.string().regex(/^order_[a-zA-Z0-9]+$/), amount: z.number().int(), currency: z.literal("INR") }).parse(await res.json());
     if (order.amount !== amount * 100) throw new Error("Gateway amount mismatch");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin.from("payments").insert({
       user_id: context.userId, kind: data.kind, appointment_id: data.kind === "consultation" ? data.appointmentId ?? null : null,
       order_id: data.kind === "order" ? data.orderId ?? null : null, amount, payer_name: payerName, method: "card", status: "pending",
       gateway: "razorpay", gateway_order_id: order.id, notes: label,
     }).select("id").single();
     if (error || !row) throw new Error("Could not record this payment");
+    const recorded = await supabaseAdmin.from("gateway_initiations").update({ payment_id: row.id }).eq("token", claim.data);
+    if (recorded.error) throw new Error("Payment recorded; please retry from billing.");
     return { paymentId: row.id, orderId: order.id, amount, keyId, label };
   });
 

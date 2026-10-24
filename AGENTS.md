@@ -16,3 +16,7 @@
 - Commerce creation uses an authenticated atomic database RPC; browser totals are display-only because order integrity is a security boundary.
 - Gateway confirmations bind the stored order to captured provider amounts before service-only atomic settlement; callbacks are not payment proof.
 - Doctors require administrator-managed patient assignments; a verified role alone is not a clinical relationship.
+- Patient booking, cancellation and payment attempts use authenticated narrow RPCs; direct financial writes are revoked to prevent field tampering.
+- Health writes consume owner/purpose-bound server-issued consent receipts; clinical updates preserve evidence rather than deriving consent from read access.
+- Checkout persists owner-bound request IDs and gateway initiation claims; ambiguous provider failures retain claims for manual reconciliation to prevent duplicate charging.
+- Lovable's managed migration tool is the sole schema deployment path; legacy SQL is a baseline reference and must not be independently replayed against production.
