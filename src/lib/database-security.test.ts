@@ -24,9 +24,11 @@ describe("direct PostgreSQL security regression", () => {
       ALTER TABLE public.case_records ENABLE ROW LEVEL SECURITY; CREATE POLICY own_case ON public.case_records FOR ALL TO authenticated USING(patient_id=auth.uid()) WITH CHECK(patient_id=auth.uid());
       CREATE TABLE public.clinical_assignments(patient_id uuid,doctor_id uuid,assigned_by uuid,UNIQUE(patient_id,doctor_id));
       ALTER TABLE public.appointments ADD COLUMN consultation_type text DEFAULT 'new';`);
-    // Execute the recovered deployed functions, then all checked-in later migrations.
-    await db.exec(readFileSync("src/lib/__tests__/verified-baseline.sql", "utf8"));
-    for (const path of readdirSync("drizzle/migrations").filter(p => p.endsWith(".sql")).sort()) await db.exec(readFileSync(`drizzle/migrations/${path}`, "utf8"));
+    // Financial types/tables precede recovered functions; consent depends on those functions.
+    for (const path of readdirSync("drizzle/migrations").filter(p => p.endsWith(".sql")).sort()) {
+      if (path.startsWith("0006_")) await db.exec(readFileSync("src/lib/__tests__/verified-baseline.sql", "utf8"));
+      await db.exec(readFileSync(`drizzle/migrations/${path}`, "utf8"));
+    }
     await db.exec(`CREATE TRIGGER appointment_security BEFORE INSERT OR UPDATE ON public.appointments FOR EACH ROW EXECUTE FUNCTION public.guard_appointment_write();
       CREATE TRIGGER payment_security BEFORE INSERT OR UPDATE ON public.payments FOR EACH ROW EXECUTE FUNCTION public.guard_payment_write();
       INSERT INTO auth.users(id) VALUES('${patient}'),('${other}');
