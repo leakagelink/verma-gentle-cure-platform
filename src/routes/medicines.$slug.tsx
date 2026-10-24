@@ -29,6 +29,8 @@ export const Route = createFileRoute("/medicines/$slug")({
         { property: "og:title", content: medicine.name },
         { property: "og:description", content: medicine.description },
         { property: "og:type", content: "product" },
+        { property: "og:image", content: productImage(medicine.slug) },
+        { name: "twitter:image", content: productImage(medicine.slug) },
       { name: "twitter:card", content: "summary" },
         { property: "og:url", content: `/medicines/${medicine.slug}` },
       ],

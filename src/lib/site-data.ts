@@ -282,7 +282,7 @@ export const FAQS = [
   },
   {
     q: "Is my medical information private?",
-    a: "Yes. Medical records, uploaded reports and prescriptions are stored in secure, access-controlled storage and are visible only to you and the treating doctor.",
+    a: "Yes. Medical records, uploaded reports and prescriptions are stored in secure, access-controlled storage and are visible to you, explicitly assigned doctors and authorized clinic administrators.",
   },
   {
     q: "Can I reschedule or cancel an appointment?",
