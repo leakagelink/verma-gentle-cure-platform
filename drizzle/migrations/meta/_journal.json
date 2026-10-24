@@ -57,6 +57,13 @@
       "when": 1792852670872,
       "tag": "0007_gateway_uniqueness_and_atomic_stock_restore",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792853328125,
+      "tag": "0008_version_verified_gateway_settlement",
+      "breakpoints": true
     }
   ]
 }
