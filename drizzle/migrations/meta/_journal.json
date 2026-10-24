@@ -78,6 +78,13 @@
       "when": 1792853474997,
       "tag": "0010_durable_checkout_and_gateway_initiation",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792853495382,
+      "tag": "0011_checkout_result_binding",
+      "breakpoints": true
     }
   ]
 }
