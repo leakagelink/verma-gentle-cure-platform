@@ -168,6 +168,7 @@ function BookAppointmentPage() {
         medical_history: form.previousTreatment || null,
         current_medication: form.currentMedicines || null,
         allergies: form.allergies || null,
+        consultation_type: form.type,
         fee,
         status: "pending",
         payment_status: "pending",

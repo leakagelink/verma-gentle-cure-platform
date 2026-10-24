@@ -304,7 +304,8 @@ function PayPanel({
     setOpening(true);
     try {
       const ready = await loadCheckout();
-      if (!ready) throw new Error("Could not open the payment window");
+      const Razorpay = window.Razorpay;
+      if (!ready || !Razorpay) throw new Error("Could not open the payment window");
       const session = await startPay({
         data: {
           kind: due.kind,
@@ -312,7 +313,7 @@ function PayPanel({
           orderId: due.order_id,
         },
       });
-      const rz = new window.Razorpay!({
+      const rz = new Razorpay({
         key: session.keyId,
         amount: session.amount * 100,
         currency: "INR",

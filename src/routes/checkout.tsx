@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { createOrder } from "@/lib/commerce.functions";
+import { COUPONS } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 import { COUPON_STORAGE_KEY, useStoreSettings, type PaymentMethod } from "@/lib/products";
 import { loadCheckout } from "@/lib/razorpay-checkout";
@@ -52,6 +53,7 @@ function CheckoutPage() {
   } | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("cod");
   const [saving, setSaving] = useState(false);
+  const submitOrder = useServerFn(createOrder);
   const startPay = useServerFn(startOnlinePayment);
   const confirmPay = useServerFn(confirmOnlinePayment);
   const failPay = useServerFn(failOnlinePayment);
@@ -71,7 +73,11 @@ function CheckoutPage() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(COUPON_STORAGE_KEY);
-      if (raw) setCoupon(JSON.parse(raw) as { code: string; rate: number });
+      if (raw) {
+        const stored = JSON.parse(raw) as { code?: string };
+        const code = stored.code?.toUpperCase();
+        if (code && COUPONS[code] !== undefined) setCoupon({ code, rate: COUPONS[code] });
+      }
     } catch {
       /* ignore malformed storage */
     }
@@ -93,7 +99,7 @@ function CheckoutPage() {
   const discount = coupon ? Math.round(subtotal * coupon.rate) : 0;
   const payable = Math.max(0, subtotal - discount);
   const delivery =
-    subtotal === 0 || payable >= settings.free_delivery_over ? 0 : settings.delivery_fee;
+    subtotal === 0 ? 0 : 125;
   const total = payable + delivery;
 
   const codBlocked =
@@ -127,51 +133,20 @@ function CheckoutPage() {
     }
 
     setSaving(true);
-    const { data: order, error } = await supabase
-      .from("orders")
-      .insert({
-        user_id: user.id,
-        customer_name: form.name.trim(),
-        phone: form.mobile.trim(),
-        email: form.email.trim(),
-        address: form.address.trim(),
-        city: form.city.trim(),
-        state: form.state.trim(),
-        pincode: form.pincode.trim(),
-        payment_method: method,
-        payment_status: "pending",
-        status: "placed",
-        subtotal,
-        discount,
-        delivery_fee: delivery,
-        total,
-        coupon: coupon?.code ?? null,
-        notes: form.notes.trim() || null,
-      })
-      .select("id, order_no")
-      .single();
-
-    if (error || !order) {
+    let order: Awaited<ReturnType<typeof submitOrder>>;
+    try {
+      order = await submitOrder({ data: {
+        customer_name: form.name.trim(), phone: form.mobile.trim(), email: form.email.trim(),
+        address: form.address.trim(), city: form.city.trim(), state: form.state.trim(), pincode: form.pincode.trim(),
+        payment_method: method, coupon: coupon?.code ?? null, notes: form.notes.trim(),
+        items: items.map(({ medicine, qty }) => ({ slug: medicine.slug, qty })),
+      } });
+    } catch {
       setSaving(false);
-      toast.error("We could not place your order. Please try again.");
+      toast.error("Could not place the order. Please check product availability and try again.");
       return;
     }
-
-    const { error: itemsError } = await supabase.from("order_items").insert(
-      items.map(({ medicine, qty }) => ({
-        order_id: order.id,
-        slug: medicine.slug,
-        name: medicine.name,
-        pack: medicine.pack,
-        price: medicine.price,
-        qty,
-        line_total: medicine.price * qty,
-      })),
-    );
     setSaving(false);
-    if (itemsError) {
-      toast.error("Order saved, but some items could not be added. Our team will call you.");
-    }
 
     clear();
     try {
@@ -194,10 +169,11 @@ function CheckoutPage() {
   async function payNow(orderId: string, orderNo: string) {
     try {
       const ready = await loadCheckout();
-      if (!ready) throw new Error("Could not open the payment window");
+      const Razorpay = window.Razorpay;
+      if (!ready || !Razorpay) throw new Error("Could not open the payment window");
       const session = await startPay({ data: { kind: "order", orderId } });
       return await new Promise<boolean>((resolve) => {
-        const rz = new window.Razorpay!({
+        const rz = new Razorpay({
           key: session.keyId,
           amount: session.amount * 100,
           currency: "INR",
