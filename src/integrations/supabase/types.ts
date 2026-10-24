@@ -291,6 +291,30 @@ export type Database = {
           },
         ]
       }
+      checkout_requests: {
+        Row: {
+          created_at: string
+          payload: Json
+          request_id: string
+          result: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          payload: Json
+          request_id: string
+          result?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          payload?: Json
+          request_id?: string
+          result?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       clinical_assignments: {
         Row: {
           assigned_by: string
@@ -312,6 +336,33 @@ export type Database = {
           doctor_id?: string
           id?: string
           patient_id?: string
+        }
+        Relationships: []
+      }
+      gateway_initiations: {
+        Row: {
+          created_at: string
+          kind: string
+          payment_id: string | null
+          resource_id: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          kind: string
+          payment_id?: string | null
+          resource_id: string
+          token?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          kind?: string
+          payment_id?: string | null
+          resource_id?: string
+          token?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -855,6 +906,14 @@ export type Database = {
       cancel_patient_appointment: {
         Args: { _appointment: string }
         Returns: undefined
+      }
+      claim_gateway_initiation: {
+        Args: { _kind: string; _resource: string; _user: string }
+        Returns: string
+      }
+      create_idempotent_order: {
+        Args: { _request: string; payload: Json }
+        Returns: Json
       }
       create_trusted_order: { Args: { payload: Json }; Returns: Json }
       has_role: {

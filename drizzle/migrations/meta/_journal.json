@@ -71,6 +71,13 @@
       "when": 1792853388261,
       "tag": "0009_trusted_patient_actions_and_consent_receipts",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792853474997,
+      "tag": "0010_durable_checkout_and_gateway_initiation",
+      "breakpoints": true
     }
   ]
 }
