@@ -36,6 +36,9 @@ Assessment: 24 October 2026. **BLOCKED / NOT VERIFIED for Google Play submission
 - Production advisory scan: no known vulnerabilities in 54 production dependencies after updates. Dev/toolchain vulnerabilities were not comprehensively certified.
 - Whole-repository lint **failed**: 1,410 errors / 8 warnings at the recorded run, overwhelmingly existing formatting; one unnecessary regex escape subsequently corrected. No broad formatting rewrite performed. A later whole-repository lint success is not claimed.
 - Self-account session mint failed because no app account matches the requesting user's identity. Do not select a different person's account silently. Signed-in end-to-end, role matrix, storage, destructive deletion and provider tests remain unverified.
+- Repeated verification at 14:39 UTC: all 13 unit tests passed again. Published privacy URL returned HTTP 200; published deletion URL returned **404**, so publishing the updated deletion page is a release gate. No deployment was performed.
+- Quick database scan at 14:40 UTC: one active warning remains for unrestricted public reads of store settings. Leave it active until exposed columns and future setting storage are reviewed. A deep code security scan is running; its results are not yet included and this report does not claim security clearance.
+- Consent triggers validate submitted version/timestamp fields and record server time; this is not independent proof that a patient actually accepted the notice. Stronger server-side collection evidence remains a release gate.
 
 ## Changed source areas
 
