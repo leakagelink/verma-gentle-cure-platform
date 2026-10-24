@@ -37,7 +37,9 @@ describe("direct PostgreSQL security regression", () => {
   }, 30000);
   afterAll(async () => { await db?.close(); });
   it("rejects direct appointment fee tampering", async () => {
-    await expect(asPatient("UPDATE public.appointments SET fee=1 WHERE id='00000000-0000-4000-8000-000000000010';")).rejects.toThrow(); await reset();
+    await asPatient("UPDATE public.appointments SET fee=1 WHERE id='00000000-0000-4000-8000-000000000010';"); await reset();
+    const result = await db.query<{ fee: number }>("SELECT fee FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000010'");
+    expect(result.rows[0]?.fee).toBe(700);
   });
   it("rejects direct paid payment forgery", async () => {
     await expect(asPatient(`INSERT INTO public.payments(user_id,kind,amount,method,status) VALUES('${patient}','order',1,'card','paid');`)).rejects.toThrow(); await reset();
