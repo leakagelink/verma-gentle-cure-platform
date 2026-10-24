@@ -21,6 +21,7 @@ export const Route = createFileRoute("/about-doctor")({
         content: "Qualifications, clinical experience and consultation approach.",
       },
       { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/about-doctor" },
     ],
     links: [{ rel: "canonical", href: "/about-doctor" }],

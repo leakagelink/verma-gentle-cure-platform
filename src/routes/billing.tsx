@@ -48,6 +48,7 @@ export const Route = createFileRoute("/billing")({
         content: "Consultation fees, medicine bills, receipts and refund status.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/billing" },
       { name: "robots", content: "noindex" },
     ],

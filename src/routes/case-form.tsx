@@ -39,6 +39,8 @@ export const Route = createFileRoute("/case-form")({
         content: "Share your complete case history and reports securely before your consultation.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/case-form" },
     ],
     links: [{ rel: "canonical", href: "/case-form" }],

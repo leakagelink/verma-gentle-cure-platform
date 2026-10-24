@@ -14,6 +14,7 @@ export const Route = createFileRoute("/terms")({
       { property: "og:title", content: "Terms & Conditions | Verma Gentle Cure" },
       { property: "og:description", content: "Terms of use for consultations and orders." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/terms" },
     ],
     links: [{ rel: "canonical", href: "/terms" }],

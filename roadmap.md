@@ -1,9 +1,10 @@
 # Verma Gentle Cure — build roadmap
 
 ## Google Play policy readiness
-- [ ] Add public and in-app account/data deletion request flow with staff review queue.
-- [ ] Update health disclosures, privacy details and registration consent.
-- [ ] Verify flows and provide Android / Play Console submission checklist.
+- [x] Add public and in-app account/data deletion request flow with staff review queue.
+- [x] Update health disclosures, privacy details and registration consent.
+- [x] Verify public flows and provide Android / Play Console submission checklist.
+- [ ] Verify authenticated deletion submission/read-back — requesting user must sign in; managed self-session mint found no matching account.
 - [ ] Final Android bundle, verified clinical credentials, retention policy and Play Console declarations — require owner inputs.
 
 ## Phase 1 — Foundation (done)

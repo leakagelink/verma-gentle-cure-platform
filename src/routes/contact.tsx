@@ -23,6 +23,7 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact | Verma Gentle Cure" },
       { property: "og:description", content: "Clinic address, hours and patient enquiries." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/contact" },
     ],
     links: [{ rel: "canonical", href: "/contact" }],

@@ -16,6 +16,7 @@ export const Route = createFileRoute("/blog/")({
       { property: "og:title", content: "Health Journal | Verma Gentle Cure" },
       { property: "og:description", content: "Homeopathy and wellness articles from the clinic." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/blog" },
     ],
     links: [{ rel: "canonical", href: "/blog" }],

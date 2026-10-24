@@ -22,6 +22,7 @@ export const Route = createFileRoute("/cart")({
       { property: "og:title", content: "Shopping Cart | Verma Gentle Cure" },
       { property: "og:description", content: "Review your medicine order before checkout." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/cart" },
       { name: "robots", content: "noindex" },
     ],

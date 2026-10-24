@@ -14,6 +14,7 @@ export const Route = createFileRoute("/refund-policy")({
       { property: "og:title", content: "Refund Policy | Verma Gentle Cure" },
       { property: "og:description", content: "Refund and cancellation terms." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/refund-policy" },
     ],
     links: [{ rel: "canonical", href: "/refund-policy" }],

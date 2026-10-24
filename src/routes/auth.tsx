@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth")({
       { property: "og:title", content: "Patient Login | Verma Gentle Cure" },
       { property: "og:description", content: "Access appointments, prescriptions and orders." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/auth" },
     ],
     links: [{ rel: "canonical", href: "/auth" }],

@@ -28,6 +28,7 @@ export const Route = createFileRoute("/orders")({
       { property: "og:title", content: "My Orders | Verma Gentle Cure" },
       { property: "og:description", content: "Track your medicine orders and deliveries." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/orders" },
       { name: "robots", content: "noindex" },
     ],

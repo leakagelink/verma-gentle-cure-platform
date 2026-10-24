@@ -36,6 +36,8 @@ export const Route = createFileRoute("/case-records")({
         content: "Review submitted case histories and record the clinical assessment.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/case-records" },
     ],
     links: [{ rel: "canonical", href: "/case-records" }],

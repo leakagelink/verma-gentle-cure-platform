@@ -14,6 +14,7 @@ export const Route = createFileRoute("/privacy-policy")({
       { property: "og:title", content: "Privacy Policy | Verma Gentle Cure" },
       { property: "og:description", content: "How patient information is handled and protected." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/privacy-policy" },
     ],
     links: [{ rel: "canonical", href: "/privacy-policy" }],

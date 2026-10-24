@@ -42,6 +42,8 @@ export const Route = createFileRoute("/doctor")({
         content: "Review consultations and issue digital prescriptions.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/doctor" },
     ],
     links: [{ rel: "canonical", href: "/doctor" }],

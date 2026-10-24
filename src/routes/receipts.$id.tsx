@@ -30,6 +30,7 @@ export const Route = createFileRoute("/receipts/$id")({
       { property: "og:title", content: "Payment Receipt | Verma Gentle Cure" },
       { property: "og:description", content: "Your clinic payment receipt and invoice." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/receipts" },
       { name: "robots", content: "noindex" },
     ],
