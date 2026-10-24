@@ -1,173 +1,105 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createHmac, timingSafeEqual } from "crypto";
-
+import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { startPaymentSchema, confirmPaymentSchema, verifyPaymentSignature, assertCapturedPayment, type GatewayPayment } from "./payment-security";
 
-type StartInput = {
-  kind: "consultation" | "order";
-  appointmentId?: string | null;
-  orderId?: string | null;
-};
-
-/** Tells the UI whether an online gateway is configured. */
 export const getPaymentConfig = createServerFn({ method: "GET" }).handler(async () => {
   const keyId = process.env["RAZORPAY_KEY_ID"];
-  const secret = process.env["RAZORPAY_KEY_SECRET"];
-  return { online: Boolean(keyId && secret), keyId: keyId ?? null };
+  return { online: Boolean(keyId && process.env["RAZORPAY_KEY_SECRET"]), keyId: keyId ?? null };
 });
 
-/** Creates a Razorpay order for a pending consultation fee or medicine order. */
 export const startOnlinePayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: StartInput) => {
-    if (data.kind !== "consultation" && data.kind !== "order") throw new Error("Invalid charge type");
-    if (!data.appointmentId && !data.orderId) throw new Error("Nothing to pay for");
-    return data;
-  })
+  .inputValidator((input: unknown) => startPaymentSchema.parse(input))
   .handler(async ({ data, context }) => {
     const keyId = process.env["RAZORPAY_KEY_ID"];
     const keySecret = process.env["RAZORPAY_KEY_SECRET"];
     if (!keyId || !keySecret) throw new Error("Online payment is not configured yet");
-
-    const { supabase, userId } = context;
-
-    let amount = 0;
-    let label = "";
+    let amount: number;
+    let label: string;
+    let payerName: string;
     if (data.kind === "consultation" && data.appointmentId) {
-      const { data: appt } = await supabase
-        .from("appointments")
-        .select("id, fee, appointment_date, slot, patient_name")
-        .eq("id", data.appointmentId)
-        .maybeSingle();
-      if (!appt) throw new Error("Appointment not found");
-      amount = appt.fee;
-      label = `Consultation ${appt.appointment_date} ${appt.slot}`;
-    } else if (data.orderId) {
-      const { data: order } = await supabase
-        .from("orders")
-        .select("id, total, order_no, customer_name")
-        .eq("id", data.orderId)
-        .maybeSingle();
-      if (!order) throw new Error("Order not found");
-      amount = order.total;
+      const { data: appt, error } = await context.supabase.from("appointments")
+        .select("id, fee, appointment_date, slot, patient_name, status, payment_status")
+        .eq("id", data.appointmentId).eq("patient_id", context.userId).maybeSingle();
+      if (error || !appt || appt.status === "cancelled" || !["pending", "failed"].includes(appt.payment_status)) throw new Error("Appointment not payable");
+      amount = appt.fee; payerName = appt.patient_name;
+      label = "Clinical consultation";
+    } else if (data.kind === "order" && data.orderId) {
+      const { data: order, error } = await context.supabase.from("orders")
+        .select("id, total, order_no, customer_name, status, payment_status")
+        .eq("id", data.orderId).eq("user_id", context.userId).maybeSingle();
+      if (error || !order || order.status === "cancelled" || !["pending", "failed"].includes(order.payment_status)) throw new Error("Order not payable");
+      amount = order.total; payerName = order.customer_name;
       label = `Medicine order ${order.order_no}`;
-    }
-    if (amount <= 0) throw new Error("Nothing to pay");
-
-    const body = new URLSearchParams({
-      amount: String(amount * 100),
-      currency: "INR",
-      receipt: `vgc-${Date.now()}`,
-    });
+    } else throw new Error("Invalid payment resource");
+    if (!Number.isSafeInteger(amount) || amount <= 0) throw new Error("Nothing to pay");
+    // Reuse an unpaid gateway order so retries cannot create parallel charges.
+    let pending = context.supabase.from("payments").select("id, gateway_order_id, amount")
+      .eq("user_id", context.userId).eq("gateway", "razorpay").in("status", ["pending", "failed"]);
+    pending = data.kind === "order" && data.orderId ? pending.eq("order_id", data.orderId) : pending.eq("appointment_id", data.appointmentId ?? "");
+    const prior = await pending.order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (prior.error) throw new Error("Could not check payment attempts");
+    if (prior.data?.gateway_order_id && prior.data.amount === amount) return { paymentId: prior.data.id, orderId: prior.data.gateway_order_id, amount, keyId, label };
     const res = await fetch("https://api.razorpay.com/v1/orders", {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString("base64")}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body,
+      method: "POST", headers: { Authorization: `Basic ${btoa(`${keyId}:${keySecret}`)}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: amount * 100, currency: "INR", receipt: `vgc-${crypto.randomUUID().slice(0, 30)}` }), signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) throw new Error("Could not start the payment. Please try again.");
-    const order = (await res.json()) as { id: string };
-
+    const order = z.object({ id: z.string().regex(/^order_[a-zA-Z0-9]+$/), amount: z.number().int(), currency: z.literal("INR") }).parse(await res.json());
+    if (order.amount !== amount * 100) throw new Error("Gateway amount mismatch");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin
-      .from("payments")
-      .insert({
-        user_id: userId,
-        kind: data.kind,
-        appointment_id: data.appointmentId ?? null,
-        order_id: data.orderId ?? null,
-        amount,
-        method: "card",
-        status: "pending",
-        gateway: "razorpay",
-        gateway_order_id: order.id,
-        notes: label,
-      })
-      .select("id, receipt_no")
-      .single();
+    const { data: row, error } = await supabaseAdmin.from("payments").insert({
+      user_id: context.userId, kind: data.kind, appointment_id: data.kind === "consultation" ? data.appointmentId : null,
+      order_id: data.kind === "order" ? data.orderId : null, amount, payer_name: payerName, method: "card", status: "pending",
+      gateway: "razorpay", gateway_order_id: order.id, notes: label,
+    }).select("id").single();
     if (error || !row) throw new Error("Could not record this payment");
-
     return { paymentId: row.id, orderId: order.id, amount, keyId, label };
   });
 
-/** Verifies the Razorpay signature and marks the payment (and its bill) as paid. */
 export const confirmOnlinePayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (data: {
-      paymentId: string;
-      razorpayOrderId: string;
-      razorpayPaymentId: string;
-      signature: string;
-      method?: string;
-    }) => data,
-  )
+  .inputValidator((input: unknown) => confirmPaymentSchema.parse(input))
   .handler(async ({ data, context }) => {
+    const keyId = process.env["RAZORPAY_KEY_ID"];
     const keySecret = process.env["RAZORPAY_KEY_SECRET"];
-    if (!keySecret) throw new Error("Online payment is not configured yet");
-
-    const expected = createHmac("sha256", keySecret)
-      .update(`${data.razorpayOrderId}|${data.razorpayPaymentId}`)
-      .digest("hex");
-    const a = Buffer.from(expected);
-    const b = Buffer.from(data.signature || "");
-    const valid = a.length === b.length && timingSafeEqual(a, b);
-
+    if (!keyId || !keySecret) throw new Error("Online payment is not configured yet");
+    const { data: row, error } = await context.supabase.from("payments")
+      .select("id, user_id, gateway, gateway_order_id, gateway_payment_id, status, amount")
+      .eq("id", data.paymentId).eq("user_id", context.userId).maybeSingle();
+    if (error || !row || row.gateway !== "razorpay" || !row.gateway_order_id || row.gateway_order_id !== data.razorpayOrderId) throw new Error("Payment not found");
+    if (!await verifyPaymentSignature(keySecret, row.gateway_order_id, data.razorpayPaymentId, data.signature)) throw new Error("Payment could not be verified");
+    if (row.status === "paid") {
+      if (row.gateway_payment_id !== data.razorpayPaymentId) throw new Error("Payment already settled");
+      return { ok: true, receiptId: row.id };
+    }
+    const res = await fetch(`https://api.razorpay.com/v1/payments/${encodeURIComponent(data.razorpayPaymentId)}`, {
+      headers: { Authorization: `Basic ${btoa(`${keyId}:${keySecret}`)}` }, signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) throw new Error("Payment verification unavailable. Please retry.");
+    const payment = await res.json() as GatewayPayment;
+    assertCapturedPayment(payment, { paymentId: data.razorpayPaymentId, orderId: row.gateway_order_id, amountRupees: row.amount });
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin
-      .from("payments")
-      .select("*")
-      .eq("id", data.paymentId)
-      .maybeSingle();
-    if (!row || row.user_id !== context.userId) throw new Error("Payment not found");
-
-    if (!valid) {
-      await supabaseAdmin
-        .from("payments")
-        .update({ status: "failed", failure_reason: "Signature verification failed" })
-        .eq("id", row.id);
-      throw new Error("Payment could not be verified");
-    }
-
-    await supabaseAdmin
-      .from("payments")
-      .update({
-        status: "paid",
-        gateway_payment_id: data.razorpayPaymentId,
-        method: data.method && data.method !== "" ? data.method : row.method,
-      })
-      .eq("id", row.id);
-
-    if (row.appointment_id) {
-      await supabaseAdmin
-        .from("appointments")
-        .update({ payment_status: "paid" })
-        .eq("id", row.appointment_id);
-    }
-    if (row.order_id) {
-      await supabaseAdmin.from("orders").update({ payment_status: "paid" }).eq("id", row.order_id);
-    }
-
+    const result = await supabaseAdmin.rpc("settle_gateway_payment", {
+      _payment: row.id, _user: context.userId, _gateway_order: row.gateway_order_id,
+      _gateway_payment: payment.id, _amount: row.amount, _method: payment.method ?? "online",
+    });
+    if (result.error) throw new Error("Payment received but receipt update could not complete. Please contact the clinic.");
     return { ok: true, receiptId: row.id };
   });
 
-/** Records a cancelled or failed gateway attempt so the patient can retry. */
 export const failOnlinePayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { paymentId: string; reason: string }) => data)
+  .inputValidator((input: unknown) => z.object({ paymentId: z.string().uuid(), reason: z.string().max(200) }).parse(input))
   .handler(async ({ data, context }) => {
+    const { data: row, error } = await context.supabase.from("payments").select("id")
+      .eq("id", data.paymentId).eq("user_id", context.userId).eq("gateway", "razorpay").eq("status", "pending").maybeSingle();
+    if (error) throw new Error("Could not check payment");
+    if (!row) return { ok: false };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin
-      .from("payments")
-      .select("id, user_id")
-      .eq("id", data.paymentId)
-      .maybeSingle();
-    if (!row || row.user_id !== context.userId) return { ok: false };
-    await supabaseAdmin
-      .from("payments")
-      .update({ status: "failed", failure_reason: data.reason.slice(0, 200) })
-      .eq("id", row.id);
+    const result = await supabaseAdmin.from("payments").update({ status: "failed", failure_reason: "Checkout closed or payment incomplete" })
+      .eq("id", row.id).eq("status", "pending");
+    if (result.error) throw new Error("Could not record payment attempt");
     return { ok: true };
   });
