@@ -52,6 +52,7 @@ export type Database = {
           fee: number
           gender: string | null
           health_consent_at: string | null
+          health_consent_receipt_id: string | null
           health_notice_version: string | null
           id: string
           medical_history: string | null
@@ -77,6 +78,7 @@ export type Database = {
           fee?: number
           gender?: string | null
           health_consent_at?: string | null
+          health_consent_receipt_id?: string | null
           health_notice_version?: string | null
           id?: string
           medical_history?: string | null
@@ -102,6 +104,7 @@ export type Database = {
           fee?: number
           gender?: string | null
           health_consent_at?: string | null
+          health_consent_receipt_id?: string | null
           health_notice_version?: string | null
           id?: string
           medical_history?: string | null
@@ -176,6 +179,7 @@ export type Database = {
           family_history: string
           gender: string
           health_consent_at: string | null
+          health_consent_receipt_id: string | null
           health_notice_version: string | null
           id: string
           lifestyle: string
@@ -216,6 +220,7 @@ export type Database = {
           family_history?: string
           gender?: string
           health_consent_at?: string | null
+          health_consent_receipt_id?: string | null
           health_notice_version?: string | null
           id?: string
           lifestyle?: string
@@ -256,6 +261,7 @@ export type Database = {
           family_history?: string
           gender?: string
           health_consent_at?: string | null
+          health_consent_receipt_id?: string | null
           health_notice_version?: string | null
           id?: string
           lifestyle?: string
@@ -306,6 +312,33 @@ export type Database = {
           doctor_id?: string
           id?: string
           patient_id?: string
+        }
+        Relationships: []
+      }
+      health_consent_receipts: {
+        Row: {
+          accepted_at: string
+          consumed_at: string | null
+          id: string
+          notice_version: string
+          purpose: string
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          consumed_at?: string | null
+          id?: string
+          notice_version: string
+          purpose: string
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string
+          consumed_at?: string | null
+          id?: string
+          notice_version?: string
+          purpose?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -817,7 +850,12 @@ export type Database = {
         Args: { _doctor: string; _patient: string }
         Returns: undefined
       }
+      book_patient_appointment: { Args: { payload: Json }; Returns: string }
       can_access_patient: { Args: { _patient: string }; Returns: boolean }
+      cancel_patient_appointment: {
+        Args: { _appointment: string }
+        Returns: undefined
+      }
       create_trusted_order: { Args: { payload: Json }; Returns: Json }
       has_role: {
         Args: {
@@ -825,6 +863,11 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      record_counter_payment: { Args: { payload: Json }; Returns: string }
+      review_manual_payment: {
+        Args: { _payment: string; payload: Json }
+        Returns: undefined
       }
       settle_gateway_payment: {
         Args: {
@@ -837,6 +880,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      submit_patient_payment: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       app_role: "patient" | "doctor" | "admin"

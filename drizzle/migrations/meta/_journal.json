@@ -64,6 +64,13 @@
       "when": 1792853328125,
       "tag": "0008_version_verified_gateway_settlement",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792853388261,
+      "tag": "0009_trusted_patient_actions_and_consent_receipts",
+      "breakpoints": true
     }
   ]
 }
