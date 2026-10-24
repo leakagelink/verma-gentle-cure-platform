@@ -1,18 +1,21 @@
 # Verma Gentle Cure — build roadmap
 
 ## Second uploaded audit
-- [ ] Replace direct patient appointment/payment writes with narrow trusted operations; preserve clinical and cash/COD workflows.
-- [ ] Version deployed settlement and clinical baseline; verify applied migration records and document one deployment process.
-- [ ] Protect consent evidence with server-issued, owner-bound receipts and test self-access/clinical separation.
-- [ ] Prevent duplicate checkout and concurrent gateway initiation; add direct authorization regression tests.
-- [ ] Check environment exclusions, lint, harness build, tests and report actual remaining blockers.
+- [x] Replace direct patient appointment/payment writes with narrow trusted operations; preserve clinical and cash/COD workflows.
+- [x] Recover/version settlement and fee/pricing guards; verify 0000–0013 applied hashes and document managed deployment.
+- [x] Protect consent with server-issued receipts; test self-access, timestamps, replay and assigned-clinician preservation.
+- [x] Add durable checkout/gateway claims and 17 isolated direct PostgreSQL regression tests.
+- [x] Run 30 tests, changed-file lint and inspect automatic build; deliver SECOND_SECURITY_AUDIT.md.
+- [ ] Full clean-staging baseline replay — historical clinical/storage dependencies missing before 0006.
+- [ ] Exclude/untrack environment files — managed .gitignore is read-only; owner Git action required.
+- [ ] Hosted signed-in/provider concurrency tests and rescheduling — session/test-mode setup and unimplemented scheduling flow remain.
 
 ## Uploaded security audit
 - [x] Inspect repository and deployed authorization policies.
 - [x] Apply trusted commerce and clinical-access protections.
 - [x] Run available security tests and public checks; deliver SECURITY_AUDIT.md with actual results and release gates.
 - [ ] Restore reproducible migration history — initial applied security migration missing from managed journal/files.
-- [ ] Review background deep security scan findings when delivered; quick scan leaves public store-settings warning active.
+- [x] Review completed deep scan: order/consultation underpayment findings addressed by guarded writes; findings retained pending post-change scan.
 - [ ] Publish updated public deletion resource — current live URL returns 404; owner deployment approval required.
 - [ ] Captured-payment reconciliation/webhook, initiation lock and privileged settlement regression tests — require safe provider test setup and signed-in verification.
 - [ ] Authenticated end-to-end checks — requesting user has no matching signed-in account.

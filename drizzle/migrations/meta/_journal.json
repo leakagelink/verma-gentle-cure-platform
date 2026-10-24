@@ -85,6 +85,20 @@
       "when": 1792853495382,
       "tag": "0011_checkout_result_binding",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792854305890,
+      "tag": "0012_version_clinical_and_commerce_guardrails",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792854406898,
+      "tag": "0013_trusted_manual_settlement_and_amounts",
+      "breakpoints": true
     }
   ]
 }
