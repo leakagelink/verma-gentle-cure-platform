@@ -50,8 +50,8 @@ export const startOnlinePayment = createServerFn({ method: "POST" })
     if (order.amount !== amount * 100) throw new Error("Gateway amount mismatch");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin.from("payments").insert({
-      user_id: context.userId, kind: data.kind, appointment_id: data.kind === "consultation" ? data.appointmentId : null,
-      order_id: data.kind === "order" ? data.orderId : null, amount, payer_name: payerName, method: "card", status: "pending",
+      user_id: context.userId, kind: data.kind, appointment_id: data.kind === "consultation" ? data.appointmentId ?? null : null,
+      order_id: data.kind === "order" ? data.orderId ?? null : null, amount, payer_name: payerName, method: "card", status: "pending",
       gateway: "razorpay", gateway_order_id: order.id, notes: label,
     }).select("id").single();
     if (error || !row) throw new Error("Could not record this payment");
