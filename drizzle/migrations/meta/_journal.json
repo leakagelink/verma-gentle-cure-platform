@@ -99,6 +99,13 @@
       "when": 1792854406898,
       "tag": "0013_trusted_manual_settlement_and_amounts",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792860764355,
+      "tag": "0014_verified_deletion_processing_and_public_intake",
+      "breakpoints": true
     }
   ]
 }
