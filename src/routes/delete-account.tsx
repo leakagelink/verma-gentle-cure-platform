@@ -31,7 +31,7 @@ function DeleteAccountPage() {
   const [error, setError] = useState("");
   return <>
     <PageHero eyebrow="Privacy" title="Account & data deletion" description="Request deletion of your Verma Gentle Cure account or personal data." />
-    <section className="container-page max-w-3xl space-y-6 py-8">
+    <section className="container-page max-w-3xl space-y-6 py-8 pr-16 lg:pr-4">
       <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
         <h2 className="text-xl text-foreground">What happens to your information</h2>
         <p>Account deletion removes your sign-in account and non-required profile information. Data-only deletion lets you request removal of non-required personal information without closing your account. The clinic verifies account ownership before acting.</p>

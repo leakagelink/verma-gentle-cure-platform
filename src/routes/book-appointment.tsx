@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Check, ChevronLeft, ChevronRight, Paperclip, ShieldCheck } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CLINIC, CONSULT_FEES } from "@/lib/site-data";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
+import { hasPrivacyConsent } from "@/lib/privacy-rules";
 
 export const Route = createFileRoute("/book-appointment")({
   head: () => ({
@@ -109,6 +110,7 @@ function BookAppointmentPage() {
   const [form, setForm] = useState<Form>(EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [healthConsent, setHealthConsent] = useState(false);
   const [appointmentId, setAppointmentId] = useState("");
   const days = useMemo(() => nextDays(12), []);
   const fee = form.type === "new" ? CONSULT_FEES.new : CONSULT_FEES.followUp;
@@ -126,6 +128,7 @@ function BookAppointmentPage() {
     if (current === 2 && !form.date) e["date"] = "Select a date to continue.";
     if (current === 3 && !form.slot) e["slot"] = "Select a time slot to continue.";
     if (current === 4) {
+      if (!hasPrivacyConsent(healthConsent)) e["consent"] = "Please consent to sharing health information with the clinic.";
       if (form.fullName.trim().length < 3) e["fullName"] = "Enter your full name.";
       if (!/^[6-9]\d{9}$/.test(form.mobile.trim()))
         e["mobile"] = "Enter a valid 10-digit Indian mobile number.";
@@ -139,6 +142,7 @@ function BookAppointmentPage() {
   }
 
   async function confirmAppointment() {
+    if (!hasPrivacyConsent(healthConsent)) { toast.error("Health information consent is required."); return; }
     if (!user) {
       toast.error("Please sign in to confirm your appointment.");
       navigate({ to: "/auth" });
@@ -350,6 +354,12 @@ function BookAppointmentPage() {
 
             {step === 4 && (
               <Step title="Patient & medical information">
+                <div className="mb-5 space-y-3 rounded-lg border border-border bg-mint p-4">
+                  <p className="text-sm leading-relaxed text-muted-foreground">Your contact details, symptoms, medical history, medicines and allergies are saved in access-controlled clinic records and shared with authorized staff for consultation. Optional health fields may be left blank. The app is not a medical device and does not diagnose, treat, cure or prevent conditions; medical decisions belong to a healthcare professional.</p>
+                  <Label className="flex items-start gap-3"><input type="checkbox" checked={healthConsent} onChange={e => setHealthConsent(e.target.checked)} className="mt-1" /> I consent to sharing this information for clinic care and am authorized to provide it for the patient.</Label>
+                  <p className="text-xs"><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/delete-account" className="text-primary underline">Data deletion</Link></p>
+                  {errors["consent"] && <p role="alert" className="text-sm text-destructive">{errors["consent"]}</p>}
+                </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Full name" error={errors["fullName"]}>
                     <Input
@@ -450,25 +460,8 @@ function BookAppointmentPage() {
                 </div>
 
                 <div className="mt-6 rounded-2xl border border-dashed border-border p-5">
-                  <Label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-navy">
-                    <Paperclip className="size-4 text-leaf" />
-                    Upload reports, prescriptions or images
-                    <input
-                      type="file"
-                      multiple
-                      className="sr-only"
-                      onChange={(e) =>
-                        set("files", Array.from(e.target.files ?? []).map((f) => f.name))
-                      }
-                    />
-                  </Label>
-                  {form.files.length > 0 && (
-                    <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
-                      {form.files.map((f) => (
-                        <li key={f}>• {f}</li>
-                      ))}
-                    </ul>
-                  )}
+                  <Button asChild variant="outline"><Link to="/case-form">Upload reports in your case-taking form</Link></Button>
+                  <p className="mt-3 text-xs text-muted-foreground">Reports are uploaded and saved through the private case-taking form, not this booking page.</p>
                   <p className="mt-3 flex items-center gap-2 text-xs text-forest">
                     <ShieldCheck className="size-4" /> Secure medical information
                   </p>
