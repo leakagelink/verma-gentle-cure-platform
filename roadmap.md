@@ -3,7 +3,9 @@
 ## Uploaded security audit
 - [x] Inspect repository and deployed authorization policies.
 - [x] Apply trusted commerce and clinical-access protections.
-- [ ] Verify available tests, privacy and upload safeguards; deliver audit/release instructions.
+- [x] Run available security tests and public checks; deliver SECURITY_AUDIT.md with actual results and release gates.
+- [ ] Restore reproducible migration history — initial applied security migration missing from managed journal/files.
+- [ ] Captured-payment reconciliation/webhook, initiation lock and privileged settlement regression tests — require safe provider test setup and signed-in verification.
 - [ ] Authenticated end-to-end checks — requesting user has no matching signed-in account.
 - [ ] Deletion fulfillment, legal retention, Android AAB and Play declarations — require owner decisions and native project.
 
