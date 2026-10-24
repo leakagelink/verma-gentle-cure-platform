@@ -1,5 +1,10 @@
 # Verma Gentle Cure — build roadmap
 
+## Final remediation audit
+- [ ] Implement public unauthenticated intake and verified-owner deletion processor with fail-closed retention, concurrency and readback.
+- [ ] Test deletion using synthetic/disposable data; independently re-audit security, migrations, secrets and lint.
+- [ ] Deliver exact final evidence and Android/retention/provider release blockers.
+
 ## Second uploaded audit
 - [x] Replace direct patient appointment/payment writes with narrow trusted operations; preserve clinical and cash/COD workflows.
 - [x] Recover/version settlement and fee/pricing guards; verify 0000–0013 applied hashes and document managed deployment.

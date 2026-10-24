@@ -16,22 +16,34 @@ export type Database = {
     Tables: {
       account_deletion_requests: {
         Row: {
+          completed_at: string | null
           created_at: string
+          failure_code: string | null
           id: string
+          processing_state: string
+          processing_token: string | null
           scope: string
           status: string
           user_id: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
+          failure_code?: string | null
           id?: string
+          processing_state?: string
+          processing_token?: string | null
           scope: string
           status?: string
           user_id: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
+          failure_code?: string | null
           id?: string
+          processing_state?: string
+          processing_token?: string | null
           scope?: string
           status?: string
           user_id?: string
@@ -336,6 +348,33 @@ export type Database = {
           doctor_id?: string
           id?: string
           patient_id?: string
+        }
+        Relationships: []
+      }
+      external_deletion_requests: {
+        Row: {
+          contact: string
+          created_at: string
+          id: string
+          rate_key: string
+          scope: string
+          state: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          id?: string
+          rate_key: string
+          scope: string
+          state?: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          id?: string
+          rate_key?: string
+          scope?: string
+          state?: string
         }
         Relationships: []
       }
@@ -907,6 +946,7 @@ export type Database = {
         Args: { _appointment: string }
         Returns: undefined
       }
+      claim_account_deletion: { Args: { _request: string }; Returns: Json }
       claim_gateway_initiation: {
         Args: { _kind: string; _resource: string; _user: string }
         Returns: string
@@ -922,6 +962,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      purge_eligible_account_data: {
+        Args: { _request: string; _token: string }
+        Returns: undefined
       }
       record_counter_payment: { Args: { payload: Json }; Returns: string }
       review_manual_payment: {
