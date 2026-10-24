@@ -208,7 +208,7 @@ function CaseFormPage() {
           toast.error("Use a PDF, JPEG, PNG or WebP file up to 10 MB.");
           continue;
         }
-        const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(-80);
+        const safeName = file.name.replace(/[^\w.-]+/g, "-").slice(-80);
         const path = `${user.id}/${crypto.randomUUID()}-${safeName}`;
         const { error } = await supabase.storage.from(CASE_BUCKET).upload(path, file, {
           contentType: file.type || "application/octet-stream",
