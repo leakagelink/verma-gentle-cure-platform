@@ -1,5 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, Clock, Instagram, Mail, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  Instagram,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Navigation,
+  Phone,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -46,20 +55,46 @@ function ContactPage() {
         <div className="space-y-4">
           <div className="card-premium p-5">
             <p className="font-display text-xl text-navy">{CLINIC.name}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{CLINIC.doctor} ({CLINIC.qualification}) · Homeopathic Physician</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {CLINIC.doctor} ({CLINIC.qualification}) · Homeopathic Physician
+            </p>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <Button asChild className="rounded-full"><a href={CLINIC.phoneHref}><Phone className="size-4" /> Call Clinic</a></Button>
-              <Button asChild variant="outline" className="rounded-full"><a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> WhatsApp Us</a></Button>
-              <Button asChild variant="outline" className="rounded-full"><Link to="/book-appointment"><CalendarDays className="size-4" /> Book Appointment</Link></Button>
-              <Button asChild variant="outline" className="rounded-full"><a href={CLINIC.mapsHref} target="_blank" rel="noopener noreferrer"><Navigation className="size-4" /> Get Directions</a></Button>
-              <Button asChild variant="outline" className="rounded-full"><a href={CLINIC.instagramHref} target="_blank" rel="noopener noreferrer"><Instagram className="size-4" /> Instagram</a></Button>
+              <Button asChild className="rounded-full">
+                <a href={CLINIC.phoneHref}>
+                  <Phone className="size-4" /> Call Clinic
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="size-4" /> WhatsApp Us
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <Link to="/book-appointment">
+                  <CalendarDays className="size-4" /> Book Appointment
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <a href={CLINIC.mapsHref} target="_blank" rel="noopener noreferrer">
+                  <Navigation className="size-4" /> Get Directions
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full">
+                <a href={CLINIC.instagramHref} target="_blank" rel="noopener noreferrer">
+                  <Instagram className="size-4" /> Instagram
+                </a>
+              </Button>
             </div>
           </div>
           {[
             { icon: MapPin, title: "Clinic address", body: CLINIC.address },
             { icon: Phone, title: "Clinic Phone", body: CLINIC.phone },
             { icon: MessageCircle, title: "WhatsApp", body: CLINIC.whatsapp },
-            { icon: Instagram, title: "Instagram", body: `${CLINIC.instagram} — instagram.com/vermagentlecure` },
+            {
+              icon: Instagram,
+              title: "Instagram",
+              body: `${CLINIC.instagram} — instagram.com/vermagentlecure`,
+            },
             { icon: Mail, title: "Email", body: CLINIC.email },
             { icon: Clock, title: "Consultation hours", body: CLINIC.hours },
           ].map(({ icon: Icon, title, body }) => (
@@ -79,7 +114,11 @@ function ContactPage() {
           className="card-premium space-y-4 p-6 lg:p-8"
           onSubmit={(e) => {
             e.preventDefault();
-            if (!form.name.trim() || !/^\S+@\S+\.\S+$/.test(form.email) || form.message.trim().length < 10) {
+            if (
+              !form.name.trim() ||
+              !/^\S+@\S+\.\S+$/.test(form.email) ||
+              form.message.trim().length < 10
+            ) {
               toast.error("Please add your name, a valid email and a short message.");
               return;
             }

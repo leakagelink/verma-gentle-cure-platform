@@ -120,7 +120,10 @@ function ReceiptPage() {
         </header>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          <Field k={isInvoice ? "Invoice / receipt no." : "Payment reference no."} v={payment.receipt_no} />
+          <Field
+            k={isInvoice ? "Invoice / receipt no." : "Payment reference no."}
+            v={payment.receipt_no}
+          />
           <Field k="Date" v={formatStamp(payment.created_at)} />
           <Field k="Billed for" v={KIND_LABEL[payment.kind] ?? payment.kind} />
           <Field k="Payment method" v={PAY_METHOD_LABEL[payment.method] ?? payment.method} />

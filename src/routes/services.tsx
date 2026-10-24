@@ -1,12 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  BellRing,
-  HeartPulse,
-  Package,
-  RefreshCw,
-  Stethoscope,
-  Video,
-} from "lucide-react";
+import { BellRing, HeartPulse, Package, RefreshCw, Stethoscope, Video } from "lucide-react";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";

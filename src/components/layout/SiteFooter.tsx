@@ -53,7 +53,9 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-navy">Quick Links</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-navy">
+            Quick Links
+          </h3>
           <ul className="mt-4 space-y-2.5">
             {QUICK.map((l) => (
               <li key={l.to}>
@@ -122,7 +124,8 @@ export function SiteFooter() {
             <span className="font-semibold text-navy">Medical disclaimer:</span> {CLINIC.disclaimer}
           </p>
           <p className="text-xs text-muted-foreground lg:pr-20">
-            © {new Date().getFullYear()} {CLINIC.name} — {CLINIC.corporateLine}. All rights reserved.
+            © {new Date().getFullYear()} {CLINIC.name} — {CLINIC.corporateLine}. All rights
+            reserved.
           </p>
         </div>
       </div>

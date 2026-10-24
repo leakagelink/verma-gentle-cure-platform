@@ -129,8 +129,7 @@ function DoctorDashboardPage() {
     );
   }
 
-  const visible =
-    filter === "all" ? appointments : appointments.filter((a) => a.status === filter);
+  const visible = filter === "all" ? appointments : appointments.filter((a) => a.status === filter);
 
   return (
     <>
@@ -149,7 +148,6 @@ function DoctorDashboardPage() {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-
           {(["all", ...STATUSES] as const).map((value) => (
             <button
               key={value}
@@ -269,13 +267,7 @@ function DoctorDashboardPage() {
   );
 }
 
-function NotesEditor({
-  initial,
-  onSave,
-}: {
-  initial: string;
-  onSave: (notes: string) => void;
-}) {
+function NotesEditor({ initial, onSave }: { initial: string; onSave: (notes: string) => void }) {
   const [value, setValue] = useState(initial);
   useEffect(() => setValue(initial), [initial]);
   return (
@@ -347,11 +339,8 @@ function PrescriptionForm({
     };
   }, [appointment.id]);
 
-
   function updateMedicine(index: number, key: keyof PrescriptionMedicine, value: string) {
-    setMedicines((list) =>
-      list.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
-    );
+    setMedicines((list) => list.map((item, i) => (i === index ? { ...item, [key]: value } : item)));
   }
 
   async function save() {
@@ -393,7 +382,9 @@ function PrescriptionForm({
       return;
     }
     toast.success(
-      existingId ? "Prescription updated — the change is recorded" : "Prescription issued to the patient",
+      existingId
+        ? "Prescription updated — the change is recorded"
+        : "Prescription issued to the patient",
     );
     onDone();
   }
@@ -434,10 +425,12 @@ function PrescriptionForm({
         </div>
       </div>
 
-
       <div className="mt-5 space-y-4">
         {medicines.map((medicine, index) => (
-          <div key={index} className="grid gap-3 rounded-xl border border-border bg-background p-4 md:grid-cols-5">
+          <div
+            key={index}
+            className="grid gap-3 rounded-xl border border-border bg-background p-4 md:grid-cols-5"
+          >
             <Input
               placeholder="Medicine"
               value={medicine.name}

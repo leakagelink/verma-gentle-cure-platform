@@ -65,18 +65,33 @@ export function SiteHeader() {
               )}
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="hidden rounded-full sm:inline-flex"
+          >
             <Link to={user ? "/account" : "/auth"} aria-label="Login or account">
               <UserRound className="size-5" />
             </Link>
           </Button>
-          <a href={CLINIC.phoneHref} className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-navy hover:bg-mint/60 2xl:inline-flex"><Phone className="size-4" /> {CLINIC.phone}</a>
+          <a
+            href={CLINIC.phoneHref}
+            className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-navy hover:bg-mint/60 2xl:inline-flex"
+          >
+            <Phone className="size-4" /> {CLINIC.phone}
+          </a>
           <Button asChild className="hidden rounded-full lg:inline-flex">
             <Link to="/book-appointment">Book Appointment</Link>
           </Button>
           <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
             <DrawerTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full xl:hidden" aria-label="More">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full xl:hidden"
+                aria-label="More"
+              >
                 <Menu className="size-5" />
               </Button>
             </DrawerTrigger>
@@ -87,12 +102,20 @@ export function SiteHeader() {
                   <DrawerDescription>More from Verma Gentle Cure</DrawerDescription>
                 </div>
                 <DrawerClose asChild>
-                  <Button variant="ghost" size="icon" className="shrink-0 rounded-full" aria-label="Close menu">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 rounded-full"
+                    aria-label="Close menu"
+                  >
                     <X className="size-5" />
                   </Button>
                 </DrawerClose>
               </DrawerHeader>
-              <nav className="grid grid-cols-2 gap-2 overflow-y-auto px-4 pb-4" aria-label="More navigation">
+              <nav
+                className="grid grid-cols-2 gap-2 overflow-y-auto px-4 pb-4"
+                aria-label="More navigation"
+              >
                 {NAV.filter((item) => item.to !== "/").map((item) => (
                   <DrawerClose asChild key={item.to}>
                     <Link
@@ -103,12 +126,49 @@ export function SiteHeader() {
                     </Link>
                   </DrawerClose>
                 ))}
-                <a href={CLINIC.phoneHref} className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><Phone className="size-4" /> Call Clinic</a>
-                <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><MessageCircle className="size-4" /> WhatsApp</a>
-                <a href={CLINIC.instagramHref} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"><Instagram className="size-4" /> Instagram</a>
-                {([["/testimonials","Testimonials"],["/book-appointment","Book Appointment"],["/medical-disclaimer","Medical Disclaimer"],["/privacy-policy","Privacy Policy"],["/delete-account","Account & Data Deletion"],["/terms","Terms & Conditions"],["/appointment-policy","Cancellation Policy"],["/accessibility","Accessibility"],["/corporate-information","Corporate Information"],["/faq","FAQ"]] as const).map(([to,label]) => (
+                <a
+                  href={CLINIC.phoneHref}
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <Phone className="size-4" /> Call Clinic
+                </a>
+                <a
+                  href={CLINIC.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <MessageCircle className="size-4" /> WhatsApp
+                </a>
+                <a
+                  href={CLINIC.instagramHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <Instagram className="size-4" /> Instagram
+                </a>
+                {(
+                  [
+                    ["/testimonials", "Testimonials"],
+                    ["/book-appointment", "Book Appointment"],
+                    ["/medical-disclaimer", "Medical Disclaimer"],
+                    ["/privacy-policy", "Privacy Policy"],
+                    ["/delete-account", "Account & Data Deletion"],
+                    ["/terms", "Terms & Conditions"],
+                    ["/appointment-policy", "Cancellation Policy"],
+                    ["/accessibility", "Accessibility"],
+                    ["/corporate-information", "Corporate Information"],
+                    ["/faq", "FAQ"],
+                  ] as const
+                ).map(([to, label]) => (
                   <DrawerClose asChild key={to}>
-                    <Link to={to} className="flex min-h-11 items-center rounded-xl px-4 text-xs text-muted-foreground active:bg-mint/60">{label}</Link>
+                    <Link
+                      to={to}
+                      className="flex min-h-11 items-center rounded-xl px-4 text-xs text-muted-foreground active:bg-mint/60"
+                    >
+                      {label}
+                    </Link>
                   </DrawerClose>
                 ))}
                 <DrawerClose asChild>

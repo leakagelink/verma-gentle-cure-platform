@@ -110,14 +110,17 @@ function AuthPage() {
           );
           return;
         }
-        toast.success(data.session ? "Account created." : "Check your email to confirm your account before signing in.");
+        toast.success(
+          data.session
+            ? "Account created."
+            : "Check your email to confirm your account before signing in.",
+        );
         if (data.session) void navigate({ to: "/account" });
       }
     } finally {
       setBusy(false);
     }
   };
-
 
   const handleReset = async () => {
     if (!/^\S+@\S+\.\S+$/.test(email)) {
@@ -224,15 +227,41 @@ function AuthPage() {
               autoComplete={mode === "login" ? "current-password" : "new-password"}
             />
           </div>
-          {mode === "register" && <div className="space-y-2 text-xs leading-relaxed text-muted-foreground">
-            <Label className="flex items-start gap-3"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} className="mt-1" /> I am an adult registering for myself or as a parent/legal guardian, and agree to the terms and processing of my account information for clinic services.</Label>
-            <p><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/terms" className="text-primary underline">Terms</Link> · <Link to="/medical-disclaimer" className="text-primary underline">Medical disclaimer</Link></p>
-          </div>}
-          <Button type="submit" disabled={busy || (mode === "register" && !consent)} className="h-12 w-full rounded-full">
+          {mode === "register" && (
+            <div className="space-y-2 text-xs leading-relaxed text-muted-foreground">
+              <Label className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-1"
+                />{" "}
+                I am an adult registering for myself or as a parent/legal guardian, and agree to the
+                terms and processing of my account information for clinic services.
+              </Label>
+              <p>
+                <Link to="/privacy-policy" className="text-primary underline">
+                  Privacy policy
+                </Link>{" "}
+                ·{" "}
+                <Link to="/terms" className="text-primary underline">
+                  Terms
+                </Link>{" "}
+                ·{" "}
+                <Link to="/medical-disclaimer" className="text-primary underline">
+                  Medical disclaimer
+                </Link>
+              </p>
+            </div>
+          )}
+          <Button
+            type="submit"
+            disabled={busy || (mode === "register" && !consent)}
+            className="h-12 w-full rounded-full"
+          >
             {busy ? "Please wait…" : mode === "login" ? "Login" : "Create account"}
           </Button>
         </form>
-
 
         <p className="mt-5 text-sm text-muted-foreground">
           {mode === "login" ? "Forgot your password? " : "Already registered? "}
@@ -246,7 +275,8 @@ function AuthPage() {
         </p>
 
         <p className="mt-6 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
-          Your records are access-controlled and available to you and authorized clinic staff. You can also{" "}
+          Your records are access-controlled and available to you and authorized clinic staff. You
+          can also{" "}
           <Link to="/book-appointment" className="font-semibold text-leaf">
             book a consultation
           </Link>{" "}

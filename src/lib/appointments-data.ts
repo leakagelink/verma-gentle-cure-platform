@@ -2,8 +2,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type AppointmentRow = Database["public"]["Tables"]["appointments"]["Row"];
 export type PrescriptionRow = Database["public"]["Tables"]["prescriptions"]["Row"];
-export type PrescriptionAuditRow =
-  Database["public"]["Tables"]["prescription_audit"]["Row"];
+export type PrescriptionAuditRow = Database["public"]["Tables"]["prescription_audit"]["Row"];
 
 export const DOCTOR_DEFAULTS = {
   name: "Dr. Rajshree Verma",

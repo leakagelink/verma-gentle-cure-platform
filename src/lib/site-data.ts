@@ -13,7 +13,8 @@ export const CLINIC = {
   corporate: "Vermaverse OPC Private Limited",
   corporateLine: "A Healthcare Initiative of Vermaverse OPC Private Limited",
   inaugurated: "23 March 2026",
-  mapsHref: "https://www.google.com/maps/search/?api=1&query=Sarala+Complex+Kadma+Market+Jamshedpur",
+  mapsHref:
+    "https://www.google.com/maps/search/?api=1&query=Sarala+Complex+Kadma+Market+Jamshedpur",
   email: "care@vermagentlecure.com",
   address: "G3, 1st Floor, Sarala Complex, Kadma Market, Jamshedpur, Jharkhand – 831005",
   hours: "Mon – Sat · 10:00 AM – 7:00 PM · Sunday by appointment",
@@ -79,13 +80,37 @@ export const SERVICES: Service[] = [
 ];
 
 export const TRUST_POINTS = [
-  { title: "6 Years of Professional Experience", description: "Dr. Rajshree Verma, Homeopathic Physician", icon: "BadgeCheck" },
-  { title: "Founded by Dr. Rajshree Verma (BHMS)", description: "Homeopathic Physician and founder", icon: "UserRoundCheck" },
-  { title: "Established in Jamshedpur", description: "Inaugurated 23 March 2026, Kadma", icon: "Stethoscope" },
-  { title: "Patient-Centred Approach", description: "Individualized consultation and care", icon: "LifeBuoy" },
+  {
+    title: "6 Years of Professional Experience",
+    description: "Dr. Rajshree Verma, Homeopathic Physician",
+    icon: "BadgeCheck",
+  },
+  {
+    title: "Founded by Dr. Rajshree Verma (BHMS)",
+    description: "Homeopathic Physician and founder",
+    icon: "UserRoundCheck",
+  },
+  {
+    title: "Established in Jamshedpur",
+    description: "Inaugurated 23 March 2026, Kadma",
+    icon: "Stethoscope",
+  },
+  {
+    title: "Patient-Centred Approach",
+    description: "Individualized consultation and care",
+    icon: "LifeBuoy",
+  },
   { title: "Media Featured", description: "Covered by local and regional media", icon: "Video" },
-  { title: "Professional & Literary Recognitions", description: "Awards, honours and academic association", icon: "ShieldCheck" },
-  { title: "Accessible Clinic Location", description: "Sarala Complex, Kadma Market", icon: "Truck" },
+  {
+    title: "Professional & Literary Recognitions",
+    description: "Awards, honours and academic association",
+    icon: "ShieldCheck",
+  },
+  {
+    title: "Accessible Clinic Location",
+    description: "Sarala Complex, Kadma Market",
+    icon: "Truck",
+  },
 ];
 
 export const STEPS = [
@@ -115,12 +140,45 @@ export type Condition = {
 };
 
 export const CONDITIONS: Condition[] = [
-  { slug: "acute-conditions", name: "Acute Conditions", description: "Consultation available for recent, short-term health concerns, with individualized assessment.", accent: "teal" },
-  { slug: "chronic-conditions", name: "Chronic Conditions", description: "Homeopathic care for long-standing complaints, reviewed in depth with structured follow-up.", accent: "navy" },
-  { slug: "womens-health", name: "Women's Health", description: "Consultation for hormonal, cyclical and general women's health concerns.", accent: "forest" },
-  { slug: "child-health", name: "Child Health", description: "Gentle, age-appropriate consultation for common childhood health concerns.", accent: "teal" },
-  { slug: "lifestyle-related", name: "Lifestyle-related Conditions", description: "Individualized assessment alongside diet, routine and habit guidance.", accent: "leaf" },
-  { slug: "mental-health-concerns", name: "Mental-health-related Concerns", description: "Supportive consultation for stress, sleep and emotional wellbeing. Not a substitute for emergency or psychiatric care.", accent: "forest" },
+  {
+    slug: "acute-conditions",
+    name: "Acute Conditions",
+    description:
+      "Consultation available for recent, short-term health concerns, with individualized assessment.",
+    accent: "teal",
+  },
+  {
+    slug: "chronic-conditions",
+    name: "Chronic Conditions",
+    description:
+      "Homeopathic care for long-standing complaints, reviewed in depth with structured follow-up.",
+    accent: "navy",
+  },
+  {
+    slug: "womens-health",
+    name: "Women's Health",
+    description: "Consultation for hormonal, cyclical and general women's health concerns.",
+    accent: "forest",
+  },
+  {
+    slug: "child-health",
+    name: "Child Health",
+    description: "Gentle, age-appropriate consultation for common childhood health concerns.",
+    accent: "teal",
+  },
+  {
+    slug: "lifestyle-related",
+    name: "Lifestyle-related Conditions",
+    description: "Individualized assessment alongside diet, routine and habit guidance.",
+    accent: "leaf",
+  },
+  {
+    slug: "mental-health-concerns",
+    name: "Mental-health-related Concerns",
+    description:
+      "Supportive consultation for stress, sleep and emotional wellbeing. Not a substitute for emergency or psychiatric care.",
+    accent: "forest",
+  },
 ];
 
 export const WHY_US = [
@@ -311,16 +369,84 @@ export type AwardItem = {
 const award = (a: Omit<AwardItem, "body">): AwardItem => ({ ...a, body: a.org });
 
 export const AWARDS: AwardItem[] = [
-  award({ title: "Bharat Kamal Puraskar 2026", org: "Bharat Seva Society, in association with Veyil Foundation", year: "2026", date: "27 March 2026", category: "Outstanding contribution in healthcare in homeopathic medicines", group: "honours" }),
-  award({ title: "Legends of Bharat Award 2026", org: "Helping Humans", year: "2026", date: "29 March 2026", category: "Contribution and dedicated service in Homeopathic Healthcare and Holistic Healing", group: "honours" }),
-  award({ title: "Rashtriya Pratibha Samman 2026", org: "Worthy Wellness Foundation", year: "2026", date: "31 March 2026", category: "Excellence / contribution in holistic healthcare", group: "honours" }),
-  award({ title: "Param Vibhushan Sewa Ratna Samman — National Award 2026", org: "Jivran Foundation", year: "2026", date: "29 April 2026", category: "Healthcare, Education and Literature", group: "honours" }),
-  award({ title: "Indian Icon Awards 2026", org: "Indian Icon Awards", year: "2026", category: "Woman Leadership Award in Healthcare", group: "honours" }),
-  award({ title: "Indian Literature Award 2026", org: "Indian Literature & Arts Society", year: "2026", date: "29 April 2026", category: "Hindi Literature – Novel (Bandini)", group: "literary" }),
-  award({ title: "Rabindra Ratna Puraskar 2026", org: "Veyil Foundation / Rabindra Ratna Puraskar National Committee", year: "2026", date: "29 April 2026", category: "Literature and Education", group: "literary" }),
-  award({ title: "BooksBrew Bookfest Honorary Recognition 2026", org: "BooksBrew", year: "2026", category: "Exemplary literary contribution and book outreach impact", group: "literary" }),
-  award({ title: "Bandini — Certificate of Recognition", org: "Book: Bandini: Iraadon Kee Ek Kalajayee Yatra", year: "2026", date: "10 April 2026", category: "Book recognition (title and ISBN recorded)", group: "literary" }),
-  award({ title: "World Academic Press — Academic Associate", org: "World Academic Press (WAP)", year: "2026", date: "Issued 23 August 2026 · Valid until 23 August 2027", category: "Academic Associate · Designation: Author", group: "literary" }),
+  award({
+    title: "Bharat Kamal Puraskar 2026",
+    org: "Bharat Seva Society, in association with Veyil Foundation",
+    year: "2026",
+    date: "27 March 2026",
+    category: "Outstanding contribution in healthcare in homeopathic medicines",
+    group: "honours",
+  }),
+  award({
+    title: "Legends of Bharat Award 2026",
+    org: "Helping Humans",
+    year: "2026",
+    date: "29 March 2026",
+    category: "Contribution and dedicated service in Homeopathic Healthcare and Holistic Healing",
+    group: "honours",
+  }),
+  award({
+    title: "Rashtriya Pratibha Samman 2026",
+    org: "Worthy Wellness Foundation",
+    year: "2026",
+    date: "31 March 2026",
+    category: "Excellence / contribution in holistic healthcare",
+    group: "honours",
+  }),
+  award({
+    title: "Param Vibhushan Sewa Ratna Samman — National Award 2026",
+    org: "Jivran Foundation",
+    year: "2026",
+    date: "29 April 2026",
+    category: "Healthcare, Education and Literature",
+    group: "honours",
+  }),
+  award({
+    title: "Indian Icon Awards 2026",
+    org: "Indian Icon Awards",
+    year: "2026",
+    category: "Woman Leadership Award in Healthcare",
+    group: "honours",
+  }),
+  award({
+    title: "Indian Literature Award 2026",
+    org: "Indian Literature & Arts Society",
+    year: "2026",
+    date: "29 April 2026",
+    category: "Hindi Literature – Novel (Bandini)",
+    group: "literary",
+  }),
+  award({
+    title: "Rabindra Ratna Puraskar 2026",
+    org: "Veyil Foundation / Rabindra Ratna Puraskar National Committee",
+    year: "2026",
+    date: "29 April 2026",
+    category: "Literature and Education",
+    group: "literary",
+  }),
+  award({
+    title: "BooksBrew Bookfest Honorary Recognition 2026",
+    org: "BooksBrew",
+    year: "2026",
+    category: "Exemplary literary contribution and book outreach impact",
+    group: "literary",
+  }),
+  award({
+    title: "Bandini — Certificate of Recognition",
+    org: "Book: Bandini: Iraadon Kee Ek Kalajayee Yatra",
+    year: "2026",
+    date: "10 April 2026",
+    category: "Book recognition (title and ISBN recorded)",
+    group: "literary",
+  }),
+  award({
+    title: "World Academic Press — Academic Associate",
+    org: "World Academic Press (WAP)",
+    year: "2026",
+    date: "Issued 23 August 2026 · Valid until 23 August 2027",
+    category: "Academic Associate · Designation: Author",
+    group: "literary",
+  }),
 ];
 
 export const AWARD_NOTE =
@@ -329,27 +455,86 @@ export const AWARD_NOTE =
 export type MediaItem = { outlet: string; date: string; headline?: string; summary: string };
 
 export const INAUGURATION_COVERAGE: MediaItem[] = [
-  { outlet: "Bharat News", date: "23 March 2026", headline: "जमशेदपुर: Verma Gentle Cure होम्योपैथिक क्लिनिक का हुआ उद्घाटन, शहरवासियों को मिलेगी अब बेहतर स्वास्थ्य सुविधाएं", summary: "Covered the inauguration, location, association with Vermaverse OPC Private Limited, Dr. Rajshree Verma's role and the presence of local dignitaries and citizens." },
-  { outlet: "Chhotanagpur Live", date: "23 March 2026", headline: "कदमा में ‘वर्मा जेंटल केयर क्लिनिक’ का शुभारंभ, सस्ती और बेहतर इलाज का संकल्प", summary: "Reported the formal opening in the presence of local people and the objective of making healthcare more affordable and accessible." },
-  { outlet: "Jharkhand Insight 24", date: "23 March 2026", headline: "कदमा में ‘वर्मा जेंटल केयर क्लिनिक’ का शुभारंभ, सस्ती और बेहतर इलाज का संकल्प", summary: "Covered the inauguration and highlighted affordable healthcare for middle-income and needy patients." },
-  { outlet: "Loktantra Savera", date: "23 March 2026", headline: "जमशेदपुर में ‘Verma Gentle Cure’ होम्योपैथिक क्लिनिक का शुभारंभ, मरीजों को मिलेगा सुरक्षित व व्यक्तिगत उपचार", summary: "Identified the clinic as an initiative of Vermaverse OPC Private Limited founded by Dr. Rajshree Verma and discussed its individualized-care approach." },
-  { outlet: "Saubhagya Rashtra", date: "23 March 2026", summary: "Reported the opening at Sarala Complex, Kadma Market and discussed patient-centred homeopathic care and the areas the clinic intends to serve." },
-  { outlet: "The News Blast", date: "23 March 2026", headline: "जमशेदपुर में ‘Verma Gentle Cure’ होम्योपैथिक क्लिनिक का शुभारंभ, मरीजों को मिलेगा व्यक्तिगत उपचार", summary: "Identified the clinic as a Vermaverse OPC Private Limited initiative founded by Dr. Rajshree Verma." },
-  { outlet: "BGPS Headline", date: "25 March 2026", headline: "कदमा में वर्मा जेंटल केयर क्लिनिक का शुभारंभ", summary: "Highlighted affordable healthcare and priority for lower-middle-income and needy patients." },
-  { outlet: "Nayi Soch Express", date: "Print media", headline: "कदमा में वर्मा जेंटल केयर क्लिनिक का शुभारंभ", summary: "Newspaper clipping featuring Dr. Rajshree Verma and the clinic launch, including the stated focus on lower-middle-income and needy patients." },
+  {
+    outlet: "Bharat News",
+    date: "23 March 2026",
+    headline:
+      "जमशेदपुर: Verma Gentle Cure होम्योपैथिक क्लिनिक का हुआ उद्घाटन, शहरवासियों को मिलेगी अब बेहतर स्वास्थ्य सुविधाएं",
+    summary:
+      "Covered the inauguration, location, association with Vermaverse OPC Private Limited, Dr. Rajshree Verma's role and the presence of local dignitaries and citizens.",
+  },
+  {
+    outlet: "Chhotanagpur Live",
+    date: "23 March 2026",
+    headline: "कदमा में ‘वर्मा जेंटल केयर क्लिनिक’ का शुभारंभ, सस्ती और बेहतर इलाज का संकल्प",
+    summary:
+      "Reported the formal opening in the presence of local people and the objective of making healthcare more affordable and accessible.",
+  },
+  {
+    outlet: "Jharkhand Insight 24",
+    date: "23 March 2026",
+    headline: "कदमा में ‘वर्मा जेंटल केयर क्लिनिक’ का शुभारंभ, सस्ती और बेहतर इलाज का संकल्प",
+    summary:
+      "Covered the inauguration and highlighted affordable healthcare for middle-income and needy patients.",
+  },
+  {
+    outlet: "Loktantra Savera",
+    date: "23 March 2026",
+    headline:
+      "जमशेदपुर में ‘Verma Gentle Cure’ होम्योपैथिक क्लिनिक का शुभारंभ, मरीजों को मिलेगा सुरक्षित व व्यक्तिगत उपचार",
+    summary:
+      "Identified the clinic as an initiative of Vermaverse OPC Private Limited founded by Dr. Rajshree Verma and discussed its individualized-care approach.",
+  },
+  {
+    outlet: "Saubhagya Rashtra",
+    date: "23 March 2026",
+    summary:
+      "Reported the opening at Sarala Complex, Kadma Market and discussed patient-centred homeopathic care and the areas the clinic intends to serve.",
+  },
+  {
+    outlet: "The News Blast",
+    date: "23 March 2026",
+    headline:
+      "जमशेदपुर में ‘Verma Gentle Cure’ होम्योपैथिक क्लिनिक का शुभारंभ, मरीजों को मिलेगा व्यक्तिगत उपचार",
+    summary:
+      "Identified the clinic as a Vermaverse OPC Private Limited initiative founded by Dr. Rajshree Verma.",
+  },
+  {
+    outlet: "BGPS Headline",
+    date: "25 March 2026",
+    headline: "कदमा में वर्मा जेंटल केयर क्लिनिक का शुभारंभ",
+    summary:
+      "Highlighted affordable healthcare and priority for lower-middle-income and needy patients.",
+  },
+  {
+    outlet: "Nayi Soch Express",
+    date: "Print media",
+    headline: "कदमा में वर्मा जेंटल केयर क्लिनिक का शुभारंभ",
+    summary:
+      "Newspaper clipping featuring Dr. Rajshree Verma and the clinic launch, including the stated focus on lower-middle-income and needy patients.",
+  },
 ];
 
 export const INTERVIEW = {
   title: "Homeopathy Will Play a Crucial Role in Future Healthcare",
   expert: "Dr. Rajshree Verma, Homeopathic Physician, Verma Gentle Cure",
-  summary: "A healthcare interview on the future role of homeopathy, its basic principles, individualized treatment and holistic healthcare. One featured interview, carried by multiple publications.",
+  summary:
+    "A healthcare interview on the future role of homeopathy, its basic principles, individualized treatment and holistic healthcare. One featured interview, carried by multiple publications.",
   publications: [
-    { outlet: "Ahmedabad Mirror", date: "March 2026", note: "Includes Verma Gentle Cure and Jamshedpur contact information" },
+    {
+      outlet: "Ahmedabad Mirror",
+      date: "March 2026",
+      note: "Includes Verma Gentle Cure and Jamshedpur contact information",
+    },
     { outlet: "Kanpur Live", date: "18 March 2026", note: "Press Release / Healthcare Feature" },
     { outlet: "KBK Times", date: "18 March 2026", note: "Press Release / Healthcare Feature" },
     { outlet: "Loktej", date: "18 March 2026", note: "Category: Business" },
     { outlet: "UP18 News", date: "18 March 2026", note: "Category: Health" },
-    { outlet: "The Blunt Times", date: "19 March 2026", note: "Health / Press Release · TBT Online Desk" },
+    {
+      outlet: "The Blunt Times",
+      date: "19 March 2026",
+      note: "Health / Press Release · TBT Online Desk",
+    },
   ],
 };
 
@@ -362,9 +547,19 @@ export const PRINT_FEATURE = {
 };
 
 export const TIMELINE = [
-  { date: "18–19 March 2026", text: "Featured healthcare interview published across multiple media outlets" },
-  { date: "23 March 2026", text: "Verma Gentle Cure formally inaugurated in Kadma, Jamshedpur", milestone: true },
-  { date: "23–25 March 2026", text: "Clinic inauguration receives regional and local media coverage" },
+  {
+    date: "18–19 March 2026",
+    text: "Featured healthcare interview published across multiple media outlets",
+  },
+  {
+    date: "23 March 2026",
+    text: "Verma Gentle Cure formally inaugurated in Kadma, Jamshedpur",
+    milestone: true,
+  },
+  {
+    date: "23–25 March 2026",
+    text: "Clinic inauguration receives regional and local media coverage",
+  },
   { date: "27 March 2026", text: "Bharat Kamal Puraskar 2026" },
   { date: "29 March 2026", text: "Legends of Bharat Award 2026" },
   { date: "31 March 2026", text: "Rashtriya Pratibha Samman 2026" },

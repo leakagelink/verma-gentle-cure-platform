@@ -151,13 +151,19 @@ function ShopPage() {
                 </DrawerTrigger>
                 <DrawerContent className="max-h-[86dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] lg:hidden">
                   <DrawerHeader className="text-left">
-                    <DrawerTitle className="font-display text-xl text-navy">Filter medicines</DrawerTitle>
-                    <DrawerDescription>Narrow products by category and availability.</DrawerDescription>
+                    <DrawerTitle className="font-display text-xl text-navy">
+                      Filter medicines
+                    </DrawerTitle>
+                    <DrawerDescription>
+                      Narrow products by category and availability.
+                    </DrawerDescription>
                   </DrawerHeader>
                   <div className="space-y-6 overflow-y-auto px-4 pb-2">{filters}</div>
                   <DrawerFooter>
                     <DrawerClose asChild>
-                      <Button className="min-h-12 rounded-xl">Show {results.length} products</Button>
+                      <Button className="min-h-12 rounded-xl">
+                        Show {results.length} products
+                      </Button>
                     </DrawerClose>
                   </DrawerFooter>
                 </DrawerContent>
@@ -202,7 +208,9 @@ function ShopPage() {
                   className="card-premium w-[72vw] shrink-0 snap-start p-4 sm:w-auto sm:p-5"
                 >
                   <p className="font-semibold text-navy">{c.name}</p>
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground sm:line-clamp-none sm:text-sm">{c.description}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground sm:line-clamp-none sm:text-sm">
+                    {c.description}
+                  </p>
                 </Link>
               ))}
             </div>
@@ -218,9 +226,7 @@ function ShopPage() {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">{children}</p>
-  );
+  return <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">{children}</p>;
 }
 
 function FilterChip({

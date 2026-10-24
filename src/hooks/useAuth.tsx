@@ -90,7 +90,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [session, role, loading, roleUser, userId],
   );
 
-  return <AuthContext.Provider value={value}><div key={userId ?? "signed-out"} className="contents">{children}</div></AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      <div key={userId ?? "signed-out"} className="contents">
+        {children}
+      </div>
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

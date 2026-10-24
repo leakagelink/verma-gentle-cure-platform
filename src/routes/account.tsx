@@ -1,5 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, ClipboardList, IndianRupee, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
+import {
+  CalendarDays,
+  ClipboardList,
+  IndianRupee,
+  LogOut,
+  Package,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -299,16 +307,25 @@ function AccountPage() {
           </Link>
           <p className="flex gap-2 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-leaf" />
-            Your records are accessible to you and authorized clinic staff as needed for care and service.
+            Your records are accessible to you and authorized clinic staff as needed for care and
+            service.
           </p>
-
         </div>
       </div>
       <div className="mt-8 flex flex-wrap gap-3 border-t border-border pt-6">
-        <Button asChild variant="outline"><Link to="/privacy-policy">Privacy policy</Link></Button>
-        <Button asChild variant="outline"><Link to="/delete-account">Delete account / personal data</Link></Button>
+        <Button asChild variant="outline">
+          <Link to="/privacy-policy">Privacy policy</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link to="/delete-account">Delete account / personal data</Link>
+        </Button>
       </div>
-      {verifiedRole === "admin" && <><ClinicalAssignments /><DeletionRequests /></>}
+      {verifiedRole === "admin" && (
+        <>
+          <ClinicalAssignments />
+          <DeletionRequests />
+        </>
+      )}
     </section>
   );
 }

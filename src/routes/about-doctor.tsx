@@ -57,12 +57,28 @@ function AboutDoctorPage() {
           <div>
             <h2 className="text-2xl text-navy">Biography</h2>
             <div className="mt-4 space-y-4 text-sm leading-relaxed text-muted-foreground">
-              <p>Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle Cure, Jamshedpur.</p>
-              <p>Her professional approach emphasizes individualized consultation and compassionate patient care.</p>
-              <p>Beyond clinical practice, her profile also includes work in literature and education, along with awards, media features and professional/academic recognition.</p>
-              <p>Her healthcare interview on the future role of homeopathy was carried by multiple publications in March 2026, while the inauguration of Verma Gentle Cure on 23 March 2026 also received coverage across several local and regional media platforms.</p>
+              <p>
+                Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle
+                Cure, Jamshedpur.
+              </p>
+              <p>
+                Her professional approach emphasizes individualized consultation and compassionate
+                patient care.
+              </p>
+              <p>
+                Beyond clinical practice, her profile also includes work in literature and
+                education, along with awards, media features and professional/academic recognition.
+              </p>
+              <p>
+                Her healthcare interview on the future role of homeopathy was carried by multiple
+                publications in March 2026, while the inauguration of Verma Gentle Cure on 23 March
+                2026 also received coverage across several local and regional media platforms.
+              </p>
               <p className="font-semibold text-navy">
-                <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> · <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp: {CLINIC.whatsapp}</a>
+                <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> ·{" "}
+                <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
+                  WhatsApp: {CLINIC.whatsapp}
+                </a>
               </p>
             </div>
           </div>
@@ -86,14 +102,21 @@ function AboutDoctorPage() {
       <section className="surface-ivory py-16">
         <div className="container-page">
           <SectionHeading eyebrow="Recognition" title="Awards, Honours & Recognitions" />
-          <p className="mt-3 text-center"><Link to="/media-recognition" className="text-sm font-semibold text-leaf">View full Media & Recognition →</Link></p>
+          <p className="mt-3 text-center">
+            <Link to="/media-recognition" className="text-sm font-semibold text-leaf">
+              View full Media & Recognition →
+            </Link>
+          </p>
           <ul className="mt-8 grid gap-4 md:grid-cols-3">
             {AWARDS.map((a) => (
               <li key={a.title} className="card-premium p-6">
                 <p className="font-display text-2xl text-lime">{a.year}</p>
                 <p className="mt-2 font-semibold text-navy">{a.title}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{a.org}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{a.category}{a.date ? ` · ${a.date}` : ""}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {a.category}
+                  {a.date ? ` · ${a.date}` : ""}
+                </p>
               </li>
             ))}
           </ul>

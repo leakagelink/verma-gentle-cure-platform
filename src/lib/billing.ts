@@ -116,7 +116,8 @@ export function summarise(rows: PaymentRow[]): FinanceTotals {
     }
     if (row.status === "pending") t.pending += row.amount;
     if (row.status === "failed") t.failed += row.amount;
-    if (row.status === "refunded" || row.refund_amount > 0) t.refunded += row.refund_amount || row.amount;
+    if (row.status === "refunded" || row.refund_amount > 0)
+      t.refunded += row.refund_amount || row.amount;
   }
   return t;
 }

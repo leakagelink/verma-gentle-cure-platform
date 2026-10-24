@@ -11,14 +11,25 @@ const activeIdentity = createMiddleware({ type: "function" }).server(async ({ ne
   if (header?.startsWith("Bearer ")) {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const identity = await supabaseAdmin.auth.getUser(header.slice(7));
-    if (identity.error || !identity.data.user) throw new Error("Sign-in expired. Please sign in again.");
-    const hold = await supabaseAdmin.from("account_deletion_requests").select("id")
-      .eq("user_id", identity.data.user.id).in("processing_state", ["processing", "failed", "completed"]);
+    if (identity.error || !identity.data.user)
+      throw new Error("Sign-in expired. Please sign in again.");
+    const hold = await supabaseAdmin
+      .from("account_deletion_requests")
+      .select("id")
+      .eq("user_id", identity.data.user.id)
+      .in("processing_state", ["processing", "failed", "completed"]);
     if (hold.error) throw new Error("Could not verify account access");
     // Completed data-only requests retain the account.
-    const blocked = await supabaseAdmin.from("account_deletion_requests").select("scope,processing_state")
-      .eq("user_id", identity.data.user.id).in("processing_state", ["processing", "failed", "completed"]);
-    if (blocked.error || blocked.data?.some(row => row.scope === "account" || row.processing_state !== "completed")) throw new Error("Account privacy processing is in progress. Contact the clinic.");
+    const blocked = await supabaseAdmin
+      .from("account_deletion_requests")
+      .select("scope,processing_state")
+      .eq("user_id", identity.data.user.id)
+      .in("processing_state", ["processing", "failed", "completed"]);
+    if (
+      blocked.error ||
+      blocked.data?.some((row) => row.scope === "account" || row.processing_state !== "completed")
+    )
+      throw new Error("Account privacy processing is in progress. Contact the clinic.");
   }
   return next();
 });

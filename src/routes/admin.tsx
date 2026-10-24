@@ -29,7 +29,8 @@ export const Route = createFileRoute("/admin")({
       { title: "Store Admin | Verma Gentle Cure" },
       {
         name: "description",
-        content: "Manage medicine orders, delivery status and payment options for the clinic store.",
+        content:
+          "Manage medicine orders, delivery status and payment options for the clinic store.",
       },
       { property: "og:title", content: "Store Admin | Verma Gentle Cure" },
       { property: "og:description", content: "Order management and store settings." },
@@ -77,7 +78,10 @@ function AdminPage() {
       const { data: itemRows } = await supabase
         .from("order_items")
         .select("*")
-        .in("order_id", list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"]);
+        .in(
+          "order_id",
+          list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"],
+        );
       if (!active) return;
       const grouped: Record<string, OrderItemRow[]> = {};
       for (const item of itemRows ?? []) {
@@ -160,8 +164,8 @@ function AdminPage() {
         <div className="card-premium p-6">
           <h2 className="text-lg text-navy">Payment & delivery options</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            These controls decide what customers can choose at checkout. Only admin accounts can save
-            changes.
+            These controls decide what customers can choose at checkout. Only admin accounts can
+            save changes.
           </p>
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             <Toggle
@@ -220,7 +224,9 @@ function AdminPage() {
                 onClick={() => setFilter(key)}
                 className={cn(
                   "min-h-9 rounded-full border px-4 text-sm transition-colors",
-                  filter === key ? "border-leaf bg-mint text-forest" : "border-border text-muted-foreground",
+                  filter === key
+                    ? "border-leaf bg-mint text-forest"
+                    : "border-border text-muted-foreground",
                 )}
               >
                 {key === "all" ? "All orders" : ORDER_STATUS_LABEL[key]}
@@ -327,13 +333,7 @@ function AdminPage() {
   );
 }
 
-function TrackingNote({
-  initial,
-  onSave,
-}: {
-  initial: string;
-  onSave: (note: string) => void;
-}) {
+function TrackingNote({ initial, onSave }: { initial: string; onSave: (note: string) => void }) {
   const [note, setNote] = useState(initial);
   return (
     <div className="mt-4 space-y-1.5">

@@ -70,7 +70,10 @@ export const Route = createFileRoute("/")({
         content:
           "Book an online homeopathic consultation with Dr. Rajshree Verma, receive a digital prescription and order authentic homeopathic medicines with delivery across India.",
       },
-      { property: "og:title", content: "Verma Gentle Cure — Dr. Rajshree Verma, Homeopathic Physician, Jamshedpur" },
+      {
+        property: "og:title",
+        content: "Verma Gentle Cure — Dr. Rajshree Verma, Homeopathic Physician, Jamshedpur",
+      },
       {
         property: "og:description",
         content:
@@ -154,10 +157,16 @@ function Hero() {
           </p>
           <p className="mt-3 text-sm font-semibold text-navy">
             <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> ·{" "}
-            <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp: {CLINIC.whatsapp}</a>
+            <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
+              WhatsApp: {CLINIC.whatsapp}
+            </a>
           </p>
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:gap-3">
-            <Button asChild size="lg" className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base">
+            <Button
+              asChild
+              size="lg"
+              className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base"
+            >
               <Link to="/book-appointment">
                 Book Appointment <ArrowRight className="size-4" />
               </Link>
@@ -219,7 +228,10 @@ function TrustStrip() {
         {TRUST_POINTS.map((point) => {
           const Icon = ICONS[point.icon as keyof typeof ICONS];
           return (
-            <div key={point.title} className="card-premium flex w-[82vw] shrink-0 snap-start items-start gap-3 p-4 sm:w-auto sm:p-5">
+            <div
+              key={point.title}
+              className="card-premium flex w-[82vw] shrink-0 snap-start items-start gap-3 p-4 sm:w-auto sm:p-5"
+            >
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-mint text-forest">
                 <Icon className="size-5" />
               </span>
@@ -271,11 +283,16 @@ function AboutDoctor() {
               ],
               ["Approach", "Detailed history, clear explanations, structured follow-up reviews"],
             ].map(([title, body]) => (
-              <div key={title} className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
+              <div
+                key={title}
+                className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5"
+              >
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
                   {title}
                 </p>
-                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:line-clamp-none sm:text-sm">{body}</p>
+                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:line-clamp-none sm:text-sm">
+                  {body}
+                </p>
               </div>
             ))}
           </div>
@@ -302,7 +319,10 @@ function Services() {
         {SERVICES.map((service) => {
           const Icon = ICONS[service.icon as keyof typeof ICONS];
           return (
-            <article key={service.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col p-5 sm:w-auto sm:p-6">
+            <article
+              key={service.slug}
+              className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col p-5 sm:w-auto sm:p-6"
+            >
               <span className="grid size-12 place-items-center rounded-2xl bg-mint text-forest transition-colors group-hover:bg-leaf group-hover:text-leaf-foreground">
                 <Icon className="size-5" />
               </span>
@@ -330,14 +350,19 @@ function HowItWorks() {
     <section className="relative overflow-hidden bg-navy py-10 text-navy-foreground sm:py-16 lg:py-24">
       <div className="container-page">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">How it works</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">
+            How it works
+          </p>
           <h2 className="mt-3 text-2xl text-navy-foreground sm:text-3xl lg:text-4xl">
             Four simple steps from booking to treatment plan
           </h2>
         </div>
         <ol className="hide-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="relative w-[76vw] shrink-0 snap-start rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:w-auto sm:p-6">
+            <li
+              key={step.title}
+              className="relative w-[76vw] shrink-0 snap-start rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:w-auto sm:p-6"
+            >
               <span className="grid size-10 place-items-center rounded-full gradient-leaf font-display text-base text-navy">
                 {i + 1}
               </span>
@@ -404,9 +429,7 @@ function WhyUs() {
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:rounded-3xl">
           {WHY_US.map((item, i) => (
             <div key={item.title} className="bg-card p-4 sm:p-6">
-              <p className="font-display text-2xl text-lime">
-                {String(i + 1).padStart(2, "0")}
-              </p>
+              <p className="font-display text-2xl text-lime">{String(i + 1).padStart(2, "0")}</p>
               <h3 className="mt-3 font-semibold text-navy">{item.title}</h3>
               <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:line-clamp-none sm:text-sm">
                 {item.description}
@@ -463,13 +486,13 @@ function BlogPreview() {
   return (
     <section className="surface-ivory py-10 sm:py-16 lg:py-24">
       <div className="container-page">
-        <SectionHeading
-          eyebrow="Health journal"
-          title="Latest health and wellness articles"
-        />
+        <SectionHeading eyebrow="Health journal" title="Latest health and wellness articles" />
         <div className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:gap-6 sm:overflow-visible sm:px-0 md:grid-cols-3">
           {BLOG_POSTS.slice(0, 3).map((post) => (
-            <article key={post.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden sm:w-auto">
+            <article
+              key={post.slug}
+              className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden sm:w-auto"
+            >
               <div className="h-40 gradient-leaf" aria-hidden />
               <div className="flex flex-1 flex-col p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
@@ -564,7 +587,9 @@ function Awards() {
           {AWARDS.map((a) => (
             <article key={a.title} className="card-premium border-t-2 border-t-lime p-5">
               <Award className="size-6 text-lime" />
-              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{a.year}</p>
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {a.year}
+              </p>
               <h3 className="mt-1 font-display text-lg text-navy">{a.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{a.org}</p>
               <p className="mt-1 text-xs text-muted-foreground">{a.category}</p>
@@ -584,14 +609,24 @@ function HomeTimeline() {
         <ol className="relative mx-auto mt-10 max-w-2xl border-l-2 border-mint pl-6">
           {TIMELINE.map((t) => (
             <li key={t.date + t.text} className="relative pb-6 last:pb-0">
-              <span className={`absolute -left-[1.95rem] top-1 size-3.5 rounded-full border-2 border-background ${t.milestone ? "bg-lime" : "bg-forest"}`} />
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-leaf">{t.date}</p>
-              <p className={`mt-1 text-sm ${t.milestone ? "font-semibold text-navy" : "text-foreground"}`}>{t.text}</p>
+              <span
+                className={`absolute -left-[1.95rem] top-1 size-3.5 rounded-full border-2 border-background ${t.milestone ? "bg-lime" : "bg-forest"}`}
+              />
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-leaf">
+                {t.date}
+              </p>
+              <p
+                className={`mt-1 text-sm ${t.milestone ? "font-semibold text-navy" : "text-foreground"}`}
+              >
+                {t.text}
+              </p>
             </li>
           ))}
         </ol>
         <div className="mt-8 text-center">
-          <Link to="/media-recognition" className="text-sm font-semibold text-leaf">View Media & Recognition →</Link>
+          <Link to="/media-recognition" className="text-sm font-semibold text-leaf">
+            View Media & Recognition →
+          </Link>
         </div>
       </div>
     </section>

@@ -40,7 +40,10 @@ export function MobileHome() {
             <span className="text-forest">Welcome to Verma Gentle Cure</span>
           </h1>
           <div className="relative mt-4">
-            <span aria-hidden className="absolute inset-x-6 -bottom-2 top-6 rounded-[2rem] bg-mint" />
+            <span
+              aria-hidden
+              className="absolute inset-x-6 -bottom-2 top-6 rounded-[2rem] bg-mint"
+            />
             <img
               src={heroPortrait.url}
               alt="Dr. Rajshree Verma, Homeopathic Physician"
@@ -85,7 +88,9 @@ export function MobileHome() {
               <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${tone}`}>
                 <Icon className="size-4.5" />
               </span>
-              <span className="w-full truncate text-[0.68rem] font-semibold text-navy">{label}</span>
+              <span className="w-full truncate text-[0.68rem] font-semibold text-navy">
+                {label}
+              </span>
             </Link>
           ))}
         </div>
@@ -151,7 +156,9 @@ export function MobileHome() {
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-navy">Dr. Rajshree Verma</p>
-            <p className="truncate text-xs text-muted-foreground">BHMS · Homeopathic Physician · 6 Years of Experience</p>
+            <p className="truncate text-xs text-muted-foreground">
+              BHMS · Homeopathic Physician · 6 Years of Experience
+            </p>
             <Link
               to="/about-doctor"
               className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-leaf"
@@ -167,7 +174,10 @@ export function MobileHome() {
         <Header title="How consultation works" />
         <ol className="mt-3 space-y-2">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="flex gap-3 rounded-2xl border border-border bg-card p-3">
+            <li
+              key={step.title}
+              className="flex gap-3 rounded-2xl border border-border bg-card p-3"
+            >
               <span className="grid size-8 shrink-0 place-items-center rounded-full bg-forest font-display text-xs text-forest-foreground">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -203,10 +213,15 @@ export function MobileHome() {
         <Header title="Awards & Recognition" to="/media-recognition" />
         <div className="hide-scrollbar -mx-4 mt-3 flex snap-x gap-3 overflow-x-auto px-4 pb-1">
           {AWARDS.map((a) => (
-            <div key={a.title} className="w-44 shrink-0 snap-start rounded-2xl border border-lime/50 bg-card p-3">
+            <div
+              key={a.title}
+              className="w-44 shrink-0 snap-start rounded-2xl border border-lime/50 bg-card p-3"
+            >
               <Award className="size-5 text-lime" />
               <p className="mt-2 text-sm font-semibold leading-snug text-navy">{a.title}</p>
-              <p className="mt-1 text-[0.68rem] text-muted-foreground">{a.year} · {a.org}</p>
+              <p className="mt-1 text-[0.68rem] text-muted-foreground">
+                {a.year} · {a.org}
+              </p>
               <p className="mt-1 line-clamp-2 text-[0.68rem] text-muted-foreground">{a.category}</p>
             </div>
           ))}
