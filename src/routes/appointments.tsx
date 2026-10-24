@@ -85,8 +85,9 @@ function AppointmentsPage() {
   }, [load]);
 
   async function cancelAppointment(id: string) {
-    try { await cancel({ data: { id } }); }
-    catch {
+    try {
+      await cancel({ data: { id } });
+    } catch {
       toast.error("Could not cancel this appointment.");
       return;
     }
@@ -118,7 +119,6 @@ function AppointmentsPage() {
               <Link to="/book-appointment">Book new consultation</Link>
             </Button>
           </div>
-
         </div>
 
         {loading ? (

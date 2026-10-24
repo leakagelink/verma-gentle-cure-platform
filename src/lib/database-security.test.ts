@@ -6,9 +6,13 @@ const patient = "00000000-0000-4000-8000-000000000001";
 const other = "00000000-0000-4000-8000-000000000002";
 let db: PGlite;
 async function asPatient(sql: string) {
-  return db.exec(`SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${patient}',false),set_config('request.jwt.claim.role','authenticated',false); ${sql}`);
+  return db.exec(
+    `SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${patient}',false),set_config('request.jwt.claim.role','authenticated',false); ${sql}`,
+  );
 }
-async function reset() { await db.exec("RESET ROLE; SELECT set_config('request.jwt.claim.role','',false);"); }
+async function reset() {
+  await db.exec("RESET ROLE; SELECT set_config('request.jwt.claim.role','',false);");
+}
 describe("direct PostgreSQL security regression", () => {
   beforeAll(async () => {
     db = new PGlite();
@@ -18,15 +22,19 @@ describe("direct PostgreSQL security regression", () => {
       CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$SELECT current_setting('request.jwt.claim.role',true)$$;
       GRANT USAGE ON SCHEMA auth TO authenticated,service_role;
       CREATE TABLE storage.objects(id uuid,bucket_id text,name text,metadata jsonb); ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;`);
-    for (const path of readdirSync("supabase/migrations").sort()) await db.exec(readFileSync(`supabase/migrations/${path}`, "utf8"));
+    for (const path of readdirSync("supabase/migrations").sort())
+      await db.exec(readFileSync(`supabase/migrations/${path}`, "utf8"));
     await db.exec(`CREATE TABLE public.case_records(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),patient_id uuid NOT NULL,appointment_id uuid,status text DEFAULT 'draft',attachments jsonb DEFAULT '[]',created_at timestamptz DEFAULT now(),updated_at timestamptz DEFAULT now());
       GRANT SELECT,INSERT,UPDATE ON public.case_records TO authenticated; GRANT ALL ON public.case_records TO service_role;
       ALTER TABLE public.case_records ENABLE ROW LEVEL SECURITY; CREATE POLICY own_case ON public.case_records FOR ALL TO authenticated USING(patient_id=auth.uid()) WITH CHECK(patient_id=auth.uid());
       CREATE TABLE public.clinical_assignments(patient_id uuid,doctor_id uuid,assigned_by uuid,UNIQUE(patient_id,doctor_id));
       ALTER TABLE public.appointments ADD COLUMN consultation_type text DEFAULT 'new';`);
     // Financial types/tables precede recovered functions; consent depends on those functions.
-    for (const path of readdirSync("drizzle/migrations").filter(p => p.endsWith(".sql")).sort()) {
-      if (path.startsWith("0006_")) await db.exec(readFileSync("src/lib/__tests__/verified-baseline.sql", "utf8"));
+    for (const path of readdirSync("drizzle/migrations")
+      .filter((p) => p.endsWith(".sql"))
+      .sort()) {
+      if (path.startsWith("0006_"))
+        await db.exec(readFileSync("src/lib/__tests__/verified-baseline.sql", "utf8"));
       await db.exec(readFileSync(`drizzle/migrations/${path}`, "utf8"));
     }
     await db.exec(`CREATE TRIGGER payment_security BEFORE INSERT OR UPDATE ON public.payments FOR EACH ROW EXECUTE FUNCTION public.guard_payment_write();
@@ -34,65 +42,140 @@ describe("direct PostgreSQL security regression", () => {
       SELECT set_config('request.jwt.claim.role','service_role',false);
       INSERT INTO public.appointments(id,patient_id,patient_name,phone,mode,appointment_date,slot,concern,fee) VALUES('00000000-0000-4000-8000-000000000010','${patient}','Test Patient','9000000000','video',current_date+1,'10:00 AM','Synthetic concern',700);`);
   }, 30000);
-  afterAll(async () => { await db?.close(); });
+  afterAll(async () => {
+    await db?.close();
+  });
   it("rejects direct appointment fee tampering", async () => {
-    await asPatient("UPDATE public.appointments SET fee=1 WHERE id='00000000-0000-4000-8000-000000000010';"); await reset();
-    const result = await db.query<{ fee: number }>("SELECT fee FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000010'");
+    await asPatient(
+      "UPDATE public.appointments SET fee=1 WHERE id='00000000-0000-4000-8000-000000000010';",
+    );
+    await reset();
+    const result = await db.query<{ fee: number }>(
+      "SELECT fee FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000010'",
+    );
     expect(result.rows[0]?.fee).toBe(700);
   });
   it("rejects direct paid payment forgery", async () => {
-    await expect(asPatient(`INSERT INTO public.payments(user_id,kind,amount,method,status) VALUES('${patient}','order',1,'card','paid');`)).rejects.toThrow(); await reset();
+    await expect(
+      asPatient(
+        `INSERT INTO public.payments(user_id,kind,amount,method,status) VALUES('${patient}','order',1,'card','paid');`,
+      ),
+    ).rejects.toThrow();
+    await reset();
   });
   it("rejects direct underpriced order creation", async () => {
-    await expect(asPatient(`INSERT INTO public.orders(user_id,customer_name,phone,email,address,city,state,pincode,payment_method,subtotal,total) VALUES('${patient}','Test Patient','9000000000','test@example.invalid','Synthetic Address','Test','Test','831005','cod',1,1);`)).rejects.toThrow(); await reset();
+    await expect(
+      asPatient(
+        `INSERT INTO public.orders(user_id,customer_name,phone,email,address,city,state,pincode,payment_method,subtotal,total) VALUES('${patient}','Test Patient','9000000000','test@example.invalid','Synthetic Address','Test','Test','831005','cod',1,1);`,
+      ),
+    ).rejects.toThrow();
+    await reset();
   });
   it("rejects direct order-item insertion", async () => {
-    await expect(asPatient("INSERT INTO public.order_items(order_id,slug,name,pack,price,qty,line_total) VALUES('00000000-0000-4000-8000-000000000099','fake','fake','fake',1,1,1);")).rejects.toThrow(); await reset();
+    await expect(
+      asPatient(
+        "INSERT INTO public.order_items(order_id,slug,name,pack,price,qty,line_total) VALUES('00000000-0000-4000-8000-000000000099','fake','fake','fake',1,1,1);",
+      ),
+    ).rejects.toThrow();
+    await reset();
   });
   it("rejects missing consent even for patient self-access", async () => {
-    await expect(asPatient(`INSERT INTO public.case_records(patient_id) VALUES('${patient}');`)).rejects.toThrow("consent"); await reset();
+    await expect(
+      asPatient(`INSERT INTO public.case_records(patient_id) VALUES('${patient}');`),
+    ).rejects.toThrow("consent");
+    await reset();
   });
   for (const [name, version, timestamp] of [
-    ["invalid version", "invalid", "now()"], ["stale timestamp", "health-2026-10-24", "now()-interval '16 minutes'"], ["future timestamp", "health-2026-10-24", "now()+interval '1 minute'"],
-  ]) it(`rejects consent ${name}`, async () => {
-    await reset();
-    const result = await db.query<{ id: string }>(`INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version,accepted_at) VALUES('${patient}','case','${version}',${timestamp}) RETURNING id`);
-    await expect(asPatient(`INSERT INTO public.case_records(patient_id,health_consent_receipt_id) VALUES('${patient}','${result.rows[0]?.id}');`)).rejects.toThrow("consent"); await reset();
-  });
+    ["invalid version", "invalid", "now()"],
+    ["stale timestamp", "health-2026-10-24", "now()-interval '16 minutes'"],
+    ["future timestamp", "health-2026-10-24", "now()+interval '1 minute'"],
+  ])
+    it(`rejects consent ${name}`, async () => {
+      await reset();
+      const result = await db.query<{ id: string }>(
+        `INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version,accepted_at) VALUES('${patient}','case','${version}',${timestamp}) RETURNING id`,
+      );
+      await expect(
+        asPatient(
+          `INSERT INTO public.case_records(patient_id,health_consent_receipt_id) VALUES('${patient}','${result.rows[0]?.id}');`,
+        ),
+      ).rejects.toThrow("consent");
+      await reset();
+    });
   it("accepts server-issued consent once and rejects replay", async () => {
     await reset();
-    const result = await db.query<{ id: string }>(`INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24') RETURNING id`);
+    const result = await db.query<{ id: string }>(
+      `INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24') RETURNING id`,
+    );
     const sql = `INSERT INTO public.case_records(patient_id,health_consent_receipt_id) VALUES('${patient}','${result.rows[0]?.id}');`;
-    await asPatient(sql); await reset(); await expect(asPatient(sql)).rejects.toThrow("consent"); await reset();
+    await asPatient(sql);
+    await reset();
+    await expect(asPatient(sql)).rejects.toThrow("consent");
+    await reset();
   });
   it("patients cannot create arbitrary consent receipts", async () => {
-    await expect(asPatient(`INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24');`)).rejects.toThrow(); await reset();
+    await expect(
+      asPatient(
+        `INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24');`,
+      ),
+    ).rejects.toThrow();
+    await reset();
   });
   it("patients cannot invoke service-only settlement", async () => {
-    await expect(asPatient(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000099','${patient}','order_test','pay_test',1,'card');`)).rejects.toThrow(); await reset();
+    await expect(
+      asPatient(
+        `SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000099','${patient}','order_test','pay_test',1,'card');`,
+      ),
+    ).rejects.toThrow();
+    await reset();
   });
   it("cancellation RPC cannot cancel another patient's appointment", async () => {
     await reset();
-    await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false); INSERT INTO public.appointments(id,patient_id,patient_name,phone,mode,appointment_date,slot,concern,fee) VALUES('00000000-0000-4000-8000-000000000011','${other}','Other Patient','9000000000','video',current_date+1,'10:00 AM','Synthetic concern',700);`);
-    await expect(asPatient("SELECT public.cancel_patient_appointment('00000000-0000-4000-8000-000000000011');")).rejects.toThrow("not cancellable"); await reset();
+    await db.exec(
+      `SELECT set_config('request.jwt.claim.role','service_role',false); INSERT INTO public.appointments(id,patient_id,patient_name,phone,mode,appointment_date,slot,concern,fee) VALUES('00000000-0000-4000-8000-000000000011','${other}','Other Patient','9000000000','video',current_date+1,'10:00 AM','Synthetic concern',700);`,
+    );
+    await expect(
+      asPatient(
+        "SELECT public.cancel_patient_appointment('00000000-0000-4000-8000-000000000011');",
+      ),
+    ).rejects.toThrow("not cancellable");
+    await reset();
   });
   it("authoritative settlement is idempotent and updates both bill and payment", async () => {
-    await reset(); await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
+    await reset();
+    await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
       INSERT INTO public.payments(id,user_id,kind,appointment_id,amount,method,status,gateway,gateway_order_id) VALUES('00000000-0000-4000-8000-000000000020','${patient}','consultation','00000000-0000-4000-8000-000000000010',700,'card','pending','razorpay','order_test');`);
     const sql = `SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000020','${patient}','order_test','pay_test',700,'card');`;
-    await db.exec(sql); await db.exec(sql);
-    const result = await db.query<{ status: string; payment_status: string }>("SELECT p.status,a.payment_status FROM public.payments p JOIN public.appointments a ON a.id=p.appointment_id WHERE p.id='00000000-0000-4000-8000-000000000020'");
+    await db.exec(sql);
+    await db.exec(sql);
+    const result = await db.query<{ status: string; payment_status: string }>(
+      "SELECT p.status,a.payment_status FROM public.payments p JOIN public.appointments a ON a.id=p.appointment_id WHERE p.id='00000000-0000-4000-8000-000000000020'",
+    );
     expect(result.rows[0]).toEqual({ status: "paid", payment_status: "paid" });
-    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000020','${patient}','order_wrong','pay_test',700,'card');`)).rejects.toThrow("binding");
+    await expect(
+      db.exec(
+        `SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000020','${patient}','order_wrong','pay_test',700,'card');`,
+      ),
+    ).rejects.toThrow("binding");
     await reset();
   });
   it("a failed final payment write rolls back the associated bill update", async () => {
-    await reset(); await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
+    await reset();
+    await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
       INSERT INTO public.payments(id,user_id,kind,appointment_id,amount,method,status,gateway,gateway_order_id) VALUES('00000000-0000-4000-8000-000000000021','${other}','consultation','00000000-0000-4000-8000-000000000011',700,'card','pending','razorpay','order_rollback');`);
     // Inject a failure after the bill update, at the final authoritative write.
-    await db.exec("ALTER TABLE public.payments ADD CONSTRAINT synthetic_final_write_failure CHECK(id<>'00000000-0000-4000-8000-000000000021' OR status<>'paid');");
-    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000021','${other}','order_rollback','pay_rollback',700,'card');`)).rejects.toThrow("synthetic_final_write_failure");
-    const bill = await db.query<{ payment_status: string }>("SELECT payment_status FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000011'");
-    expect(bill.rows[0]?.payment_status).toBe("pending"); await reset();
+    await db.exec(
+      "ALTER TABLE public.payments ADD CONSTRAINT synthetic_final_write_failure CHECK(id<>'00000000-0000-4000-8000-000000000021' OR status<>'paid');",
+    );
+    await expect(
+      db.exec(
+        `SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000021','${other}','order_rollback','pay_rollback',700,'card');`,
+      ),
+    ).rejects.toThrow("synthetic_final_write_failure");
+    const bill = await db.query<{ payment_status: string }>(
+      "SELECT payment_status FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000011'",
+    );
+    expect(bill.rows[0]?.payment_status).toBe("pending");
+    await reset();
   });
 });

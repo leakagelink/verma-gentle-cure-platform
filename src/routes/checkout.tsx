@@ -27,7 +27,10 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
       { title: "Checkout | Verma Gentle Cure" },
-      { name: "description", content: "Confirm your delivery details and place your medicine order." },
+      {
+        name: "description",
+        content: "Confirm your delivery details and place your medicine order.",
+      },
       { property: "og:title", content: "Checkout | Verma Gentle Cure" },
       { property: "og:description", content: "Confirm delivery details and place your order." },
       { property: "og:type", content: "website" },
@@ -100,14 +103,11 @@ function CheckoutPage() {
 
   const discount = coupon ? Math.round(subtotal * coupon.rate) : 0;
   const payable = Math.max(0, subtotal - discount);
-  const delivery =
-    subtotal === 0 ? 0 : 125;
+  const delivery = subtotal === 0 ? 0 : 125;
   const total = payable + delivery;
 
   const codBlocked =
-    !settings.cod_enabled ||
-    total < settings.cod_min_order ||
-    total > settings.cod_max_order;
+    !settings.cod_enabled || total < settings.cod_min_order || total > settings.cod_max_order;
 
   async function placeOrder() {
     if (submitting.current) return;
@@ -137,17 +137,32 @@ function CheckoutPage() {
 
     submitting.current = true;
     setSaving(true);
-    const fingerprint = JSON.stringify({ form, method, coupon: coupon?.code, items: items.map(({ medicine, qty }) => [medicine.slug, qty]) });
-    if (submission.current?.fingerprint !== fingerprint) submission.current = { fingerprint, id: crypto.randomUUID() };
+    const fingerprint = JSON.stringify({
+      form,
+      method,
+      coupon: coupon?.code,
+      items: items.map(({ medicine, qty }) => [medicine.slug, qty]),
+    });
+    if (submission.current?.fingerprint !== fingerprint)
+      submission.current = { fingerprint, id: crypto.randomUUID() };
     let order: Awaited<ReturnType<typeof submitOrder>>;
     try {
-      order = await submitOrder({ data: {
-        request_id: submission.current.id,
-        customer_name: form.name.trim(), phone: form.mobile.trim(), email: form.email.trim(),
-        address: form.address.trim(), city: form.city.trim(), state: form.state.trim(), pincode: form.pincode.trim(),
-        payment_method: method, coupon: coupon?.code ?? null, notes: form.notes.trim(),
-        items: items.map(({ medicine, qty }) => ({ slug: medicine.slug, qty })),
-      } });
+      order = await submitOrder({
+        data: {
+          request_id: submission.current.id,
+          customer_name: form.name.trim(),
+          phone: form.mobile.trim(),
+          email: form.email.trim(),
+          address: form.address.trim(),
+          city: form.city.trim(),
+          state: form.state.trim(),
+          pincode: form.pincode.trim(),
+          payment_method: method,
+          coupon: coupon?.code ?? null,
+          notes: form.notes.trim(),
+          items: items.map(({ medicine, qty }) => ({ slug: medicine.slug, qty })),
+        },
+      });
     } catch {
       submitting.current = false;
       setSaving(false);
@@ -189,7 +204,11 @@ function CheckoutPage() {
           name: "Verma Gentle Cure",
           description: `Medicine order ${orderNo}`,
           order_id: session.orderId,
-          prefill: { name: form.name.trim(), email: form.email.trim(), contact: form.mobile.trim() },
+          prefill: {
+            name: form.name.trim(),
+            email: form.email.trim(),
+            contact: form.mobile.trim(),
+          },
           handler: async (response: {
             razorpay_payment_id: string;
             razorpay_order_id: string;
@@ -240,7 +259,11 @@ function CheckoutPage() {
         <h1 className="mt-5 text-3xl text-navy">Order placed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Order ID <strong className="text-navy">{placed.orderNo}</strong> · Payment status:{" "}
-          {placed.paid ? "Paid" : placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
+          {placed.paid
+            ? "Paid"
+            : placed.method === "cod"
+              ? "Pending (Cash on Delivery)"
+              : "Pending"}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {!placed.paid && placed.method !== "cod" && (
@@ -270,30 +293,31 @@ function CheckoutPage() {
     );
   }
 
-  const methodOptions: { value: PaymentMethod; title: string; body: string; disabled: boolean }[] = [
-    {
-      value: "online",
-      title: "Online payment",
-      body: settings.online_payment_enabled ? "Card / Netbanking" : "Not enabled yet",
-      disabled: !settings.online_payment_enabled,
-    },
-    {
-      value: "upi",
-      title: "UPI",
-      body: settings.upi_enabled ? "Any UPI app" : "Not enabled yet",
-      disabled: !settings.upi_enabled,
-    },
-    {
-      value: "cod",
-      title: "Cash on Delivery",
-      body: settings.cod_enabled
-        ? codBlocked
-          ? `Available for orders ${formatINR(settings.cod_min_order)}–${formatINR(settings.cod_max_order)}`
-          : "Pay the delivery partner"
-        : "Currently turned off",
-      disabled: codBlocked,
-    },
-  ];
+  const methodOptions: { value: PaymentMethod; title: string; body: string; disabled: boolean }[] =
+    [
+      {
+        value: "online",
+        title: "Online payment",
+        body: settings.online_payment_enabled ? "Card / Netbanking" : "Not enabled yet",
+        disabled: !settings.online_payment_enabled,
+      },
+      {
+        value: "upi",
+        title: "UPI",
+        body: settings.upi_enabled ? "Any UPI app" : "Not enabled yet",
+        disabled: !settings.upi_enabled,
+      },
+      {
+        value: "cod",
+        title: "Cash on Delivery",
+        body: settings.cod_enabled
+          ? codBlocked
+            ? `Available for orders ${formatINR(settings.cod_min_order)}–${formatINR(settings.cod_max_order)}`
+            : "Pay the delivery partner"
+          : "Currently turned off",
+        disabled: codBlocked,
+      },
+    ];
 
   return (
     <>

@@ -91,9 +91,9 @@ function CaseFormPage() {
       setShowChild(
         Boolean(
           data.child_birth_history ||
-            data.child_vaccination ||
-            data.child_development ||
-            data.child_behaviour,
+          data.child_vaccination ||
+          data.child_development ||
+          data.child_behaviour,
         ),
       );
     } else {
@@ -128,7 +128,9 @@ function CaseFormPage() {
   ) {
     if (!user) return null;
     if (!hasPrivacyConsent(healthConsent)) throw new Error("Health data consent required.");
-    const receipt = await consent({ data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "case" } });
+    const receipt = await consent({
+      data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "case" },
+    });
     const payload = {
       ...form,
       patient_id: user.id,
@@ -157,7 +159,10 @@ function CaseFormPage() {
 
   async function saveDraft() {
     if (busy) return;
-    if (!healthConsent) { toast.error("Please consent to sharing your health information first."); return; }
+    if (!healthConsent) {
+      toast.error("Please consent to sharing your health information first.");
+      return;
+    }
     setBusy(true);
     try {
       await persist("draft");
@@ -172,7 +177,10 @@ function CaseFormPage() {
   async function submitForm(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    if (!healthConsent) { toast.error("Please consent to sharing your health information first."); return; }
+    if (!healthConsent) {
+      toast.error("Please consent to sharing your health information first.");
+      return;
+    }
     if (form.patient_name.trim().length < 3) {
       toast.error("Please enter the patient's full name.");
       return;
@@ -203,8 +211,14 @@ function CaseFormPage() {
 
   async function uploadFiles(files: FileList | null) {
     if (!files || files.length === 0 || !user) return;
-    if (!healthConsent) { toast.error("Please consent before uploading health reports."); return; }
-    if (attachments.length + files.length > 20) { toast.error("Attach at most 20 reports."); return; }
+    if (!healthConsent) {
+      toast.error("Please consent before uploading health reports.");
+      return;
+    }
+    if (attachments.length + files.length > 20) {
+      toast.error("Attach at most 20 reports.");
+      return;
+    }
     setUploading(true);
     const added: CaseAttachment[] = [];
     try {
@@ -233,8 +247,9 @@ function CaseFormPage() {
       }
     } catch {
       if (added.length > 0) {
-        const cleanup = await supabase.storage.from(CASE_BUCKET).remove(added.map(a => a.path));
-        if (cleanup.error) toast.error("Upload cleanup could not complete. Please contact the clinic.");
+        const cleanup = await supabase.storage.from(CASE_BUCKET).remove(added.map((a) => a.path));
+        if (cleanup.error)
+          toast.error("Upload cleanup could not complete. Please contact the clinic.");
       }
       toast.error("Could not attach your files. Please try again.");
     } finally {
@@ -244,7 +259,10 @@ function CaseFormPage() {
   }
 
   async function removeAttachment(target: CaseAttachment) {
-    if (!healthConsent) { toast.error("Please confirm consent before changing your saved report list."); return; }
+    if (!healthConsent) {
+      toast.error("Please confirm consent before changing your saved report list.");
+      return;
+    }
     const next = attachments.filter((a) => a.path !== target.path);
     try {
       await persist(status, next);
@@ -254,7 +272,9 @@ function CaseFormPage() {
         throw new Error("File removal failed");
       }
       setAttachments(next);
-    } catch { toast.error("Could not remove this report. Please contact the clinic."); }
+    } catch {
+      toast.error("Could not remove this report. Please contact the clinic.");
+    }
   }
 
   async function openAttachment(target: CaseAttachment) {
@@ -325,7 +345,11 @@ function CaseFormPage() {
                   <Button asChild variant="outline" className="rounded-full">
                     <Link to="/book-appointment">Book a consultation</Link>
                   </Button>
-                  <Button variant="ghost" className="rounded-full" onClick={() => void startNewCase()}>
+                  <Button
+                    variant="ghost"
+                    className="rounded-full"
+                    onClick={() => void startNewCase()}
+                  >
                     Start a new case form
                   </Button>
                 </div>
@@ -335,9 +359,33 @@ function CaseFormPage() {
             <form onSubmit={submitForm} className="mt-6 grid gap-5 sm:gap-6">
               <fieldset className="space-y-3 rounded-lg border border-border bg-mint p-4">
                 <legend className="px-1 font-semibold">Your health information</legend>
-                <p className="text-sm leading-relaxed text-muted-foreground">This form collects symptoms, medical and family history, optional mental/reproductive health information and the reports/photos you choose to upload. Information is stored in access-controlled clinic records and shared with authorized care staff for consultation, not advertising. Optional questions may be left blank. The app is not a medical device and does not diagnose, treat, cure or prevent a condition; consult a healthcare professional for medical advice.</p>
-                <Label className="flex items-start gap-3"><input type="checkbox" checked={healthConsent} onChange={e => setHealthConsent(e.target.checked)} className="mt-1" /> I consent to storing and sharing this health information with the clinic for care, and have authority to share it for the patient.</Label>
-                <p className="text-xs"><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/delete-account" className="text-primary underline">Data deletion requests</Link></p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  This form collects symptoms, medical and family history, optional
+                  mental/reproductive health information and the reports/photos you choose to
+                  upload. Information is stored in access-controlled clinic records and shared with
+                  authorized care staff for consultation, not advertising. Optional questions may be
+                  left blank. The app is not a medical device and does not diagnose, treat, cure or
+                  prevent a condition; consult a healthcare professional for medical advice.
+                </p>
+                <Label className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={healthConsent}
+                    onChange={(e) => setHealthConsent(e.target.checked)}
+                    className="mt-1"
+                  />{" "}
+                  I consent to storing and sharing this health information with the clinic for care,
+                  and have authority to share it for the patient.
+                </Label>
+                <p className="text-xs">
+                  <Link to="/privacy-policy" className="text-primary underline">
+                    Privacy policy
+                  </Link>{" "}
+                  ·{" "}
+                  <Link to="/delete-account" className="text-primary underline">
+                    Data deletion requests
+                  </Link>
+                </p>
               </fieldset>
               {visibleSections.map((section) => (
                 <fieldset

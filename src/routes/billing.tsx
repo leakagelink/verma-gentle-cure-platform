@@ -122,7 +122,10 @@ function BillingPage() {
       }
     }
     for (const o of orders.data ?? []) {
-      if ((o.payment_status === "pending" || o.payment_status === "failed") && o.payment_method !== "cod") {
+      if (
+        (o.payment_status === "pending" || o.payment_status === "failed") &&
+        o.payment_method !== "cod"
+      ) {
         open.push({
           key: `o-${o.id}`,
           kind: "order",
@@ -277,7 +280,6 @@ function BillingPage() {
   );
 }
 
-
 function PayPanel({
   due,
   userId,
@@ -345,7 +347,9 @@ function PayPanel({
         },
         modal: {
           ondismiss: () => {
-            void failPay({ data: { paymentId: session.paymentId, reason: "Cancelled by patient" } });
+            void failPay({
+              data: { paymentId: session.paymentId, reason: "Cancelled by patient" },
+            });
             onDone();
           },
         },
@@ -369,13 +373,17 @@ function PayPanel({
       return;
     }
     setSaving(true);
-    try { await submitReference({ data: {
-      kind: due.kind,
-      appointment_id: due.appointment_id,
-      order_id: due.order_id,
-      method: method === "card" ? "card" : method === "netbanking" ? "netbanking" : "upi",
-      reference: reference.trim(),
-    } }); } catch {
+    try {
+      await submitReference({
+        data: {
+          kind: due.kind,
+          appointment_id: due.appointment_id,
+          order_id: due.order_id,
+          method: method === "card" ? "card" : method === "netbanking" ? "netbanking" : "upi",
+          reference: reference.trim(),
+        },
+      });
+    } catch {
       setSaving(false);
       toast.error("Could not record this payment. Please try again.");
       return;
@@ -395,11 +403,7 @@ function PayPanel({
       {online && (
         <div className="rounded-2xl border border-border surface-ivory p-4">
           <p className="text-sm text-navy">Pay securely by UPI, card or net banking</p>
-          <Button
-            className="mt-3 rounded-full"
-            disabled={opening}
-            onClick={() => void payOnline()}
-          >
+          <Button className="mt-3 rounded-full" disabled={opening} onClick={() => void payOnline()}>
             {opening ? "Opening…" : `Pay ${formatMoney(due.amount)} online`}
           </Button>
         </div>
@@ -415,7 +419,9 @@ function PayPanel({
               onClick={() => setMethod(m)}
               className={cn(
                 "min-h-10 rounded-full border px-4 text-sm",
-                method === m ? "border-leaf bg-mint text-forest" : "border-border text-muted-foreground",
+                method === m
+                  ? "border-leaf bg-mint text-forest"
+                  : "border-border text-muted-foreground",
               )}
             >
               {PAY_METHOD_LABEL[m]}

@@ -83,12 +83,24 @@ function FinancePage() {
   const totals = useMemo(() => summarise(rows), [rows]);
 
   async function patch(id: string, values: Partial<PaymentRow>) {
-    try { await review({ data: { id, values: {
-      ...(values.status !== undefined ? { status: values.status } : {}),
-      ...(values.refund_status !== undefined ? { refund_status: values.refund_status as "none" | "requested" | "processing" | "completed" | "rejected" } : {}),
-      ...(values.refund_amount !== undefined ? { refund_amount: values.refund_amount } : {}),
-      ...(values.refund_note !== undefined ? { refund_note: values.refund_note } : {}),
-    } } }); } catch {
+    try {
+      await review({
+        data: {
+          id,
+          values: {
+            ...(values.status !== undefined ? { status: values.status } : {}),
+            ...(values.refund_status !== undefined
+              ? {
+                  refund_status: values.refund_status as
+                    "none" | "requested" | "processing" | "completed" | "rejected",
+                }
+              : {}),
+            ...(values.refund_amount !== undefined ? { refund_amount: values.refund_amount } : {}),
+            ...(values.refund_note !== undefined ? { refund_note: values.refund_note } : {}),
+          },
+        },
+      });
+    } catch {
       toast.error("Could not update this payment.");
       return;
     }
@@ -104,7 +116,9 @@ function FinancePage() {
     return (
       <section className="container-page py-20 text-center">
         <h1 className="text-2xl text-navy">This area is for the clinic team</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Your account role is {role ?? "patient"}.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Your account role is {role ?? "patient"}.
+        </p>
         <Button asChild className="mt-6 rounded-full">
           <Link to="/billing">My payments</Link>
         </Button>
@@ -145,7 +159,9 @@ function FinancePage() {
                 onClick={() => setFilter(key)}
                 className={cn(
                   "min-h-9 rounded-full border px-4 text-sm transition-colors",
-                  filter === key ? "border-leaf bg-mint text-forest" : "border-border text-muted-foreground",
+                  filter === key
+                    ? "border-leaf bg-mint text-forest"
+                    : "border-border text-muted-foreground",
                 )}
               >
                 {key === "all" ? "All payments" : PAY_STATUS_LABEL[key]}
@@ -277,18 +293,29 @@ function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string 
       return;
     }
     setSaving(true);
-    const { data: matched, error: lookupError } = await supabase.from("profiles")
-      .select("id").eq("id", patientEmail.trim()).maybeSingle();
-    if (lookupError || !matched) { setSaving(false); toast.error("Enter an exact registered patient ID."); return; }
+    const { data: matched, error: lookupError } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("id", patientEmail.trim())
+      .maybeSingle();
+    if (lookupError || !matched) {
+      setSaving(false);
+      toast.error("Enter an exact registered patient ID.");
+      return;
+    }
     const userId = matched.id;
-    try { await record({ data: {
-      user_id: userId,
-      kind: kind === "order" ? "order" : "consultation",
-      amount: value,
-      method,
-      payer_name: payerName.trim(),
-      notes: notes.trim(),
-    } }); } catch {
+    try {
+      await record({
+        data: {
+          user_id: userId,
+          kind: kind === "order" ? "order" : "consultation",
+          amount: value,
+          method,
+          payer_name: payerName.trim(),
+          notes: notes.trim(),
+        },
+      });
+    } catch {
       setSaving(false);
       toast.error("Could not save this entry.");
       return;
@@ -369,13 +396,7 @@ function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string 
   );
 }
 
-function RefundAmount({
-  initial,
-  onSave,
-}: {
-  initial: number;
-  onSave: (amount: number) => void;
-}) {
+function RefundAmount({ initial, onSave }: { initial: number; onSave: (amount: number) => void }) {
   const [value, setValue] = useState(String(initial));
   return (
     <div className="space-y-1.5">
@@ -386,7 +407,11 @@ function RefundAmount({
           value={value}
           onChange={(e) => setValue(e.target.value.replace(/\D/g, ""))}
         />
-        <Button variant="outline" className="rounded-full" onClick={() => onSave(Number(value) || 0)}>
+        <Button
+          variant="outline"
+          className="rounded-full"
+          onClick={() => onSave(Number(value) || 0)}
+        >
           Save
         </Button>
       </div>

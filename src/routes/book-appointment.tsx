@@ -133,7 +133,8 @@ function BookAppointmentPage() {
     if (current === 2 && !form.date) e["date"] = "Select a date to continue.";
     if (current === 3 && !form.slot) e["slot"] = "Select a time slot to continue.";
     if (current === 4) {
-      if (!hasPrivacyConsent(healthConsent)) e["consent"] = "Please consent to sharing health information with the clinic.";
+      if (!hasPrivacyConsent(healthConsent))
+        e["consent"] = "Please consent to sharing health information with the clinic.";
       if (form.fullName.trim().length < 3) e["fullName"] = "Enter your full name.";
       if (!/^[6-9]\d{9}$/.test(form.mobile.trim()))
         e["mobile"] = "Enter a valid 10-digit Indian mobile number.";
@@ -147,7 +148,10 @@ function BookAppointmentPage() {
   }
 
   async function confirmAppointment() {
-    if (!hasPrivacyConsent(healthConsent)) { toast.error("Health information consent is required."); return; }
+    if (!hasPrivacyConsent(healthConsent)) {
+      toast.error("Health information consent is required.");
+      return;
+    }
     if (!user) {
       toast.error("Please sign in to confirm your appointment.");
       navigate({ to: "/auth" });
@@ -155,30 +159,37 @@ function BookAppointmentPage() {
     }
     setSaving(true);
     try {
-    const receipt = await consent({ data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "appointment" } });
-    const data = await book({ data: {
-        health_consent_receipt_id: receipt.id,
-        patient_name: form.fullName.trim(),
-        phone: form.mobile.trim(),
-        email: form.email.trim(),
-        date_of_birth: form.dob,
-        gender: form.gender,
-        mode: form.mode,
-        appointment_date: form.date,
-        slot: form.slot,
-        concern: [form.concern, form.symptoms, form.duration, form.notes]
-          .filter((part) => part.trim().length > 0)
-          .join("\n\n"),
-        medical_history: form.previousTreatment || null,
-        current_medication: form.currentMedicines || null,
-        allergies: form.allergies || null,
-        consultation_type: form.type,
-      } });
-    setAppointmentId(`VGC-${data.id.slice(0, 8).toUpperCase()}`);
-    toast.success("Appointment requested");
-    setStep(7);
-    } catch { toast.error("We could not save your appointment. Please try again."); }
-    finally { setSaving(false); }
+      const receipt = await consent({
+        data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "appointment" },
+      });
+      const data = await book({
+        data: {
+          health_consent_receipt_id: receipt.id,
+          patient_name: form.fullName.trim(),
+          phone: form.mobile.trim(),
+          email: form.email.trim(),
+          date_of_birth: form.dob,
+          gender: form.gender,
+          mode: form.mode,
+          appointment_date: form.date,
+          slot: form.slot,
+          concern: [form.concern, form.symptoms, form.duration, form.notes]
+            .filter((part) => part.trim().length > 0)
+            .join("\n\n"),
+          medical_history: form.previousTreatment || null,
+          current_medication: form.currentMedicines || null,
+          allergies: form.allergies || null,
+          consultation_type: form.type,
+        },
+      });
+      setAppointmentId(`VGC-${data.id.slice(0, 8).toUpperCase()}`);
+      toast.success("Appointment requested");
+      setStep(7);
+    } catch {
+      toast.error("We could not save your appointment. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   function goNext() {
@@ -202,7 +213,10 @@ function BookAppointmentPage() {
       />
 
       <section className="container-page py-5 sm:py-10 lg:py-12">
-        <ol className="hide-scrollbar -mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" aria-label="Booking progress">
+        <ol
+          className="hide-scrollbar -mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+          aria-label="Booking progress"
+        >
           {STEP_LABELS.map((label, i) => (
             <li
               key={label}
@@ -226,8 +240,18 @@ function BookAppointmentPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   {(
                     [
-                      ["new", "New Consultation", "First detailed case-taking session.", CONSULT_FEES.new],
-                      ["follow-up", "Follow-up Consultation", "Review of your ongoing plan.", CONSULT_FEES.followUp],
+                      [
+                        "new",
+                        "New Consultation",
+                        "First detailed case-taking session.",
+                        CONSULT_FEES.new,
+                      ],
+                      [
+                        "follow-up",
+                        "Follow-up Consultation",
+                        "Review of your ongoing plan.",
+                        CONSULT_FEES.followUp,
+                      ],
                     ] as const
                   ).map(([value, title, body, price]) => (
                     <button
@@ -351,10 +375,37 @@ function BookAppointmentPage() {
             {step === 4 && (
               <Step title="Patient & medical information">
                 <div className="mb-5 space-y-3 rounded-lg border border-border bg-mint p-4">
-                  <p className="text-sm leading-relaxed text-muted-foreground">Your contact details, symptoms, medical history, medicines and allergies are saved in access-controlled clinic records and shared with authorized staff for consultation. Optional health fields may be left blank. The app is not a medical device and does not diagnose, treat, cure or prevent conditions; medical decisions belong to a healthcare professional.</p>
-                  <Label className="flex items-start gap-3"><input type="checkbox" checked={healthConsent} onChange={e => setHealthConsent(e.target.checked)} className="mt-1" /> I consent to sharing this information for clinic care and am authorized to provide it for the patient.</Label>
-                  <p className="text-xs"><Link to="/privacy-policy" className="text-primary underline">Privacy policy</Link> · <Link to="/delete-account" className="text-primary underline">Data deletion</Link></p>
-                  {errors["consent"] && <p role="alert" className="text-sm text-destructive">{errors["consent"]}</p>}
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Your contact details, symptoms, medical history, medicines and allergies are
+                    saved in access-controlled clinic records and shared with authorized staff for
+                    consultation. Optional health fields may be left blank. The app is not a medical
+                    device and does not diagnose, treat, cure or prevent conditions; medical
+                    decisions belong to a healthcare professional.
+                  </p>
+                  <Label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={healthConsent}
+                      onChange={(e) => setHealthConsent(e.target.checked)}
+                      className="mt-1"
+                    />{" "}
+                    I consent to sharing this information for clinic care and am authorized to
+                    provide it for the patient.
+                  </Label>
+                  <p className="text-xs">
+                    <Link to="/privacy-policy" className="text-primary underline">
+                      Privacy policy
+                    </Link>{" "}
+                    ·{" "}
+                    <Link to="/delete-account" className="text-primary underline">
+                      Data deletion
+                    </Link>
+                  </p>
+                  {errors["consent"] && (
+                    <p role="alert" className="text-sm text-destructive">
+                      {errors["consent"]}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Full name" error={errors["fullName"]}>
@@ -384,7 +435,11 @@ function BookAppointmentPage() {
                     </div>
                   </Field>
                   <Field label="Date of birth" error={errors["dob"]}>
-                    <Input type="date" value={form.dob} onChange={(e) => set("dob", e.target.value)} />
+                    <Input
+                      type="date"
+                      value={form.dob}
+                      onChange={(e) => set("dob", e.target.value)}
+                    />
                   </Field>
                   <Field label="Mobile number" error={errors["mobile"]}>
                     <Input
@@ -456,8 +511,13 @@ function BookAppointmentPage() {
                 </div>
 
                 <div className="mt-6 rounded-2xl border border-dashed border-border p-5">
-                  <Button asChild variant="outline"><Link to="/case-form">Upload reports in your case-taking form</Link></Button>
-                  <p className="mt-3 text-xs text-muted-foreground">Reports are uploaded and saved through the private case-taking form, not this booking page.</p>
+                  <Button asChild variant="outline">
+                    <Link to="/case-form">Upload reports in your case-taking form</Link>
+                  </Button>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Reports are uploaded and saved through the private case-taking form, not this
+                    booking page.
+                  </p>
                   <p className="mt-3 flex items-center gap-2 text-xs text-forest">
                     <ShieldCheck className="size-4" /> Secure medical information
                   </p>
@@ -593,7 +653,9 @@ function BookAppointmentPage() {
             <p className="mt-5 border-t border-border pt-4 font-display text-2xl text-navy">
               {formatINR(fee)}
             </p>
-            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">{CLINIC.disclaimer}</p>
+            <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+              {CLINIC.disclaimer}
+            </p>
           </aside>
         </div>
       </section>
