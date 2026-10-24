@@ -43,6 +43,7 @@ export type Database = {
           allergies: string | null
           appointment_date: string
           concern: string
+          consultation_type: string
           created_at: string
           current_medication: string | null
           date_of_birth: string | null
@@ -65,6 +66,7 @@ export type Database = {
           allergies?: string | null
           appointment_date: string
           concern: string
+          consultation_type?: string
           created_at?: string
           current_medication?: string | null
           date_of_birth?: string | null
@@ -87,6 +89,7 @@ export type Database = {
           allergies?: string | null
           appointment_date?: string
           concern?: string
+          consultation_type?: string
           created_at?: string
           current_medication?: string | null
           date_of_birth?: string | null
@@ -269,6 +272,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      clinical_assignments: {
+        Row: {
+          assigned_by: string
+          created_at: string
+          doctor_id: string
+          id: string
+          patient_id: string
+        }
+        Insert: {
+          assigned_by?: string
+          created_at?: string
+          doctor_id: string
+          id?: string
+          patient_id: string
+        }
+        Update: {
+          assigned_by?: string
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          patient_id?: string
+        }
+        Relationships: []
       }
       order_items: {
         Row: {
@@ -774,12 +801,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_patient: { Args: { _patient: string }; Returns: boolean }
+      create_trusted_order: { Args: { payload: Json }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      settle_gateway_payment: {
+        Args: {
+          _amount: number
+          _gateway_order: string
+          _gateway_payment: string
+          _method: string
+          _payment: string
+          _user: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
