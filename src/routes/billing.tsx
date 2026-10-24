@@ -11,6 +11,7 @@ import {
   startOnlinePayment,
 } from "@/lib/razorpay.functions";
 import { loadCheckout } from "@/lib/razorpay-checkout";
+import { submitPaymentReference } from "@/lib/trusted-actions.functions";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -299,6 +300,7 @@ function PayPanel({
   const startPay = useServerFn(startOnlinePayment);
   const confirmPay = useServerFn(confirmOnlinePayment);
   const failPay = useServerFn(failOnlinePayment);
+  const submitReference = useServerFn(submitPaymentReference);
 
   async function payOnline() {
     setOpening(true);
@@ -367,24 +369,18 @@ function PayPanel({
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("payments").insert({
-      user_id: userId,
+    try { await submitReference({ data: {
       kind: due.kind,
       appointment_id: due.appointment_id,
       order_id: due.order_id,
-      amount: due.amount,
-      method,
-      status: "pending",
-      gateway: "manual",
-      gateway_payment_id: reference.trim(),
-      attempt,
-      notes: due.label,
-    });
-    setSaving(false);
-    if (error) {
+      method: method === "card" ? "card" : method === "netbanking" ? "netbanking" : "upi",
+      reference: reference.trim(),
+    } }); } catch {
+      setSaving(false);
       toast.error("Could not record this payment. Please try again.");
       return;
     }
+    setSaving(false);
     toast.success("Payment submitted — the clinic desk will confirm it shortly.");
     onDone();
   }

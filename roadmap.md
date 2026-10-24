@@ -1,5 +1,12 @@
 # Verma Gentle Cure — build roadmap
 
+## Second uploaded audit
+- [ ] Replace direct patient appointment/payment writes with narrow trusted operations; preserve clinical and cash/COD workflows.
+- [ ] Version deployed settlement and clinical baseline; verify applied migration records and document one deployment process.
+- [ ] Protect consent evidence with server-issued, owner-bound receipts and test self-access/clinical separation.
+- [ ] Prevent duplicate checkout and concurrent gateway initiation; add direct authorization regression tests.
+- [ ] Check environment exclusions, lint, harness build, tests and report actual remaining blockers.
+
 ## Uploaded security audit
 - [x] Inspect repository and deployed authorization policies.
 - [x] Apply trusted commerce and clinical-access protections.

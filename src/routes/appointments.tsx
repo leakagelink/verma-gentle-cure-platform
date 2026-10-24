@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { cancelAppointment as cancelPatientAppointment } from "@/lib/trusted-actions.functions";
 import { CalendarDays, FileText, Stethoscope } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -47,6 +49,7 @@ export const Route = createFileRoute("/appointments")({
 });
 
 function AppointmentsPage() {
+  const cancel = useServerFn(cancelPatientAppointment);
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState<AppointmentRow[]>([]);
@@ -82,11 +85,8 @@ function AppointmentsPage() {
   }, [load]);
 
   async function cancelAppointment(id: string) {
-    const { error } = await supabase
-      .from("appointments")
-      .update({ status: "cancelled" })
-      .eq("id", id);
-    if (error) {
+    try { await cancel({ data: { id } }); }
+    catch {
       toast.error("Could not cancel this appointment.");
       return;
     }
