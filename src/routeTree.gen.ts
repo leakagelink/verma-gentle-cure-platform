@@ -27,6 +27,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CorporateInformationRouteImport } from './routes/corporate-information'
+import { Route as DeleteAccountRouteImport } from './routes/delete-account'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FinanceRouteImport } from './routes/finance'
@@ -136,6 +137,11 @@ const ContactRoute = ContactRouteImport.update({
 const CorporateInformationRoute = CorporateInformationRouteImport.update({
   id: '/corporate-information',
   path: '/corporate-information',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeleteAccountRoute = DeleteAccountRouteImport.update({
+  id: '/delete-account',
+  path: '/delete-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DoctorRoute = DoctorRouteImport.update({
@@ -258,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -298,6 +305,7 @@ export interface FileRoutesByTo {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -339,6 +347,7 @@ export interface FileRoutesById {
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
   '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
   '/finance': typeof FinanceRoute
@@ -381,6 +390,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -421,6 +431,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
     | '/consultation'
     | '/contact'
     | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
     | '/finance'
@@ -502,6 +514,7 @@ export interface RootRouteChildren {
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
   CorporateInformationRoute: typeof CorporateInformationRoute
+  DeleteAccountRoute: typeof DeleteAccountRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
   FinanceRoute: typeof FinanceRoute
@@ -650,6 +663,13 @@ declare module '@tanstack/react-router' {
       path: '/corporate-information'
       fullPath: '/corporate-information'
       preLoaderRoute: typeof CorporateInformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delete-account': {
+      id: '/delete-account'
+      path: '/delete-account'
+      fullPath: '/delete-account'
+      preLoaderRoute: typeof DeleteAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/doctor': {
@@ -814,6 +834,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
   CorporateInformationRoute: CorporateInformationRoute,
+  DeleteAccountRoute: DeleteAccountRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
   FinanceRoute: FinanceRoute,
