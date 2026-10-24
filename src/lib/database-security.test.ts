@@ -89,8 +89,9 @@ describe("direct PostgreSQL security regression", () => {
   it("a failed final payment write rolls back the associated bill update", async () => {
     await reset(); await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false);
       INSERT INTO public.payments(id,user_id,kind,appointment_id,amount,method,status,gateway,gateway_order_id) VALUES('00000000-0000-4000-8000-000000000021','${other}','consultation','00000000-0000-4000-8000-000000000011',700,'card','pending','razorpay','order_rollback');`);
-    // The unique provider ID from the prior test forces a genuine final-write failure.
-    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000021','${other}','order_rollback','pay_test',700,'card');`)).rejects.toThrow();
+    // Inject a failure after the bill update, at the final authoritative write.
+    await db.exec("ALTER TABLE public.payments ADD CONSTRAINT synthetic_final_write_failure CHECK(id<>'00000000-0000-4000-8000-000000000021' OR status<>'paid');");
+    await expect(db.exec(`SELECT public.settle_gateway_payment('00000000-0000-4000-8000-000000000021','${other}','order_rollback','pay_rollback',700,'card');`)).rejects.toThrow("synthetic_final_write_failure");
     const bill = await db.query<{ payment_status: string }>("SELECT payment_status FROM public.appointments WHERE id='00000000-0000-4000-8000-000000000011'");
     expect(bill.rows[0]?.payment_status).toBe("pending"); await reset();
   });
