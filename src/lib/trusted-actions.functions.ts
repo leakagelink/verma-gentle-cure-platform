@@ -126,7 +126,8 @@ export const reviewPayment = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (result.error || !result.data) throw new Error("Administrator required.");
-    const review = await context.supabase.rpc("review_manual_payment", {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const review = await supabaseAdmin.rpc("review_manual_payment", {
       _payment: data.id,
       payload: data.values,
     });
