@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { recordHealthConsent } from "@/lib/trusted-actions.functions";
 import { ClipboardList, FileUp, Lock, Paperclip, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -49,6 +51,7 @@ export const Route = createFileRoute("/case-form")({
 });
 
 function CaseFormPage() {
+  const consent = useServerFn(recordHealthConsent);
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -125,10 +128,12 @@ function CaseFormPage() {
   ) {
     if (!user) return null;
     if (!hasPrivacyConsent(healthConsent)) throw new Error("Health data consent required.");
+    const receipt = await consent({ data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "case" } });
     const payload = {
       ...form,
       patient_id: user.id,
-      health_consent_at: new Date().toISOString(),
+      health_consent_receipt_id: receipt.id,
+      health_consent_at: receipt.accepted_at,
       health_notice_version: HEALTH_NOTICE_VERSION,
       status: nextStatus,
       attachments: nextAttachments as unknown as never,

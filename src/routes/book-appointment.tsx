@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { bookAppointment, recordHealthConsent } from "@/lib/trusted-actions.functions";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -106,6 +107,8 @@ function nextDays(count: number) {
 }
 
 function BookAppointmentPage() {
+  const book = useServerFn(bookAppointment);
+  const consent = useServerFn(recordHealthConsent);
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
@@ -151,12 +154,10 @@ function BookAppointmentPage() {
       return;
     }
     setSaving(true);
-    const { data, error } = await supabase
-      .from("appointments")
-      .insert({
-        patient_id: user.id,
-        health_consent_at: new Date().toISOString(),
-        health_notice_version: HEALTH_NOTICE_VERSION,
+    try {
+    const receipt = await consent({ data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "appointment" } });
+    const data = await book({ data: {
+        health_consent_receipt_id: receipt.id,
         patient_name: form.fullName.trim(),
         phone: form.mobile.trim(),
         email: form.email.trim(),
@@ -172,22 +173,12 @@ function BookAppointmentPage() {
         current_medication: form.currentMedicines || null,
         allergies: form.allergies || null,
         consultation_type: form.type,
-        fee,
-        status: "pending",
-        payment_status: "pending",
-      })
-      .select("id")
-      .single();
-    setSaving(false);
-
-    if (error || !data) {
-      toast.error("We could not save your appointment. Please try again.");
-      return;
-    }
-
+      } });
     setAppointmentId(`VGC-${data.id.slice(0, 8).toUpperCase()}`);
     toast.success("Appointment requested");
     setStep(7);
+    } catch { toast.error("We could not save your appointment. Please try again."); }
+    finally { setSaving(false); }
   }
 
   function goNext() {

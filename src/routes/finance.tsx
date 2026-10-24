@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { recordCounterPayment, reviewPayment } from "@/lib/trusted-actions.functions";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -51,6 +53,7 @@ export const Route = createFileRoute("/finance")({
 const STATUSES: PaymentStatus[] = ["pending", "paid", "failed", "refunded"];
 
 function FinancePage() {
+  const review = useServerFn(reviewPayment);
   const { user, loading, role } = useAuth();
   const isCareTeam = role === "admin";
   const navigate = useNavigate();
@@ -80,8 +83,12 @@ function FinancePage() {
   const totals = useMemo(() => summarise(rows), [rows]);
 
   async function patch(id: string, values: Partial<PaymentRow>) {
-    const { error } = await supabase.from("payments").update(values).eq("id", id);
-    if (error) {
+    try { await review({ data: { id, values: {
+      ...(values.status !== undefined ? { status: values.status } : {}),
+      ...(values.refund_status !== undefined ? { refund_status: values.refund_status as "none" | "requested" | "processing" | "completed" | "rejected" } : {}),
+      ...(values.refund_amount !== undefined ? { refund_amount: values.refund_amount } : {}),
+      ...(values.refund_note !== undefined ? { refund_note: values.refund_note } : {}),
+    } } }); } catch {
       toast.error("Could not update this payment.");
       return;
     }
@@ -250,6 +257,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string }) {
+  const record = useServerFn(recordCounterPayment);
   const [patientEmail, setPatientEmail] = useState("");
   const [payerName, setPayerName] = useState("");
   const [amount, setAmount] = useState("");
@@ -273,22 +281,19 @@ function CashEntry({ onSaved, staffId }: { onSaved: () => void; staffId: string 
       .select("id").eq("id", patientEmail.trim()).maybeSingle();
     if (lookupError || !matched) { setSaving(false); toast.error("Enter an exact registered patient ID."); return; }
     const userId = matched.id;
-    const { error } = await supabase.from("payments").insert({
+    try { await record({ data: {
       user_id: userId,
-      kind,
+      kind: kind === "order" ? "order" : "consultation",
       amount: value,
       method,
-      status: "paid",
       payer_name: payerName.trim(),
-      notes: notes.trim() || null,
-      recorded_by: staffId,
-      gateway: "counter",
-    });
-    setSaving(false);
-    if (error) {
+      notes: notes.trim(),
+    } }); } catch {
+      setSaving(false);
       toast.error("Could not save this entry.");
       return;
     }
+    setSaving(false);
     setAmount("");
     setNotes("");
     setPayerName("");
