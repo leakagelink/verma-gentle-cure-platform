@@ -1,7 +1,7 @@
 // Browser-safe validation; provider clients and credentials stay server-only.
 export function isRemovedIdentity(result: {
   data: { user: unknown };
-  error: { code?: string } | null;
+  error: { code?: string | undefined } | null;
 }) {
   return !result.data.user && result.error?.code === "user_not_found";
 }
