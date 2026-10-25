@@ -21,3 +21,5 @@
 - Checkout persists owner-bound request IDs and gateway initiation claims; ambiguous provider failures retain claims for manual reconciliation to prevent duplicate charging.
 - Lovable's managed migration tool is the sole schema deployment path; legacy SQL is a baseline reference and must not be independently replayed against production.
 - Deletion processing uses an administrator-authorized token claim, account freeze, storage/API removal and readback; medical/financial/clinician dependencies block automated processing until lawful retention is resolved, preventing cascading loss of required records.
+- Deletion readback requires structured identity absence and validated storage pages; ambiguous receipt writes require reconciliation rather than inferred completion.
+- Isolated migration replay uses an explicit versioned platform shim and recovered clinical baseline; neither is a production deployment script, and existing managed migration history stays immutable.
