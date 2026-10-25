@@ -94,7 +94,11 @@ function DeleteAccountPage() {
                 try {
                   if (!submission.current || submission.current.scope !== scope)
                     submission.current = { scope, id: crypto.randomUUID() };
-                  setRequest(await requestDeletion({ data: { scope, confirmation, submissionId: submission.current.id } }));
+                  setRequest(
+                    await requestDeletion({
+                      data: { scope, confirmation, submissionId: submission.current.id },
+                    }),
+                  );
                 } catch (err) {
                   setError(err instanceof Error ? err.message : "Could not submit your request.");
                 } finally {

@@ -8,10 +8,18 @@ export const requestAccountDeletion = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => deletionRequestSchema.parse(input))
   .handler(async ({ data, context }) => {
     const result = await context.supabase.rpc("submit_deletion_request", {
-      _scope: data.scope, _submission: data.submissionId,
+      _scope: data.scope,
+      _submission: data.submissionId,
     });
     if (result.error) throw new Error("Could not save your request. Please try again.");
-    return z.object({ id: z.string().uuid(), status: z.string(), processing_state: z.string(), created_at: z.string() }).parse(result.data);
+    return z
+      .object({
+        id: z.string().uuid(),
+        status: z.string(),
+        processing_state: z.string(),
+        created_at: z.string(),
+      })
+      .parse(result.data);
   });
 
 export const listDeletionRequests = createServerFn({ method: "POST" })
