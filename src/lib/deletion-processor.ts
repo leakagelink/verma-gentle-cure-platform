@@ -22,7 +22,12 @@ export async function executeDeletion(job: DeletionJob, ops: DeletionOperations)
     await ops.finish();
     return { state: "completed" as const };
   } catch {
-    await ops.fail();
-    return { state: "failed" as const };
+    try {
+      await ops.fail();
+      return { state: "failed" as const };
+    } catch {
+      // Never imply a failure receipt was saved when its acknowledgement is missing.
+      return { state: "reconciliation_required" as const };
+    }
   }
 }
