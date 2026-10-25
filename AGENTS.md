@@ -24,3 +24,4 @@
 - Deletion readback requires structured identity absence and validated storage pages; ambiguous receipt writes require reconciliation rather than inferred completion.
 - Isolated migration replay uses an explicit versioned platform shim and recovered clinical baseline; neither is a production deployment script, and existing managed migration history stays immutable.
 - ESLint exempts only Prettier formatting for seven exact integration-managed sources; all other lint rules stay enabled because regeneration controls their formatting.
+- Build-time browser connection defines use an exact public-only allowlist with deployment-independent defaults and environment overrides; published startup must not depend on a tracked local .env file, and private server keys must never enter that allowlist.
