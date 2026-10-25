@@ -1,6 +1,10 @@
 import { supabaseAdmin as admin } from "@/integrations/supabase/client.server";
 import { executeDeletion } from "./deletion-processor";
-import { hasClearedMetadata, isRemovedIdentity, validateStoragePage } from "./deletion-verification";
+import {
+  hasClearedMetadata,
+  isRemovedIdentity,
+  validateStoragePage,
+} from "./deletion-verification";
 
 export async function processEligibleDeletion(
   id: string,
@@ -30,11 +34,17 @@ export async function processEligibleDeletion(
   }
   async function transition(state: "completed" | "failed") {
     const result = await admin.rpc("finish_deletion_generation", {
-      _request: id, _token: token, _state: state,
+      _request: id,
+      _token: token,
+      _state: state,
     });
     if (result.error || !result.data) {
-      const receipt = await admin.from("account_deletion_requests")
-        .select("processing_state").eq("id", id).eq("processing_token", token).single();
+      const receipt = await admin
+        .from("account_deletion_requests")
+        .select("processing_state")
+        .eq("id", id)
+        .eq("processing_token", token)
+        .single();
       checked(receipt.error);
       if (state === "completed" && receipt.data?.processing_state === "completed") return;
       throw new Error("Deletion receipt unavailable");
@@ -50,14 +60,20 @@ export async function processEligibleDeletion(
         checked(identity.error);
         if (!identity.data.user) throw new Error("Identity unavailable");
         // Do not remove an existing administrator-imposed ban on data-only restoration.
-        if (scope === "data" && identity.data.user.banned_until &&
-          Date.parse(identity.data.user.banned_until) > Date.now())
+        if (
+          scope === "data" &&
+          identity.data.user.banned_until &&
+          Date.parse(identity.data.user.banned_until) > Date.now()
+        )
           throw new Error("Restricted identity requires reconciliation");
         const result = await admin.auth.admin.updateUserById(userId, { ban_duration: "876000h" });
         checked(result.error);
         const frozen = await admin.auth.admin.getUserById(userId);
         checked(frozen.error);
-        if (!frozen.data.user?.banned_until || Date.parse(frozen.data.user.banned_until) <= Date.now())
+        if (
+          !frozen.data.user?.banned_until ||
+          Date.parse(frozen.data.user.banned_until) <= Date.now()
+        )
           throw new Error("Identity freeze unverified");
         if (scope === "data") {
           checked(
@@ -122,21 +138,27 @@ export async function processEligibleDeletion(
           .maybeSingle();
         checked(profile.error);
         if (scope === "account" && profile.data) throw new Error("Profile remains");
-        if (scope === "data" && (!profile.data || profile.data.full_name !== "" ||
-          [profile.data.phone, profile.data.date_of_birth, profile.data.gender, profile.data.city, profile.data.avatar_url]
-            .some((value) => value !== null))) throw new Error("Profile data remains");
+        if (
+          scope === "data" &&
+          (!profile.data ||
+            profile.data.full_name !== "" ||
+            [
+              profile.data.phone,
+              profile.data.date_of_birth,
+              profile.data.gender,
+              profile.data.city,
+              profile.data.avatar_url,
+            ].some((value) => value !== null))
+        )
+          throw new Error("Profile data remains");
         if ((await files(userId)).length) throw new Error("Files remain");
         if (scope === "account") {
           const identity = await admin.auth.admin.getUserById(userId);
-          if (!isRemovedIdentity(identity))
-            throw new Error("Identity removal unverified");
+          if (!isRemovedIdentity(identity)) throw new Error("Identity removal unverified");
         } else {
           const identity = await admin.auth.admin.getUserById(userId);
           checked(identity.error);
-          if (
-            !identity.data.user ||
-            !hasClearedMetadata(identity.data.user.user_metadata)
-          )
+          if (!identity.data.user || !hasClearedMetadata(identity.data.user.user_metadata))
             throw new Error("Personal identity metadata remains");
         }
       },
@@ -144,8 +166,12 @@ export async function processEligibleDeletion(
         checked((await admin.auth.admin.updateUserById(userId, { ban_duration: "none" })).error);
         const identity = await admin.auth.admin.getUserById(userId);
         checked(identity.error);
-        if (!identity.data.user || (identity.data.user.banned_until &&
-          Date.parse(identity.data.user.banned_until) > Date.now())) throw new Error("Identity restore unverified");
+        if (
+          !identity.data.user ||
+          (identity.data.user.banned_until &&
+            Date.parse(identity.data.user.banned_until) > Date.now())
+        )
+          throw new Error("Identity restore unverified");
       },
       finish: () => transition("completed"),
       fail: () => transition("failed"),

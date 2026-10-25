@@ -41,12 +41,18 @@ describe("eligible deletion orchestration", () => {
   }
   it("does not complete data deletion when sign-in restoration fails", async () => {
     const { ops, calls } = operations("restore");
-    expect(await executeDeletion({ userId: "synthetic", scope: "data" }, ops)).toEqual({ state: "failed" });
+    expect(await executeDeletion({ userId: "synthetic", scope: "data" }, ops)).toEqual({
+      state: "failed",
+    });
     expect(calls).not.toContain("finish");
   });
   it("reports uncertainty if saving the failure receipt also fails", async () => {
     const { ops } = operations("verify");
-    ops.fail = async () => { throw new Error("synthetic receipt failure"); };
-    expect(await executeDeletion({ userId: "synthetic", scope: "account" }, ops)).toEqual({ state: "reconciliation_required" });
+    ops.fail = async () => {
+      throw new Error("synthetic receipt failure");
+    };
+    expect(await executeDeletion({ userId: "synthetic", scope: "account" }, ops)).toEqual({
+      state: "reconciliation_required",
+    });
   });
 });

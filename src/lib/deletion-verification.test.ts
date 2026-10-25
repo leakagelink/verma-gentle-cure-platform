@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { hasClearedMetadata, isRemovedIdentity, validateStoragePage } from "./deletion-verification";
+import {
+  hasClearedMetadata,
+  isRemovedIdentity,
+  validateStoragePage,
+} from "./deletion-verification";
 
 describe("deletion evidence validation", () => {
   it("accepts only structured user-not-found evidence", () => {
-    expect(isRemovedIdentity({ data: { user: null }, error: { code: "user_not_found" } })).toBe(true);
-    expect(isRemovedIdentity({ data: { user: null }, error: { code: "unexpected_failure" } })).toBe(false);
+    expect(isRemovedIdentity({ data: { user: null }, error: { code: "user_not_found" } })).toBe(
+      true,
+    );
+    expect(isRemovedIdentity({ data: { user: null }, error: { code: "unexpected_failure" } })).toBe(
+      false,
+    );
     expect(isRemovedIdentity({ data: { user: { id: "exists" } }, error: null })).toBe(false);
     expect(isRemovedIdentity({ data: { user: null }, error: null })).toBe(false);
   });
@@ -17,7 +25,12 @@ describe("deletion evidence validation", () => {
       expect(() => validateStoragePage([{ name, id: null }])).toThrow();
     }
     expect(() => validateStoragePage([{ name: "file", id: undefined }])).toThrow();
-    expect(validateStoragePage([{ name: "folder", id: null }, { name: "report.pdf", id: "uuid" }])).toHaveLength(2);
+    expect(
+      validateStoragePage([
+        { name: "folder", id: null },
+        { name: "report.pdf", id: "uuid" },
+      ]),
+    ).toHaveLength(2);
   });
   it("does not mistake false or zero personal metadata for erased values", () => {
     expect(hasClearedMetadata({ full_name: null })).toBe(true);

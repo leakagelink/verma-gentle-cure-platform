@@ -52,21 +52,41 @@ describe("direct PostgreSQL security regression", () => {
     await reset();
     const owner = "00000000-0000-4000-8000-000000000081";
     const actor = "00000000-0000-4000-8000-000000000082";
-    await db.exec(`INSERT INTO auth.users(id) VALUES('${owner}'),('${actor}'); INSERT INTO public.user_roles(user_id,role) VALUES('${actor}','admin'); INSERT INTO public.account_deletion_requests(user_id,scope) VALUES('${owner}','account'),('${owner}','data'); SELECT set_config('request.jwt.claim.sub','${actor}',false),set_config('request.jwt.claim.role','authenticated',false);`);
-    await db.exec(`SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='account';`);
-    await expect(db.exec(`SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='data';`)).rejects.toThrow("Another deletion");
+    await db.exec(
+      `INSERT INTO auth.users(id) VALUES('${owner}'),('${actor}'); INSERT INTO public.user_roles(user_id,role) VALUES('${actor}','admin'); INSERT INTO public.account_deletion_requests(user_id,scope) VALUES('${owner}','account'),('${owner}','data'); SELECT set_config('request.jwt.claim.sub','${actor}',false),set_config('request.jwt.claim.role','authenticated',false);`,
+    );
+    await db.exec(
+      `SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='account';`,
+    );
+    await expect(
+      db.exec(
+        `SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='data';`,
+      ),
+    ).rejects.toThrow("Another deletion");
     await reset();
   });
   it("makes token-bound completion idempotent and never downgrades it", async () => {
     await reset();
     const receipt = "00000000-0000-4000-8000-000000000083";
     const token = "00000000-0000-4000-8000-000000000084";
-    await db.exec(`INSERT INTO public.account_deletion_requests(id,user_id,scope,processing_state,processing_token) VALUES('${receipt}','00000000-0000-4000-8000-000000000085','account','processing','${token}'); SELECT set_config('request.jwt.claim.role','service_role',false);`);
-    await db.exec(`SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','failed');`);
-    const result = await db.query<{ processing_state: string }>(`SELECT processing_state FROM public.account_deletion_requests WHERE id='${receipt}'`);
+    await db.exec(
+      `INSERT INTO public.account_deletion_requests(id,user_id,scope,processing_state,processing_token) VALUES('${receipt}','00000000-0000-4000-8000-000000000085','account','processing','${token}'); SELECT set_config('request.jwt.claim.role','service_role',false);`,
+    );
+    await db.exec(
+      `SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','failed');`,
+    );
+    const result = await db.query<{ processing_state: string }>(
+      `SELECT processing_state FROM public.account_deletion_requests WHERE id='${receipt}'`,
+    );
     expect(result.rows[0]?.processing_state).toBe("completed");
-    await expect(db.exec(`SELECT public.finish_deletion_generation('${receipt}','00000000-0000-4000-8000-000000000086','completed');`)).rejects.toThrow();
-    await expect(asPatient(`SELECT public.finish_deletion_generation('${receipt}','${token}','completed');`)).rejects.toThrow();
+    await expect(
+      db.exec(
+        `SELECT public.finish_deletion_generation('${receipt}','00000000-0000-4000-8000-000000000086','completed');`,
+      ),
+    ).rejects.toThrow();
+    await expect(
+      asPatient(`SELECT public.finish_deletion_generation('${receipt}','${token}','completed');`),
+    ).rejects.toThrow();
     await reset();
   });
   it("rejects direct appointment fee tampering", async () => {

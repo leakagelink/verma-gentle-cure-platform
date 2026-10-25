@@ -18,7 +18,8 @@ export function validateStoragePage(data: unknown): { name: string; id: string |
       item.name === ".." ||
       /[/\\]/.test(item.name) ||
       !(item.id === null || (typeof item.id === "string" && item.id.length > 0))
-    ) throw new Error("Invalid storage entry");
+    )
+      throw new Error("Invalid storage entry");
     return { name: item.name, id: item.id as string | null };
   });
 }
