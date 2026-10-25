@@ -1,11 +1,15 @@
 # Verma Gentle Cure — build roadmap
 
 ## Final critical fixes — October 25, 2026
-- [ ] Reproduce and repair the missing canonical baseline without changing production history.
-- [ ] Improve eligible deletion recovery and verify available Auth/Storage flows.
-- [ ] Inspect environment tracking, secret exposure and generated-code lint failures.
-- [ ] Run supported regression suites and inspect current hosted privileges.
-- [ ] Deliver evidence, current Google Play requirements and exact remaining release gates.
+- [x] Reproduce missing baseline and add full clinical isolated replay through 0019 without changing production history.
+- [x] Improve deletion submissions, cross-scope exclusion, receipt retries and strict provider evidence; 61 local tests pass.
+- [x] Inspect environment/history and generated lint failures; no matched private credentials; owner action still required.
+- [x] Inspect hosted privileges, public deletion/privacy availability and automatic build; deliver FINAL_CRITICAL_FIXES_REPORT.md.
+- [ ] Fresh supported hosted baseline replay — platform-provisioned baseline and isolated hosted environment required; test shim is not deployable.
+- [ ] Hosted Auth/Storage/session deletion — no matched requesting-user account or authorized disposable hosted test environment.
+- [ ] Retention minimization/expiry and failed-job worker recovery — approved clinic/legal retention rules and authorized recovery design required.
+- [ ] Environment untracking and repository lint — read-only .gitignore/stateful Git restrictions and protected generated formatting require owner/platform action.
+- [ ] Native release evidence — Android project, signed AAB, Play declarations and professional credential verification required.
 
 ## Final remediation audit
 - [x] Implement public unauthenticated intake and eligible verified-owner deletion processor with fail-closed retention, dependency fencing and readback.

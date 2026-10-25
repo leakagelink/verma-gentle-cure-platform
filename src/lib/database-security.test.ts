@@ -48,6 +48,74 @@ describe("direct PostgreSQL security regression", () => {
   afterAll(async () => {
     await db?.close();
   });
+  it("prevents overlapping account and data deletion claims for one owner", async () => {
+    await reset();
+    const owner = "00000000-0000-4000-8000-000000000081";
+    const actor = "00000000-0000-4000-8000-000000000082";
+    await db.exec(
+      `INSERT INTO auth.users(id) VALUES('${owner}'),('${actor}'); INSERT INTO public.user_roles(user_id,role) VALUES('${actor}','admin'); INSERT INTO public.account_deletion_requests(user_id,scope) VALUES('${owner}','account'),('${owner}','data'); SELECT set_config('request.jwt.claim.sub','${actor}',false),set_config('request.jwt.claim.role','authenticated',false);`,
+    );
+    await db.exec(
+      `SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='account';`,
+    );
+    await expect(
+      db.exec(
+        `SELECT public.claim_account_deletion(id) FROM public.account_deletion_requests WHERE user_id='${owner}' AND scope='data';`,
+      ),
+    ).rejects.toThrow("Another deletion");
+    await reset();
+  });
+  it("returns one owner request and does not reopen completion on a delayed retry", async () => {
+    await reset();
+    const owner = "00000000-0000-4000-8000-000000000087";
+    const key = "00000000-0000-4000-8000-000000000088";
+    await db.exec(
+      `INSERT INTO auth.users(id) VALUES('${owner}'); SELECT set_config('request.jwt.claim.sub','${owner}',false),set_config('request.jwt.claim.role','authenticated',false);`,
+    );
+    await db.exec(
+      `SELECT public.submit_deletion_request('data','${key}'); SELECT public.submit_deletion_request('data','${key}');`,
+    );
+    await reset();
+    await db.exec(
+      `UPDATE public.account_deletion_requests SET processing_state='completed',completed_at=now() WHERE user_id='${owner}'; SELECT set_config('request.jwt.claim.sub','${owner}',false),set_config('request.jwt.claim.role','authenticated',false); SELECT public.submit_deletion_request('data','${key}');`,
+    );
+    const result = await db.query<{ processing_state: string }>(
+      `SELECT processing_state FROM public.account_deletion_requests WHERE user_id='${owner}'`,
+    );
+    expect(result.rows).toEqual([{ processing_state: "completed" }]);
+    await db.exec(
+      `SELECT public.submit_deletion_request('data','00000000-0000-4000-8000-000000000089');`,
+    );
+    const reopened = await db.query<{ processing_state: string; history: number }>(
+      `SELECT processing_state,jsonb_array_length(processing_history) AS history FROM public.account_deletion_requests WHERE user_id='${owner}'`,
+    );
+    expect(reopened.rows).toEqual([{ processing_state: "pending", history: 1 }]);
+    await reset();
+  });
+  it("makes token-bound completion idempotent and never downgrades it", async () => {
+    await reset();
+    const receipt = "00000000-0000-4000-8000-000000000083";
+    const token = "00000000-0000-4000-8000-000000000084";
+    await db.exec(
+      `INSERT INTO public.account_deletion_requests(id,user_id,scope,processing_state,processing_token) VALUES('${receipt}','00000000-0000-4000-8000-000000000085','account','processing','${token}'); SELECT set_config('request.jwt.claim.role','service_role',false);`,
+    );
+    await db.exec(
+      `SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','completed'); SELECT public.finish_deletion_generation('${receipt}','${token}','failed');`,
+    );
+    const result = await db.query<{ processing_state: string }>(
+      `SELECT processing_state FROM public.account_deletion_requests WHERE id='${receipt}'`,
+    );
+    expect(result.rows[0]?.processing_state).toBe("completed");
+    await expect(
+      db.exec(
+        `SELECT public.finish_deletion_generation('${receipt}','00000000-0000-4000-8000-000000000086','completed');`,
+      ),
+    ).rejects.toThrow();
+    await expect(
+      asPatient(`SELECT public.finish_deletion_generation('${receipt}','${token}','completed');`),
+    ).rejects.toThrow();
+    await reset();
+  });
   it("rejects direct appointment fee tampering", async () => {
     await asPatient(
       "UPDATE public.appointments SET fee=1 WHERE id='00000000-0000-4000-8000-000000000010';",

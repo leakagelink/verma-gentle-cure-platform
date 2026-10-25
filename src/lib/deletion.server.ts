@@ -1,5 +1,10 @@
 import { supabaseAdmin as admin } from "@/integrations/supabase/client.server";
 import { executeDeletion } from "./deletion-processor";
+import {
+  hasClearedMetadata,
+  isRemovedIdentity,
+  validateStoragePage,
+} from "./deletion-verification";
 
 export async function processEligibleDeletion(
   id: string,
@@ -17,37 +22,59 @@ export async function processEligibleDeletion(
         .from("patient-reports")
         .list(prefix, { limit: 100, offset, sortBy: { column: "name", order: "asc" } });
       checked(page.error);
-      for (const item of page.data ?? []) {
+      const entries = validateStoragePage(page.data);
+      for (const item of entries) {
         const path = `${prefix}/${item.name}`;
         if (item.id) result.push(path);
         else result.push(...(await files(path)));
       }
-      if ((page.data?.length ?? 0) < 100) break;
+      if (entries.length < 100) break;
     }
     return result;
   }
   async function transition(state: "completed" | "failed") {
-    const result = await admin
-      .from("account_deletion_requests")
-      .update({
-        processing_state: state,
-        completed_at: state === "completed" ? new Date().toISOString() : null,
-        failure_code: state === "failed" ? "processing_failed_requires_reconciliation" : null,
-      })
-      .eq("id", id)
-      .eq("processing_token", token)
-      .eq("processing_state", "processing")
-      .select("id")
-      .single();
-    checked(result.error);
-    if (!result.data) throw new Error("Deletion receipt unavailable");
+    const result = await admin.rpc("finish_deletion_generation", {
+      _request: id,
+      _token: token,
+      _state: state,
+    });
+    if (result.error || !result.data) {
+      const receipt = await admin
+        .from("account_deletion_requests")
+        .select("processing_state")
+        .eq("id", id)
+        .eq("processing_token", token)
+        .single();
+      checked(receipt.error);
+      if (state === "completed" && receipt.data?.processing_state === "completed") return;
+      throw new Error("Deletion receipt unavailable");
+    }
+    if (result.data !== state) throw new Error("Deletion receipt requires reconciliation");
   }
   return executeDeletion(
     { userId, scope },
     {
       freeze: async () => {
+        const identity = await admin.auth.admin.getUserById(userId);
+        if (scope === "account" && isRemovedIdentity(identity)) return;
+        checked(identity.error);
+        if (!identity.data.user) throw new Error("Identity unavailable");
+        // Do not remove an existing administrator-imposed ban on data-only restoration.
+        if (
+          scope === "data" &&
+          identity.data.user.banned_until &&
+          Date.parse(identity.data.user.banned_until) > Date.now()
+        )
+          throw new Error("Restricted identity requires reconciliation");
         const result = await admin.auth.admin.updateUserById(userId, { ban_duration: "876000h" });
         checked(result.error);
+        const frozen = await admin.auth.admin.getUserById(userId);
+        checked(frozen.error);
+        if (
+          !frozen.data.user?.banned_until ||
+          Date.parse(frozen.data.user.banned_until) <= Date.now()
+        )
+          throw new Error("Identity freeze unverified");
         if (scope === "data") {
           checked(
             (
@@ -82,7 +109,12 @@ export async function processEligibleDeletion(
         checked(result.error);
       },
       removeIdentity: async () => {
-        checked((await admin.auth.admin.deleteUser(userId)).error);
+        const identity = await admin.auth.admin.getUserById(userId);
+        if (isRemovedIdentity(identity)) return;
+        checked(identity.error);
+        const removed = await admin.auth.admin.deleteUser(userId);
+        if (removed.error && !isRemovedIdentity(await admin.auth.admin.getUserById(userId)))
+          throw new Error("Identity removal failed");
       },
       verify: async () => {
         for (const table of [
@@ -106,27 +138,40 @@ export async function processEligibleDeletion(
           .maybeSingle();
         checked(profile.error);
         if (scope === "account" && profile.data) throw new Error("Profile remains");
-        if (scope === "data" && profile.data && Object.values(profile.data).some(Boolean))
+        if (
+          scope === "data" &&
+          (!profile.data ||
+            profile.data.full_name !== "" ||
+            [
+              profile.data.phone,
+              profile.data.date_of_birth,
+              profile.data.gender,
+              profile.data.city,
+              profile.data.avatar_url,
+            ].some((value) => value !== null))
+        )
           throw new Error("Profile data remains");
         if ((await files(userId)).length) throw new Error("Files remain");
         if (scope === "account") {
           const identity = await admin.auth.admin.getUserById(userId);
-          if (identity.data.user || identity.error?.status !== 404)
-            throw new Error("Identity removal unverified");
+          if (!isRemovedIdentity(identity)) throw new Error("Identity removal unverified");
         } else {
           const identity = await admin.auth.admin.getUserById(userId);
           checked(identity.error);
-          if (
-            !identity.data.user ||
-            ["full_name", "phone", "name", "avatar_url", "picture"].some((key) =>
-              Boolean(identity.data.user?.user_metadata[key]),
-            )
-          )
+          if (!identity.data.user || !hasClearedMetadata(identity.data.user.user_metadata))
             throw new Error("Personal identity metadata remains");
         }
       },
       restore: async () => {
         checked((await admin.auth.admin.updateUserById(userId, { ban_duration: "none" })).error);
+        const identity = await admin.auth.admin.getUserById(userId);
+        checked(identity.error);
+        if (
+          !identity.data.user ||
+          (identity.data.user.banned_until &&
+            Date.parse(identity.data.user.banned_until) > Date.now())
+        )
+          throw new Error("Identity restore unverified");
       },
       finish: () => transition("completed"),
       fail: () => transition("failed"),
