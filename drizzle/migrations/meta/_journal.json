@@ -127,6 +127,13 @@
       "when": 1792899644917,
       "tag": "0017_deletion_retention_fence_and_processing_generations",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792900407749,
+      "tag": "0018_deletion_cross_scope_and_receipt_recovery",
+      "breakpoints": true
     }
   ]
 }

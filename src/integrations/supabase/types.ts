@@ -964,6 +964,10 @@ export type Database = {
         Returns: boolean
       }
       deletion_is_held: { Args: { _user: string }; Returns: boolean }
+      finish_deletion_generation: {
+        Args: { _request: string; _state: string; _token: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
