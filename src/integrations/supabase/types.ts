@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           failure_code: string | null
           id: string
+          processing_history: Json
           processing_state: string
           processing_token: string | null
           scope: string
@@ -31,6 +32,7 @@ export type Database = {
           created_at?: string
           failure_code?: string | null
           id?: string
+          processing_history?: Json
           processing_state?: string
           processing_token?: string | null
           scope: string
@@ -42,6 +44,7 @@ export type Database = {
           created_at?: string
           failure_code?: string | null
           id?: string
+          processing_history?: Json
           processing_state?: string
           processing_token?: string | null
           scope?: string
@@ -956,6 +959,11 @@ export type Database = {
         Returns: Json
       }
       create_trusted_order: { Args: { payload: Json }; Returns: Json }
+      deletion_has_retained_dependencies: {
+        Args: { _user: string }
+        Returns: boolean
+      }
+      deletion_is_held: { Args: { _user: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -968,6 +976,10 @@ export type Database = {
         Returns: undefined
       }
       record_counter_payment: { Args: { payload: Json }; Returns: string }
+      reopen_data_deletion: {
+        Args: { _request: string; _user: string }
+        Returns: undefined
+      }
       review_manual_payment: {
         Args: { _payment: string; payload: Json }
         Returns: undefined

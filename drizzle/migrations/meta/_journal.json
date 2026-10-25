@@ -120,6 +120,13 @@
       "when": 1792898858355,
       "tag": "0016_version_report_consent_and_clinical_baseline_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792899644917,
+      "tag": "0017_deletion_retention_fence_and_processing_generations",
+      "breakpoints": true
     }
   ]
 }
