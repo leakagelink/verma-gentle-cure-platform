@@ -263,6 +263,18 @@ describe("direct PostgreSQL security regression", () => {
     ]);
     expect(remains.rows.length).toBeGreaterThan(0);
   });
+  it("storage rejects upload without a current server-issued case consent receipt", async () => {
+    await reset();
+    await db.exec(`CREATE POLICY synthetic_owner_upload ON storage.objects FOR INSERT TO authenticated WITH CHECK(bucket_id='patient-reports' AND (storage.foldername(name))[1]=auth.uid()::text);`);
+    const insert = `INSERT INTO storage.objects(bucket_id,name,metadata) VALUES('patient-reports','${patient}/synthetic.pdf','{"mimetype":"application/pdf","size":100}')`;
+    await expect(asPatient(insert)).rejects.toThrow();
+    await reset();
+    await db.exec(`INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24')`);
+    await asPatient(insert);
+    await reset();
+    const objects = await db.query("SELECT name FROM storage.objects WHERE name=$1",[`${patient}/synthetic.pdf`]);
+    expect(objects.rows).toHaveLength(1);
+  });
   it("denies unauthorized deletion claims and direct completion forgery", async () => {
     await expect(
       asPatient("SELECT public.claim_account_deletion('00000000-0000-4000-8000-000000000040')"),

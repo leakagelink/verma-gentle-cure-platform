@@ -70,8 +70,8 @@ export const Route = createFileRoute("/privacy-policy")({
             heading: "Retention and your rights",
             body: [
               "Records are retained for as long as needed to provide continuity of care and to meet applicable legal requirements.",
-              "Request account and associated data deletion, or personal-data-only deletion, at vermagentlecure.com/delete-account or from My account. If you cannot sign in, call or WhatsApp the clinic with your registered email or phone. No app reinstall is required. Do not send passwords or OTPs.",
-              "Deletion is processed manually after ownership verification. Non-required profile information and eligible uploaded files are removed; medical, prescription, financial and unresolved transaction records may be retained only where required. The clinic will explain the retained categories, legal reason and applicable period, and confirm the outcome. A request does not mean deletion has already happened.",
+              "Request account and associated data deletion, or personal-data-only deletion, using the public form at vermagentlecure.com/delete-account or from My account. The public form does not require sign-in; the clinic must verify ownership before processing. You can also call or WhatsApp with your registered email or phone. No app reinstall is required. Do not send passwords or OTPs.",
+              "Verified requests are reviewed by an administrator. Accounts without medical, financial or clinician dependencies can have eligible profile information, reports and credentials removed through a checked deletion process. Accounts with those records remain blocked pending retention review; no retained records are automatically destroyed. Data-only requests preserve sign-in credentials. Failed attempts are not reported as completed. Minimal request identifiers and processing outcomes are retained for reconciliation; legal grounds and retention periods require clinic review. The clinic must explain retained categories, reasons and applicable periods, and confirm the actual outcome.",
             ],
           },
           {
