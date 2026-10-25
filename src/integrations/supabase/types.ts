@@ -25,6 +25,7 @@ export type Database = {
           processing_token: string | null
           scope: string
           status: string
+          submission_keys: string[]
           user_id: string
         }
         Insert: {
@@ -37,6 +38,7 @@ export type Database = {
           processing_token?: string | null
           scope: string
           status?: string
+          submission_keys?: string[]
           user_id: string
         }
         Update: {
@@ -49,6 +51,7 @@ export type Database = {
           processing_token?: string | null
           scope?: string
           status?: string
+          submission_keys?: string[]
           user_id?: string
         }
         Relationships: []
@@ -998,6 +1001,10 @@ export type Database = {
           _user: string
         }
         Returns: undefined
+      }
+      submit_deletion_request: {
+        Args: { _scope: string; _submission: string }
+        Returns: Json
       }
       submit_patient_payment: { Args: { payload: Json }; Returns: string }
     }
