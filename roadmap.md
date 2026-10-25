@@ -1,5 +1,11 @@
 # Verma Gentle Cure — build roadmap
 
+## Environment-file security — October 25, 2026
+- [x] Verify actual Git index: `.env` and `.env.example` are tracked; eight template values are empty placeholders.
+- [ ] Add environment/private-file ignore rules — managed `.gitignore` rejects edits; owner PowerShell action required.
+- [x] Scan 243 tracked files, 326 reachable commits and 717 distinct blobs with local credential patterns; no confirmed private credentials. Scanner reported three assignment hits; follow-up classified two distinct historical/current matches as synthetic fixtures, leaving the other reported hit unconfirmed. Pattern scanning is not a guarantee.
+- [ ] Remove `.env` from Git tracking — stateful Git commands are agent-restricted; owner must run `git rm --cached -- .env` and verify index state.
+
 ## Final release-blockers verification — October 25, 2026
 - [x] Recheck tracking/history; .env remains tracked, .gitignore read-only and stateful Git restricted; owner-side commands documented.
 - [x] Compare all 20 migration hashes to hosted ledger and inspect security catalog; fresh isolated hosted target remains unavailable.
