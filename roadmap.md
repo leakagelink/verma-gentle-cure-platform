@@ -1,9 +1,12 @@
 # Verma Gentle Cure — build roadmap
 
 ## Final remediation audit
-- [ ] Implement public unauthenticated intake and verified-owner deletion processor with fail-closed retention, concurrency and readback.
-- [ ] Test deletion using synthetic/disposable data; independently re-audit security, migrations, secrets and lint.
-- [ ] Deliver exact final evidence and Android/retention/provider release blockers.
+- [x] Implement public unauthenticated intake and eligible verified-owner deletion processor with fail-closed retention, dependency fencing and readback.
+- [x] Run 46 isolated tests and synthetic public intake; independently inspect deployed policies, secrets, migration replay and lint.
+- [x] Deliver FINAL_REMEDIATION_REPORT.md with exact evidence and unresolved release blockers.
+- [ ] Hosted deletion/Auth/Storage/session tests — requesting user has no matched account; disposable hosted staging needed.
+- [ ] Retained-record account deletion and expiry — clinic/legal retention policy and approved archive/redaction design needed.
+- [ ] External ownership verification/closure and failed-job recovery — documented authorized operating procedure needed.
 
 ## Second uploaded audit
 - [x] Replace direct patient appointment/payment writes with narrow trusted operations; preserve clinical and cash/COD workflows.
@@ -21,7 +24,7 @@
 - [x] Run available security tests and public checks; deliver SECURITY_AUDIT.md with actual results and release gates.
 - [ ] Restore reproducible migration history — initial applied security migration missing from managed journal/files.
 - [x] Review completed deep scan: order/consultation underpayment findings addressed by guarded writes; findings retained pending post-change scan.
-- [ ] Publish updated public deletion resource — current live URL returns 404; owner deployment approval required.
+- [ ] Publish latest deletion form — live deletion/privacy URLs now return 200, but latest version deployment needs owner approval.
 - [ ] Captured-payment reconciliation/webhook, initiation lock and privileged settlement regression tests — require safe provider test setup and signed-in verification.
 - [ ] Authenticated end-to-end checks — requesting user has no matching signed-in account.
 - [ ] Deletion fulfillment, legal retention, Android AAB and Play declarations — require owner decisions and native project.

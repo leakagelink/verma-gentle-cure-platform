@@ -48,6 +48,21 @@ export async function processEligibleDeletion(
       freeze: async () => {
         const result = await admin.auth.admin.updateUserById(userId, { ban_duration: "876000h" });
         checked(result.error);
+        if (scope === "data") {
+          checked(
+            (
+              await admin.auth.admin.updateUserById(userId, {
+                user_metadata: {
+                  full_name: null,
+                  phone: null,
+                  name: null,
+                  avatar_url: null,
+                  picture: null,
+                },
+              })
+            ).error,
+          );
+        }
       },
       removeFiles: async () => {
         const paths = await files(userId);
@@ -98,6 +113,16 @@ export async function processEligibleDeletion(
           const identity = await admin.auth.admin.getUserById(userId);
           if (identity.data.user || identity.error?.status !== 404)
             throw new Error("Identity removal unverified");
+        } else {
+          const identity = await admin.auth.admin.getUserById(userId);
+          checked(identity.error);
+          if (
+            !identity.data.user ||
+            ["full_name", "phone", "name", "avatar_url", "picture"].some((key) =>
+              Boolean(identity.data.user?.user_metadata[key]),
+            )
+          )
+            throw new Error("Personal identity metadata remains");
         }
       },
       restore: async () => {
