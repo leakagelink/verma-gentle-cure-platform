@@ -12,15 +12,15 @@ export function validateStoragePage(data: unknown): { name: string; id: string |
     if (!entry || typeof entry !== "object") throw new Error("Invalid storage entry");
     const item = entry as Record<string, unknown>;
     if (
-      typeof item.name !== "string" ||
-      !item.name ||
-      item.name === "." ||
-      item.name === ".." ||
-      /[/\\]/.test(item.name) ||
-      !(item.id === null || (typeof item.id === "string" && item.id.length > 0))
+      typeof item["name"] !== "string" ||
+      !item["name"] ||
+      item["name"] === "." ||
+      item["name"] === ".." ||
+      /[/\\]/.test(item["name"]) ||
+      !(item["id"] === null || (typeof item["id"] === "string" && item["id"].length > 0))
     )
       throw new Error("Invalid storage entry");
-    return { name: item.name, id: item.id as string | null };
+    return { name: item["name"], id: item["id"] as string | null };
   });
 }
 
