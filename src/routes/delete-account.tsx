@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +42,7 @@ function DeleteAccountPage() {
   const [busy, setBusy] = useState(false);
   const [request, setRequest] = useState<{ id: string; status: string } | null>(null);
   const [error, setError] = useState("");
+  const submission = useRef<{ scope: "account" | "data"; id: string } | null>(null);
   return (
     <>
       <PageHero
@@ -91,7 +92,9 @@ function DeleteAccountPage() {
                 setBusy(true);
                 setError("");
                 try {
-                  setRequest(await requestDeletion({ data: { scope, confirmation } }));
+                  if (!submission.current || submission.current.scope !== scope)
+                    submission.current = { scope, id: crypto.randomUUID() };
+                  setRequest(await requestDeletion({ data: { scope, confirmation, submissionId: submission.current.id } }));
                 } catch (err) {
                   setError(err instanceof Error ? err.message : "Could not submit your request.");
                 } finally {

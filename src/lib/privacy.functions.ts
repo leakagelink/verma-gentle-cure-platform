@@ -7,33 +7,11 @@ export const requestAccountDeletion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => deletionRequestSchema.parse(input))
   .handler(async ({ data, context }) => {
-    // Identity comes only from the verified caller, never from input.
-    const { data: existing, error: readError } = await context.supabase
-      .from("account_deletion_requests")
-      .select("id, status, created_at, processing_state")
-      .eq("user_id", context.userId)
-      .eq("scope", data.scope)
-      .maybeSingle();
-    if (readError) throw new Error("Could not check your request. Please try again.");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    if (existing) {
-      if (data.scope === "data" && existing.processing_state === "completed") {
-        const reopened = await supabaseAdmin.rpc("reopen_data_deletion", {
-          _request: existing.id,
-          _user: context.userId,
-        });
-        if (reopened.error) throw new Error("Could not reopen your data deletion request.");
-        return { ...existing, processing_state: "pending" };
-      }
-      return existing;
-    }
-    const { data: request, error } = await supabaseAdmin
-      .from("account_deletion_requests")
-      .insert({ user_id: context.userId, scope: data.scope })
-      .select("id, status, created_at")
-      .single();
-    if (error || !request) throw new Error("Could not save your request. Please try again.");
-    return request;
+    const result = await context.supabase.rpc("submit_deletion_request", {
+      _scope: data.scope, _submission: data.submissionId,
+    });
+    if (result.error) throw new Error("Could not save your request. Please try again.");
+    return z.object({ id: z.string().uuid(), status: z.string(), processing_state: z.string(), created_at: z.string() }).parse(result.data);
   });
 
 export const listDeletionRequests = createServerFn({ method: "POST" })
