@@ -5,11 +5,16 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { loadEnv } from "vite";
+import { publicBackendDefines } from "./config/public-backend";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // Keep public browser configuration available after .env is removed from tracking.
+  // Environment-provided values take precedence, including isolated previews.
+  define: publicBackendDefines(loadEnv(mode, process.cwd(), "VITE_")),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-});
+}));

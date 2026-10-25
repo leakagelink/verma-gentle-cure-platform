@@ -1,5 +1,11 @@
 # Verma Gentle Cure — build roadmap
 
+## Installed app startup — October 25, 2026
+- [x] Reproduce the reported error on the live website: published browser connection variables are missing; local preview works.
+- [x] Add public-only build connection defaults with environment overrides, preserving generated integration files and local secrets.
+- [x] Verify configuration regression tests (3 passed), successful automatic build and phone-sized preview startup (no page errors).
+- [ ] Verify corrected published startup — requires publishing the updated website; installed Android bundle is not present here.
+
 ## Environment-file security — October 25, 2026
 - [x] Verify actual Git index: `.env` and `.env.example` are tracked; eight template values are empty placeholders.
 - [ ] Add environment/private-file ignore rules — managed `.gitignore` rejects edits; owner PowerShell action required.
