@@ -367,18 +367,30 @@ describe("direct PostgreSQL security regression", () => {
     const former = "00000000-0000-4000-8000-000000000070";
     const request = "00000000-0000-4000-8000-000000000071";
     await reset();
-    await db.exec(`INSERT INTO auth.users(id) VALUES('${former}'); INSERT INTO public.clinical_assignments(patient_id,doctor_id,assigned_by) VALUES('${other}','${other}','${former}'); INSERT INTO public.account_deletion_requests(id,user_id,scope) VALUES('${request}','${former}','account'); SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`);
-    const result = await db.query<{ result: { state: string } }>(`SELECT public.claim_account_deletion('${request}') result`);
+    await db.exec(
+      `INSERT INTO auth.users(id) VALUES('${former}'); INSERT INTO public.clinical_assignments(patient_id,doctor_id,assigned_by) VALUES('${other}','${other}','${former}'); INSERT INTO public.account_deletion_requests(id,user_id,scope) VALUES('${request}','${former}','account'); SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`,
+    );
+    const result = await db.query<{ result: { state: string } }>(
+      `SELECT public.claim_account_deletion('${request}') result`,
+    );
     expect(result.rows[0]?.result.state).toBe("blocked");
     await reset();
-    const assignments = await db.query("SELECT assigned_by FROM public.clinical_assignments WHERE assigned_by=$1", [former]);
+    const assignments = await db.query(
+      "SELECT assigned_by FROM public.clinical_assignments WHERE assigned_by=$1",
+      [former],
+    );
     expect(assignments.rows).toHaveLength(1);
   });
   it("reopens completed data-only requests while preserving the previous receipt", async () => {
     const request = "00000000-0000-4000-8000-000000000080";
     await reset();
-    await db.exec(`SELECT set_config('request.jwt.claim.role','service_role',false); INSERT INTO public.account_deletion_requests(id,user_id,scope,processing_state,completed_at) VALUES('${request}','${patient}','data','completed',now()); SELECT public.reopen_data_deletion('${request}','${patient}');`);
-    const result = await db.query<{ processing_state: string; history: number }>("SELECT processing_state,jsonb_array_length(processing_history) history FROM public.account_deletion_requests WHERE id=$1", [request]);
+    await db.exec(
+      `SELECT set_config('request.jwt.claim.role','service_role',false); INSERT INTO public.account_deletion_requests(id,user_id,scope,processing_state,completed_at) VALUES('${request}','${patient}','data','completed',now()); SELECT public.reopen_data_deletion('${request}','${patient}');`,
+    );
+    const result = await db.query<{ processing_state: string; history: number }>(
+      "SELECT processing_state,jsonb_array_length(processing_history) history FROM public.account_deletion_requests WHERE id=$1",
+      [request],
+    );
     expect(result.rows[0]).toEqual({ processing_state: "pending", history: 1 });
   });
 });
