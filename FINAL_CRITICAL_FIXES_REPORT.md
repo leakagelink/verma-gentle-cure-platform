@@ -53,7 +53,7 @@ Managed tool output also regenerated `src/integrations/supabase/types.ts` and ap
 | `bunx vitest run src/lib/migration-replay.test.ts` | Suite included in final full run | 5 tests passed; full baseline replay through 0019, missing-baseline reproduction, required fields, triggers and financial privileges |
 | `bunx eslint .` | Local repository | **FAILED: 1,041 errors and 8 warnings** in final run |
 | Changed-file ESLint (command below) | Local repository | PASS, exit 0, no output |
-| Automatic platform typecheck/build | Preview harness | Latest entry `2026-10-25T03:56:15Z: build OK`; manual build/typecheck was not run because platform instructions prohibit duplicate invocation |
+| Automatic platform typecheck/build | Preview harness | Latest entry `2026-10-25T04:00:14Z: build OK`; manual build/typecheck was not run because platform instructions prohibit duplicate invocation |
 | `lovable auth-session --json --self` | Hosted shared backend | FAILED: no Auth user matches requesting user's email; did not select or impersonate another existing account |
 | Managed migration tool for 0018/0019 | Hosted shared backend | Both reported applied; subsequent catalog readback confirmed new functions and intended execution ACLs |
 | Hosted catalog read tools | Shared backend, read-only | All 19 application tables have RLS enabled; clinical/finance scope policies confirmed restrictive; patient direct order/payment insertion revoked; service-only settlement/receipt function ACLs confirmed |
