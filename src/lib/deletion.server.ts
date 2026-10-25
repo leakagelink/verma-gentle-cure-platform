@@ -49,9 +49,19 @@ export async function processEligibleDeletion(
         const result = await admin.auth.admin.updateUserById(userId, { ban_duration: "876000h" });
         checked(result.error);
         if (scope === "data") {
-          checked((await admin.auth.admin.updateUserById(userId, {
-            user_metadata: { full_name: null, phone: null, name: null, avatar_url: null, picture: null },
-          })).error);
+          checked(
+            (
+              await admin.auth.admin.updateUserById(userId, {
+                user_metadata: {
+                  full_name: null,
+                  phone: null,
+                  name: null,
+                  avatar_url: null,
+                  picture: null,
+                },
+              })
+            ).error,
+          );
         }
       },
       removeFiles: async () => {
@@ -106,7 +116,13 @@ export async function processEligibleDeletion(
         } else {
           const identity = await admin.auth.admin.getUserById(userId);
           checked(identity.error);
-          if (!identity.data.user || ["full_name", "phone", "name", "avatar_url", "picture"].some(key => Boolean(identity.data.user?.user_metadata[key]))) throw new Error("Personal identity metadata remains");
+          if (
+            !identity.data.user ||
+            ["full_name", "phone", "name", "avatar_url", "picture"].some((key) =>
+              Boolean(identity.data.user?.user_metadata[key]),
+            )
+          )
+            throw new Error("Personal identity metadata remains");
         }
       },
       restore: async () => {

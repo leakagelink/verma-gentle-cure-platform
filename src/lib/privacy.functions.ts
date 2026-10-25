@@ -18,7 +18,10 @@ export const requestAccountDeletion = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     if (existing) {
       if (data.scope === "data" && existing.processing_state === "completed") {
-        const reopened = await supabaseAdmin.rpc("reopen_data_deletion", { _request: existing.id, _user: context.userId });
+        const reopened = await supabaseAdmin.rpc("reopen_data_deletion", {
+          _request: existing.id,
+          _user: context.userId,
+        });
         if (reopened.error) throw new Error("Could not reopen your data deletion request.");
         return { ...existing, processing_state: "pending" };
       }
@@ -72,7 +75,9 @@ export const submitExternalDeletion = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     // Deduplicate the same contact/scope per day, not unrelated shared-IP users.
     // Deployment-level rate limiting remains separate; never discard distinct requests.
-    const bytes = new TextEncoder().encode(`${data.contact.toLowerCase()}:${data.scope}:${new Date().toISOString().slice(0, 10)}`);
+    const bytes = new TextEncoder().encode(
+      `${data.contact.toLowerCase()}:${data.scope}:${new Date().toISOString().slice(0, 10)}`,
+    );
     const rateKey = Array.from(
       new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
       (byte) => byte.toString(16).padStart(2, "0"),
