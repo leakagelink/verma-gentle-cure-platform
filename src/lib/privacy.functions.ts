@@ -2,7 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { deletionRequestSchema } from "./privacy-rules";
 import { z } from "zod";
-import { getRequest } from "@tanstack/react-start/server";
 
 export const requestAccountDeletion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -11,13 +10,20 @@ export const requestAccountDeletion = createServerFn({ method: "POST" })
     // Identity comes only from the verified caller, never from input.
     const { data: existing, error: readError } = await context.supabase
       .from("account_deletion_requests")
-      .select("id, status, created_at")
+      .select("id, status, created_at, processing_state")
       .eq("user_id", context.userId)
       .eq("scope", data.scope)
       .maybeSingle();
     if (readError) throw new Error("Could not check your request. Please try again.");
-    if (existing) return existing;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (existing) {
+      if (data.scope === "data" && existing.processing_state === "completed") {
+        const reopened = await supabaseAdmin.rpc("reopen_data_deletion", { _request: existing.id, _user: context.userId });
+        if (reopened.error) throw new Error("Could not reopen your data deletion request.");
+        return { ...existing, processing_state: "pending" };
+      }
+      return existing;
+    }
     const { data: request, error } = await supabaseAdmin
       .from("account_deletion_requests")
       .insert({ user_id: context.userId, scope: data.scope })
@@ -64,9 +70,9 @@ export const submitExternalDeletion = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    const request = getRequest();
-    const source = request.headers.get("cf-connecting-ip") ?? "unknown";
-    const bytes = new TextEncoder().encode(`${source}:${new Date().toISOString().slice(0, 10)}`);
+    // Deduplicate the same contact/scope per day, not unrelated shared-IP users.
+    // Deployment-level rate limiting remains separate; never discard distinct requests.
+    const bytes = new TextEncoder().encode(`${data.contact.toLowerCase()}:${data.scope}:${new Date().toISOString().slice(0, 10)}`);
     const rateKey = Array.from(
       new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
       (byte) => byte.toString(16).padStart(2, "0"),

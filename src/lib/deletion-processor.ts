@@ -14,8 +14,8 @@ export type DeletionOperations = {
 export async function executeDeletion(job: DeletionJob, ops: DeletionOperations) {
   try {
     await ops.freeze();
-    await ops.removeFiles();
     await ops.purge();
+    await ops.removeFiles();
     if (job.scope === "account") await ops.removeIdentity();
     await ops.verify();
     if (job.scope === "data") await ops.restore();

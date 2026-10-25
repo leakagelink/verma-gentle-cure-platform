@@ -354,4 +354,9 @@ describe("direct PostgreSQL security regression", () => {
     );
     expect(receipt.rows[0]?.processing_state).toBe("processing");
   });
+  it("blocks new clinical dependencies after a deletion claim", async () => {
+    await reset();
+    await db.exec("SELECT set_config('request.jwt.claim.role','service_role',false)");
+    await expect(db.exec(`INSERT INTO public.clinical_assignments(patient_id,doctor_id,assigned_by) VALUES('00000000-0000-4000-8000-000000000050','${other}','${other}')`)).rejects.toThrow("privacy processing");
+  });
 });

@@ -22,12 +22,12 @@ describe("eligible deletion orchestration", () => {
     expect(await executeDeletion({ userId: "synthetic", scope: "account" }, ops)).toEqual({
       state: "completed",
     });
-    expect(calls).toEqual(["freeze", "removeFiles", "purge", "removeIdentity", "verify", "finish"]);
+    expect(calls).toEqual(["freeze", "purge", "removeFiles", "removeIdentity", "verify", "finish"]);
   });
   it("data-only deletion keeps credentials and restores sign-in after verified removal", async () => {
     const { ops, calls } = operations();
     await executeDeletion({ userId: "synthetic", scope: "data" }, ops);
-    expect(calls).toEqual(["freeze", "removeFiles", "purge", "verify", "restore", "finish"]);
+    expect(calls).toEqual(["freeze", "purge", "removeFiles", "verify", "restore", "finish"]);
   });
   for (const step of ["freeze", "removeFiles", "purge", "removeIdentity", "verify", "finish"]) {
     it(`never reports partial ${step} failure as completed`, async () => {
