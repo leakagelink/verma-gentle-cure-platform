@@ -55,7 +55,7 @@ export const Route = createFileRoute("/privacy-policy")({
           {
             heading: "Service providers and payments",
             body: [
-              "Lovable Cloud provides hosting, account authentication, application data and private report storage. Razorpay processes online payments; payment identifiers, amount and status are stored for receipts and reconciliation. The app does not collect or store your full card number, CVV or UPI PIN.",
+              "Our cloud service provider supplies hosting, account authentication, application data and private report storage. Razorpay processes online payments; payment identifiers, amount and status are stored for receipts and reconciliation. The app does not collect or store your full card number, CVV or UPI PIN.",
               "WhatsApp, Instagram and map links open third-party services whose own privacy terms apply. Medical reports are not automatically sent to those services. Google Fonts supplies the website fonts. Technical requests may include IP address and browser/device information used by hosting and service providers to deliver and secure the service.",
             ],
           },
