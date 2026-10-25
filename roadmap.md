@@ -17,7 +17,7 @@
 - [ ] Fresh supported hosted baseline replay — platform-provisioned baseline and isolated hosted environment required; test shim is not deployable.
 - [ ] Hosted Auth/Storage/session deletion — no matched requesting-user account or authorized disposable hosted test environment.
 - [ ] Retention minimization/expiry and failed-job worker recovery — approved clinic/legal retention rules and authorized recovery design required.
-- [ ] Environment untracking and repository lint — read-only .gitignore/stateful Git restrictions and protected generated formatting require owner/platform action.
+- [ ] Environment untracking — read-only .gitignore/stateful Git restrictions require owner action; repository lint now exits 0 with 8 documented warnings.
 - [ ] Native release evidence — Android project, signed AAB, Play declarations and professional credential verification required.
 
 ## Final remediation audit
