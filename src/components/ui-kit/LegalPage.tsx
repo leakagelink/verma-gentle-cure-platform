@@ -1,3 +1,5 @@
+import { Instagram, MessageCircle, Phone } from "lucide-react";
+
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { CLINIC } from "@/lib/site-data";
 
@@ -31,6 +33,27 @@ export function LegalPage({
         <p className="mt-12 rounded-2xl border border-border surface-ivory p-5 text-xs leading-relaxed text-muted-foreground">
           {CLINIC.disclaimer} For questions about this page, write to {CLINIC.email}.
         </p>
+        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl border border-border bg-card p-5 text-sm font-semibold text-navy">
+          <a href={CLINIC.phoneHref} className="inline-flex items-center gap-2">
+            <Phone className="size-4 text-leaf" /> Call Clinic: {CLINIC.phone}
+          </a>
+          <a
+            href={CLINIC.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2"
+          >
+            <MessageCircle className="size-4 text-leaf" /> WhatsApp: {CLINIC.whatsapp}
+          </a>
+          <a
+            href={CLINIC.instagramHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2"
+          >
+            <Instagram className="size-4 text-leaf" /> Instagram: {CLINIC.instagram}
+          </a>
+        </div>
       </section>
     </>
   );

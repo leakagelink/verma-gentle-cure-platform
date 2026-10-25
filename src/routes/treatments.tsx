@@ -19,6 +19,7 @@ export const Route = createFileRoute("/treatments")({
         content: "Areas of homeopathic consultation at Verma Gentle Cure.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/treatments" },
     ],
     links: [{ rel: "canonical", href: "/treatments" }],

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
@@ -9,9 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { createOrder } from "@/lib/commerce.functions";
+import { COUPONS } from "@/lib/products";
 import { useCart } from "@/lib/cart-store";
 import { COUPON_STORAGE_KEY, useStoreSettings, type PaymentMethod } from "@/lib/products";
+import { loadCheckout } from "@/lib/razorpay-checkout";
+import {
+  confirmOnlinePayment,
+  failOnlinePayment,
+  startOnlinePayment,
+} from "@/lib/razorpay.functions";
 import { formatINR } from "@/lib/shop-data";
 import { cn } from "@/lib/utils";
 
@@ -19,10 +27,14 @@ export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
       { title: "Checkout | Verma Gentle Cure" },
-      { name: "description", content: "Confirm your delivery details and place your medicine order." },
+      {
+        name: "description",
+        content: "Confirm your delivery details and place your medicine order.",
+      },
       { property: "og:title", content: "Checkout | Verma Gentle Cure" },
       { property: "og:description", content: "Confirm delivery details and place your order." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/checkout" },
       { name: "robots", content: "noindex" },
     ],
@@ -37,9 +49,19 @@ function CheckoutPage() {
   const { settings } = useStoreSettings();
   const navigate = useNavigate();
 
-  const [placed, setPlaced] = useState<{ orderNo: string; method: PaymentMethod } | null>(null);
+  const [placed, setPlaced] = useState<{
+    orderNo: string;
+    method: PaymentMethod;
+    paid: boolean;
+  } | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("cod");
   const [saving, setSaving] = useState(false);
+  const submission = useRef<{ fingerprint: string; id: string } | null>(null);
+  const submitting = useRef(false);
+  const submitOrder = useServerFn(createOrder);
+  const startPay = useServerFn(startOnlinePayment);
+  const confirmPay = useServerFn(confirmOnlinePayment);
+  const failPay = useServerFn(failOnlinePayment);
   const [coupon, setCoupon] = useState<{ code: string; rate: number } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
@@ -56,7 +78,11 @@ function CheckoutPage() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(COUPON_STORAGE_KEY);
-      if (raw) setCoupon(JSON.parse(raw) as { code: string; rate: number });
+      if (raw) {
+        const stored = JSON.parse(raw) as { code?: string };
+        const code = stored.code?.toUpperCase();
+        if (code && COUPONS[code] !== undefined) setCoupon({ code, rate: COUPONS[code] });
+      }
     } catch {
       /* ignore malformed storage */
     }
@@ -77,16 +103,14 @@ function CheckoutPage() {
 
   const discount = coupon ? Math.round(subtotal * coupon.rate) : 0;
   const payable = Math.max(0, subtotal - discount);
-  const delivery =
-    subtotal === 0 || payable >= settings.free_delivery_over ? 0 : settings.delivery_fee;
+  const delivery = subtotal === 0 ? 0 : 125;
   const total = payable + delivery;
 
   const codBlocked =
-    !settings.cod_enabled ||
-    total < settings.cod_min_order ||
-    total > settings.cod_max_order;
+    !settings.cod_enabled || total < settings.cod_min_order || total > settings.cod_max_order;
 
   async function placeOrder() {
+    if (submitting.current) return;
     if (!user) {
       toast.error("Please sign in to place your order.");
       void navigate({ to: "/auth" });
@@ -111,61 +135,119 @@ function CheckoutPage() {
       return;
     }
 
+    submitting.current = true;
     setSaving(true);
-    const { data: order, error } = await supabase
-      .from("orders")
-      .insert({
-        user_id: user.id,
-        customer_name: form.name.trim(),
-        phone: form.mobile.trim(),
-        email: form.email.trim(),
-        address: form.address.trim(),
-        city: form.city.trim(),
-        state: form.state.trim(),
-        pincode: form.pincode.trim(),
-        payment_method: method,
-        payment_status: "pending",
-        status: "placed",
-        subtotal,
-        discount,
-        delivery_fee: delivery,
-        total,
-        coupon: coupon?.code ?? null,
-        notes: form.notes.trim() || null,
-      })
-      .select("id, order_no")
-      .single();
-
-    if (error || !order) {
+    const fingerprint = JSON.stringify({
+      form,
+      method,
+      coupon: coupon?.code,
+      items: items.map(({ medicine, qty }) => [medicine.slug, qty]),
+    });
+    if (submission.current?.fingerprint !== fingerprint)
+      submission.current = { fingerprint, id: crypto.randomUUID() };
+    let order: Awaited<ReturnType<typeof submitOrder>>;
+    try {
+      order = await submitOrder({
+        data: {
+          request_id: submission.current.id,
+          customer_name: form.name.trim(),
+          phone: form.mobile.trim(),
+          email: form.email.trim(),
+          address: form.address.trim(),
+          city: form.city.trim(),
+          state: form.state.trim(),
+          pincode: form.pincode.trim(),
+          payment_method: method,
+          coupon: coupon?.code ?? null,
+          notes: form.notes.trim(),
+          items: items.map(({ medicine, qty }) => ({ slug: medicine.slug, qty })),
+        },
+      });
+    } catch {
+      submitting.current = false;
       setSaving(false);
-      toast.error("We could not place your order. Please try again.");
+      toast.error("Could not place the order. Please check product availability and try again.");
       return;
     }
-
-    const { error: itemsError } = await supabase.from("order_items").insert(
-      items.map(({ medicine, qty }) => ({
-        order_id: order.id,
-        slug: medicine.slug,
-        name: medicine.name,
-        pack: medicine.pack,
-        price: medicine.price,
-        qty,
-        line_total: medicine.price * qty,
-      })),
-    );
     setSaving(false);
-    if (itemsError) {
-      toast.error("Order saved, but some items could not be added. Our team will call you.");
-    }
+    submitting.current = false;
 
-    setPlaced({ orderNo: order.order_no, method });
     clear();
     try {
       localStorage.removeItem(COUPON_STORAGE_KEY);
     } catch {
       /* ignore */
     }
+
+    if (method !== "cod") {
+      const paid = await payNow(order.id, order.order_no);
+      setPlaced({ orderNo: order.order_no, method, paid });
+      return;
+    }
+
+    setPlaced({ orderNo: order.order_no, method, paid: false });
     toast.success("Order placed");
+  }
+
+  /** Opens the Razorpay window right after the order is created. */
+  async function payNow(orderId: string, orderNo: string) {
+    try {
+      const ready = await loadCheckout();
+      const Razorpay = window.Razorpay;
+      if (!ready || !Razorpay) throw new Error("Could not open the payment window");
+      const session = await startPay({ data: { kind: "order", orderId } });
+      return await new Promise<boolean>((resolve) => {
+        const rz = new Razorpay({
+          key: session.keyId,
+          amount: session.amount * 100,
+          currency: "INR",
+          name: "Verma Gentle Cure",
+          description: `Medicine order ${orderNo}`,
+          order_id: session.orderId,
+          prefill: {
+            name: form.name.trim(),
+            email: form.email.trim(),
+            contact: form.mobile.trim(),
+          },
+          handler: async (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) => {
+            try {
+              await confirmPay({
+                data: {
+                  paymentId: session.paymentId,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  signature: response.razorpay_signature,
+                  method: method === "upi" ? "upi" : "card",
+                },
+              });
+              toast.success("Payment successful — your receipt is ready.");
+              resolve(true);
+            } catch {
+              toast.error("Payment could not be verified. Please contact the clinic.");
+              resolve(false);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              void failPay({
+                data: { paymentId: session.paymentId, reason: "Cancelled by patient" },
+              });
+              toast.error("Payment cancelled — you can pay again from Payments & receipts.");
+              resolve(false);
+            },
+          },
+          theme: { color: "#063B52" },
+        });
+        rz.open();
+      });
+    } catch {
+      toast.error("Could not open the payment window. You can pay from Payments & receipts.");
+      return false;
+    }
   }
 
   if (placed) {
@@ -177,10 +259,19 @@ function CheckoutPage() {
         <h1 className="mt-5 text-3xl text-navy">Order placed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Order ID <strong className="text-navy">{placed.orderNo}</strong> · Payment status:{" "}
-          {placed.method === "cod" ? "Pending (Cash on Delivery)" : "Pending"}
+          {placed.paid
+            ? "Paid"
+            : placed.method === "cod"
+              ? "Pending (Cash on Delivery)"
+              : "Pending"}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild className="rounded-full">
+          {!placed.paid && placed.method !== "cod" && (
+            <Button asChild className="rounded-full">
+              <Link to="/billing">Pay now</Link>
+            </Button>
+          )}
+          <Button asChild variant={placed.paid ? "default" : "outline"} className="rounded-full">
             <Link to="/orders">Track my orders</Link>
           </Button>
           <Button asChild variant="outline" className="rounded-full">
@@ -202,30 +293,31 @@ function CheckoutPage() {
     );
   }
 
-  const methodOptions: { value: PaymentMethod; title: string; body: string; disabled: boolean }[] = [
-    {
-      value: "online",
-      title: "Online payment",
-      body: settings.online_payment_enabled ? "Card / Netbanking" : "Not enabled yet",
-      disabled: !settings.online_payment_enabled,
-    },
-    {
-      value: "upi",
-      title: "UPI",
-      body: settings.upi_enabled ? "Any UPI app" : "Not enabled yet",
-      disabled: !settings.upi_enabled,
-    },
-    {
-      value: "cod",
-      title: "Cash on Delivery",
-      body: settings.cod_enabled
-        ? codBlocked
-          ? `Available for orders ${formatINR(settings.cod_min_order)}–${formatINR(settings.cod_max_order)}`
-          : "Pay the delivery partner"
-        : "Currently turned off",
-      disabled: codBlocked,
-    },
-  ];
+  const methodOptions: { value: PaymentMethod; title: string; body: string; disabled: boolean }[] =
+    [
+      {
+        value: "online",
+        title: "Online payment",
+        body: settings.online_payment_enabled ? "Card / Netbanking" : "Not enabled yet",
+        disabled: !settings.online_payment_enabled,
+      },
+      {
+        value: "upi",
+        title: "UPI",
+        body: settings.upi_enabled ? "Any UPI app" : "Not enabled yet",
+        disabled: !settings.upi_enabled,
+      },
+      {
+        value: "cod",
+        title: "Cash on Delivery",
+        body: settings.cod_enabled
+          ? codBlocked
+            ? `Available for orders ${formatINR(settings.cod_min_order)}–${formatINR(settings.cod_max_order)}`
+            : "Pay the delivery partner"
+          : "Currently turned off",
+        disabled: codBlocked,
+      },
+    ];
 
   return (
     <>
@@ -319,8 +411,8 @@ function CheckoutPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            Payment options are managed by the clinic. Orders paid online or by UPI are recorded with
-            payment status Pending until the gateway is connected.
+            Payment options are managed by the clinic. Choosing UPI or online payment opens the
+            secure payment window as soon as you place the order.
           </p>
         </div>
 
@@ -361,7 +453,11 @@ function CheckoutPage() {
             onClick={() => void placeOrder()}
             disabled={saving}
           >
-            {saving ? "Placing order…" : "Place order"}
+            {saving
+              ? "Placing order…"
+              : method === "cod"
+                ? "Place order"
+                : `Place order & pay ${formatINR(total)}`}
           </Button>
         </aside>
       </section>

@@ -1,0 +1,146 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789739565640,
+      "tag": "0000_prescription_details_and_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789740426976,
+      "tag": "0001_payments_and_billing",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789740965254,
+      "tag": "0002_payments_gateway_order_id",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792164269880,
+      "tag": "0003_homeopathic_kits_catalogue_and_shipping_charges",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792164500961,
+      "tag": "0004_real_kit_names_and_photos",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792839992607,
+      "tag": "0005_account_data_deletion_requests",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792852277642,
+      "tag": "0006_health_consent_and_financial_immutability",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792852670872,
+      "tag": "0007_gateway_uniqueness_and_atomic_stock_restore",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792853328125,
+      "tag": "0008_version_verified_gateway_settlement",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792853388261,
+      "tag": "0009_trusted_patient_actions_and_consent_receipts",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792853474997,
+      "tag": "0010_durable_checkout_and_gateway_initiation",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792853495382,
+      "tag": "0011_checkout_result_binding",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792854305890,
+      "tag": "0012_version_clinical_and_commerce_guardrails",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792854406898,
+      "tag": "0013_trusted_manual_settlement_and_amounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792860764355,
+      "tag": "0014_verified_deletion_processing_and_public_intake",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792861130403,
+      "tag": "0015_version_clinical_scope_and_deletion_holds",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792898858355,
+      "tag": "0016_version_report_consent_and_clinical_baseline_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792899644917,
+      "tag": "0017_deletion_retention_fence_and_processing_generations",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792900407749,
+      "tag": "0018_deletion_cross_scope_and_receipt_recovery",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1792900516556,
+      "tag": "0019_deletion_submission_generation_keys",
+      "breakpoints": true
+    }
+  ]
+}

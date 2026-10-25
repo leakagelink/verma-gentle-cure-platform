@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Award,
   BadgeCheck,
   BellRing,
   CalendarDays,
@@ -15,8 +16,7 @@ import {
   Video,
 } from "lucide-react";
 
-import heroImage from "@/assets/hero-remedies.jpg";
-import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
 import { MobileHome } from "@/components/home/MobileHome";
 import { SectionHeading } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
+  AWARDS,
   BLOG_POSTS,
   CLINIC,
   CONDITIONS,
@@ -41,6 +42,7 @@ import {
   SERVICES,
   STEPS,
   TESTIMONIALS,
+  TIMELINE,
   TRUST_POINTS,
   WHY_US,
 } from "@/lib/site-data";
@@ -68,13 +70,19 @@ export const Route = createFileRoute("/")({
         content:
           "Book an online homeopathic consultation with Dr. Rajshree Verma, receive a digital prescription and order authentic homeopathic medicines with delivery across India.",
       },
-      { property: "og:title", content: "Verma Gentle Cure — Natural Healing. Personalized Care." },
+      {
+        property: "og:title",
+        content: "Verma Gentle Cure — Dr. Rajshree Verma, Homeopathic Physician, Jamshedpur",
+      },
       {
         property: "og:description",
         content:
           "Personalised homeopathic consultation, digital prescriptions and authentic medicine delivery.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: heroPortrait.url },
+      { name: "twitter:image", content: heroPortrait.url },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -88,7 +96,11 @@ export const Route = createFileRoute("/")({
           medicalSpecialty: "Homeopathic",
           address: CLINIC.address,
           telephone: CLINIC.phone,
+          foundingDate: "2026-03-23",
+          founder: { "@type": "Person", name: "Dr. Rajshree Verma" },
+          parentOrganization: { "@type": "Organization", name: CLINIC.corporate },
           email: CLINIC.email,
+          sameAs: [CLINIC.instagramHref],
         }),
       },
     ],
@@ -108,6 +120,8 @@ function HomePage() {
         <HowItWorks />
         <HealthConditions />
         <WhyUs />
+        <Awards />
+        <HomeTimeline />
         <Testimonials />
         <BlogPreview />
         <Faq />
@@ -128,24 +142,33 @@ function Hero() {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-leaf/30 bg-card px-3.5 py-1.5 text-xs font-semibold text-forest">
             <span className="size-1.5 rounded-full bg-lime" />
-            Online consultation available today
+            Gentle Care. Individual Attention.
           </span>
           <h1 className="mt-4 text-3xl leading-[1.08] text-navy text-balance-tight sm:mt-6 sm:text-5xl lg:text-6xl">
-            Natural Healing.
-            <br />
-            <span className="text-forest">Personalized Care.</span>
+            Welcome to <span className="text-forest">Verma Gentle Cure</span>
           </h1>
           <p className="mt-3 font-display text-lg text-teal">
-            Personalized homeopathic consultation designed around you.
+            Dr. Rajshree Verma (BHMS) · Homeopathic Physician · 6 Years of Experience
           </p>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">
-            Connect with a qualified homeopathic doctor, discuss your health concerns, and receive
-            personalized consultation and treatment recommendations.
+            Verma Gentle Cure is a homeopathic healthcare clinic in Jamshedpur founded by Dr.
+            Rajshree Verma (BHMS). Our approach emphasizes individualized consultation,
+            compassionate care and attention to the patient's overall health needs.
+          </p>
+          <p className="mt-3 text-sm font-semibold text-navy">
+            <a href={CLINIC.phoneHref}>Call Clinic: {CLINIC.phone}</a> ·{" "}
+            <a href={CLINIC.whatsappHref} target="_blank" rel="noopener noreferrer">
+              WhatsApp: {CLINIC.whatsapp}
+            </a>
           </p>
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:gap-3">
-            <Button asChild size="lg" className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base">
+            <Button
+              asChild
+              size="lg"
+              className="h-12 rounded-xl px-3 text-sm sm:h-13 sm:rounded-full sm:px-7 sm:text-base"
+            >
               <Link to="/book-appointment">
-                Book Online Consultation <ArrowRight className="size-4" />
+                Book Appointment <ArrowRight className="size-4" />
               </Link>
             </Button>
             <Button
@@ -154,14 +177,14 @@ function Hero() {
               variant="outline"
               className="h-12 rounded-xl border-navy/25 px-3 text-sm text-navy sm:h-13 sm:rounded-full sm:px-7 sm:text-base"
             >
-              <Link to="/medicines">Explore Medicines</Link>
+              <Link to="/contact">Contact Clinic</Link>
             </Button>
           </div>
           <dl className="mt-6 grid max-w-lg grid-cols-3 gap-3 border-t border-border pt-4 sm:mt-10 sm:gap-4 sm:pt-6">
             {[
-              ["20+ yrs", "Clinical practice"],
-              ["Secure", "Medical records"],
-              ["Pan-India", "Medicine delivery"],
+              ["6 yrs", "Professional experience"],
+              ["23 Mar 2026", "Clinic inaugurated"],
+              ["Media", "Featured"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="font-display text-lg text-navy">{k}</dt>
@@ -174,11 +197,11 @@ function Hero() {
         <div className="relative">
           <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-[var(--shadow-lift)]">
             <img
-              src={heroImage}
-              alt="Homeopathic globules, glass vials and fresh leaves on a warm ivory surface"
-              width={1280}
-              height={1600}
-              className="h-64 w-full object-cover sm:h-[26rem] lg:h-[34rem]"
+              src={heroPortrait.url}
+              alt="Dr. Rajshree Verma, Homeopathic Physician at Verma Gentle Cure"
+              width={1024}
+              height={1536}
+              className="h-64 w-full object-cover object-top sm:h-[26rem] lg:h-[34rem]"
             />
           </div>
           <div className="absolute -bottom-4 left-3 right-3 rounded-xl border border-border bg-card p-3 shadow-[var(--shadow-soft)] sm:-bottom-6 sm:left-8 sm:right-auto sm:w-72 sm:rounded-2xl sm:p-4">
@@ -187,8 +210,8 @@ function Hero() {
                 <CalendarDays className="size-5" />
               </span>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-navy">Next available slot</p>
-                <p className="truncate text-xs text-muted-foreground">Today · 5:30 PM · Video</p>
+                <p className="truncate text-sm font-semibold text-navy">In-clinic & online</p>
+                <p className="truncate text-xs text-muted-foreground">Kadma Market, Jamshedpur</p>
               </div>
             </div>
           </div>
@@ -205,7 +228,10 @@ function TrustStrip() {
         {TRUST_POINTS.map((point) => {
           const Icon = ICONS[point.icon as keyof typeof ICONS];
           return (
-            <div key={point.title} className="card-premium flex w-[82vw] shrink-0 snap-start items-start gap-3 p-4 sm:w-auto sm:p-5">
+            <div
+              key={point.title}
+              className="card-premium flex w-[82vw] shrink-0 snap-start items-start gap-3 p-4 sm:w-auto sm:p-5"
+            >
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-mint text-forest">
                 <Icon className="size-5" />
               </span>
@@ -228,11 +254,11 @@ function AboutDoctor() {
         <div className="relative">
           <div className="overflow-hidden rounded-[2rem] border border-border bg-card">
             <img
-              src={doctorImage}
+              src={heroPortrait.url}
               alt="Dr. Rajshree Verma, homeopathic physician"
               loading="lazy"
               width={1024}
-              height={1280}
+              height={1536}
               className="h-72 w-full object-cover object-top sm:h-[28rem]"
             />
           </div>
@@ -245,23 +271,28 @@ function AboutDoctor() {
           <SectionHeading
             eyebrow="About the doctor"
             title="Dr. Rajshree Verma"
-            description="Homeopathic physician with two decades of clinical practice, known for detailed case-taking and an unhurried, patient-first consultation style."
+            description="Dr. Rajshree Verma (BHMS) is a homeopathic physician and founder of Verma Gentle Cure, with 6 years of experience and an individualized, compassionate approach."
           />
           <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-4">
             {[
               ["Qualifications", "BHMS, with continued clinical education in classical homeopathy"],
-              ["Experience", "20+ years of consulting practice across chronic and acute cases"],
+              ["Experience", "6 years of professional experience"],
               [
                 "Areas of focus",
                 "Chronic conditions, skin & hair, women's wellness, children's care",
               ],
               ["Approach", "Detailed history, clear explanations, structured follow-up reviews"],
             ].map(([title, body]) => (
-              <div key={title} className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
+              <div
+                key={title}
+                className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5"
+              >
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
                   {title}
                 </p>
-                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:line-clamp-none sm:text-sm">{body}</p>
+                <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:mt-2 sm:line-clamp-none sm:text-sm">
+                  {body}
+                </p>
               </div>
             ))}
           </div>
@@ -288,7 +319,10 @@ function Services() {
         {SERVICES.map((service) => {
           const Icon = ICONS[service.icon as keyof typeof ICONS];
           return (
-            <article key={service.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col p-5 sm:w-auto sm:p-6">
+            <article
+              key={service.slug}
+              className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col p-5 sm:w-auto sm:p-6"
+            >
               <span className="grid size-12 place-items-center rounded-2xl bg-mint text-forest transition-colors group-hover:bg-leaf group-hover:text-leaf-foreground">
                 <Icon className="size-5" />
               </span>
@@ -316,14 +350,19 @@ function HowItWorks() {
     <section className="relative overflow-hidden bg-navy py-10 text-navy-foreground sm:py-16 lg:py-24">
       <div className="container-page">
         <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">How it works</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime">
+            How it works
+          </p>
           <h2 className="mt-3 text-2xl text-navy-foreground sm:text-3xl lg:text-4xl">
             Four simple steps from booking to treatment plan
           </h2>
         </div>
         <ol className="hide-scrollbar -mx-4 mt-7 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="relative w-[76vw] shrink-0 snap-start rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:w-auto sm:p-6">
+            <li
+              key={step.title}
+              className="relative w-[76vw] shrink-0 snap-start rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 sm:w-auto sm:p-6"
+            >
               <span className="grid size-10 place-items-center rounded-full gradient-leaf font-display text-base text-navy">
                 {i + 1}
               </span>
@@ -390,9 +429,7 @@ function WhyUs() {
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:rounded-3xl">
           {WHY_US.map((item, i) => (
             <div key={item.title} className="bg-card p-4 sm:p-6">
-              <p className="font-display text-2xl text-lime">
-                {String(i + 1).padStart(2, "0")}
-              </p>
+              <p className="font-display text-2xl text-lime">{String(i + 1).padStart(2, "0")}</p>
               <h3 className="mt-3 font-semibold text-navy">{item.title}</h3>
               <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-muted-foreground sm:line-clamp-none sm:text-sm">
                 {item.description}
@@ -449,13 +486,13 @@ function BlogPreview() {
   return (
     <section className="surface-ivory py-10 sm:py-16 lg:py-24">
       <div className="container-page">
-        <SectionHeading
-          eyebrow="Health journal"
-          title="Latest health and wellness articles"
-        />
+        <SectionHeading eyebrow="Health journal" title="Latest health and wellness articles" />
         <div className="hide-scrollbar -mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:mt-10 sm:grid sm:gap-6 sm:overflow-visible sm:px-0 md:grid-cols-3">
           {BLOG_POSTS.slice(0, 3).map((post) => (
-            <article key={post.slug} className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden sm:w-auto">
+            <article
+              key={post.slug}
+              className="card-premium group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden sm:w-auto"
+            >
               <div className="h-40 gradient-leaf" aria-hidden />
               <div className="flex flex-1 flex-col p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-leaf">
@@ -531,6 +568,65 @@ function FinalCta() {
           >
             <Link to="/book-appointment">Book Consultation</Link>
           </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Awards() {
+  return (
+    <section className="py-16 lg:py-20">
+      <div className="container-page">
+        <SectionHeading
+          eyebrow="Recognition"
+          title="Awards & Recognition"
+          description="Honours received personally by Dr. Rajshree Verma, listed with the awarding organization."
+        />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {AWARDS.map((a) => (
+            <article key={a.title} className="card-premium border-t-2 border-t-lime p-5">
+              <Award className="size-6 text-lime" />
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                {a.year}
+              </p>
+              <h3 className="mt-1 font-display text-lg text-navy">{a.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{a.org}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{a.category}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeTimeline() {
+  return (
+    <section className="surface-ivory py-16 lg:py-20">
+      <div className="container-page">
+        <SectionHeading eyebrow="Milestones" title="Our journey so far" />
+        <ol className="relative mx-auto mt-10 max-w-2xl border-l-2 border-mint pl-6">
+          {TIMELINE.map((t) => (
+            <li key={t.date + t.text} className="relative pb-6 last:pb-0">
+              <span
+                className={`absolute -left-[1.95rem] top-1 size-3.5 rounded-full border-2 border-background ${t.milestone ? "bg-lime" : "bg-forest"}`}
+              />
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-leaf">
+                {t.date}
+              </p>
+              <p
+                className={`mt-1 text-sm ${t.milestone ? "font-semibold text-navy" : "text-foreground"}`}
+              >
+                {t.text}
+              </p>
+            </li>
+          ))}
+        </ol>
+        <div className="mt-8 text-center">
+          <Link to="/media-recognition" className="text-sm font-semibold text-leaf">
+            View Media & Recognition →
+          </Link>
         </div>
       </div>
     </section>

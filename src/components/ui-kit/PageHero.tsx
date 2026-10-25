@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { ContactLine } from "@/components/layout/ClinicContact";
+
 export function PageHero({
   eyebrow,
   title,
@@ -29,6 +31,7 @@ export function PageHero({
             {description}
           </p>
         )}
+        <ContactLine className="mt-3 sm:mt-5" />
         {children && <div className="mt-3 sm:mt-7">{children}</div>}
       </div>
     </section>
@@ -51,9 +54,13 @@ export function SectionHeading({
       {eyebrow && (
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-leaf">{eyebrow}</p>
       )}
-      <h2 className="mt-2 text-xl text-navy text-balance-tight sm:mt-3 sm:text-3xl lg:text-4xl">{title}</h2>
+      <h2 className="mt-2 text-xl text-navy text-balance-tight sm:mt-3 sm:text-3xl lg:text-4xl">
+        {title}
+      </h2>
       {description && (
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:mt-3 sm:text-base">{description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:mt-3 sm:text-base">
+          {description}
+        </p>
       )}
     </div>
   );

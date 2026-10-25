@@ -21,6 +21,7 @@ export const Route = createFileRoute("/consultation")({
         content: "Secure video and audio homeopathic consultations with digital prescriptions.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/consultation" },
     ],
     links: [{ rel: "canonical", href: "/consultation" }],

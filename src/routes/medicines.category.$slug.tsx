@@ -24,6 +24,7 @@ export const Route = createFileRoute("/medicines/category/$slug")({
         { property: "og:title", content: `${category.name} | Verma Gentle Cure` },
         { property: "og:description", content: category.description },
         { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
         { property: "og:url", content: `/medicines/category/${category.slug}` },
       ],
       links: [{ rel: "canonical", href: `/medicines/category/${category.slug}` }],

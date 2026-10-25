@@ -28,6 +28,7 @@ export const Route = createFileRoute("/orders")({
       { property: "og:title", content: "My Orders | Verma Gentle Cure" },
       { property: "og:description", content: "Track your medicine orders and deliveries." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/orders" },
       { name: "robots", content: "noindex" },
     ],
@@ -61,7 +62,10 @@ function OrdersPage() {
       const { data: itemRows } = await supabase
         .from("order_items")
         .select("*")
-        .in("order_id", list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"]);
+        .in(
+          "order_id",
+          list.length > 0 ? list.map((o) => o.id) : ["00000000-0000-0000-0000-000000000000"],
+        );
       if (!active) return;
       const grouped: Record<string, OrderItemRow[]> = {};
       for (const item of itemRows ?? []) {
@@ -84,6 +88,11 @@ function OrdersPage() {
         description="Every medicine order placed from your account, with its current delivery and payment status."
       />
       <section className="container-page py-6 sm:py-12">
+        <div className="mb-4 flex flex-wrap gap-2">
+          <Button asChild variant="outline" className="rounded-full">
+            <Link to="/billing">Payments & receipts</Link>
+          </Button>
+        </div>
         {busy ? (
           <p className="text-sm text-muted-foreground">Loading your orders…</p>
         ) : orders.length === 0 ? (
@@ -134,7 +143,10 @@ function OrdersPage() {
                 <dl className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3 text-sm sm:mt-4 sm:grid-cols-4 sm:pt-4">
                   <Cell k="Subtotal" v={formatINR(order.subtotal)} />
                   <Cell k="Discount" v={order.discount ? `− ${formatINR(order.discount)}` : "—"} />
-                  <Cell k="Delivery" v={order.delivery_fee ? formatINR(order.delivery_fee) : "Free"} />
+                  <Cell
+                    k="Delivery"
+                    v={order.delivery_fee ? formatINR(order.delivery_fee) : "Free"}
+                  />
                   <Cell k="Total" v={formatINR(order.total)} />
                 </dl>
 

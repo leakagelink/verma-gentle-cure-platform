@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ClipboardList, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -11,8 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  DOCTOR_DEFAULTS,
   EMPTY_MEDICINE,
   formatDateLong,
+  parseMedicines,
+  signatureCode,
   MODE_LABEL,
   PAYMENT_LABEL,
   STATUS_CLASS,
@@ -39,6 +42,8 @@ export const Route = createFileRoute("/doctor")({
         content: "Review consultations and issue digital prescriptions.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/doctor" },
     ],
     links: [{ rel: "canonical", href: "/doctor" }],
@@ -124,8 +129,7 @@ function DoctorDashboardPage() {
     );
   }
 
-  const visible =
-    filter === "all" ? appointments : appointments.filter((a) => a.status === filter);
+  const visible = filter === "all" ? appointments : appointments.filter((a) => a.status === filter);
 
   return (
     <>
@@ -136,6 +140,13 @@ function DoctorDashboardPage() {
       />
 
       <section className="container-page py-12">
+        <div className="mb-6">
+          <Button asChild variant="outline" className="rounded-full">
+            <Link to="/case-records">
+              <ClipboardList className="size-4" /> Patient case records
+            </Link>
+          </Button>
+        </div>
         <div className="flex flex-wrap gap-2">
           {(["all", ...STATUSES] as const).map((value) => (
             <button
@@ -256,13 +267,7 @@ function DoctorDashboardPage() {
   );
 }
 
-function NotesEditor({
-  initial,
-  onSave,
-}: {
-  initial: string;
-  onSave: (notes: string) => void;
-}) {
+function NotesEditor({ initial, onSave }: { initial: string; onSave: (notes: string) => void }) {
   const [value, setValue] = useState(initial);
   useEffect(() => setValue(initial), [initial]);
   return (
@@ -296,16 +301,46 @@ function PrescriptionForm({
   doctorId: string | null;
   onDone: () => void;
 }) {
+  const [existingId, setExistingId] = useState<string | null>(null);
   const [diagnosis, setDiagnosis] = useState("");
   const [advice, setAdvice] = useState("");
+  const [diet, setDiet] = useState("");
+  const [generalCare, setGeneralCare] = useState("");
+  const [qualification, setQualification] = useState(DOCTOR_DEFAULTS.qualification);
+  const [registration, setRegistration] = useState(DOCTOR_DEFAULTS.registration);
   const [followUp, setFollowUp] = useState("");
   const [medicines, setMedicines] = useState<PrescriptionMedicine[]>([{ ...EMPTY_MEDICINE }]);
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    let active = true;
+    void (async () => {
+      const { data } = await supabase
+        .from("prescriptions")
+        .select("*")
+        .eq("appointment_id", appointment.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!active || !data) return;
+      setExistingId(data.id);
+      setDiagnosis(data.diagnosis ?? "");
+      setAdvice(data.advice ?? "");
+      setDiet(data.diet_advice ?? "");
+      setGeneralCare(data.general_care ?? "");
+      setQualification(data.doctor_qualification || DOCTOR_DEFAULTS.qualification);
+      setRegistration(data.doctor_registration_no || "");
+      setFollowUp(data.follow_up_date ?? "");
+      const list = parseMedicines(data.medicines);
+      if (list.length > 0) setMedicines(list);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [appointment.id]);
+
   function updateMedicine(index: number, key: keyof PrescriptionMedicine, value: string) {
-    setMedicines((list) =>
-      list.map((item, i) => (i === index ? { ...item, [key]: value } : item)),
-    );
+    setMedicines((list) => list.map((item, i) => (i === index ? { ...item, [key]: value } : item)));
   }
 
   async function save() {
@@ -319,26 +354,49 @@ function PrescriptionForm({
       return;
     }
     setSaving(true);
-    const { error } = await supabase.from("prescriptions").insert({
-      appointment_id: appointment.id,
-      patient_id: appointment.patient_id,
-      doctor_id: doctorId,
+    const payload = {
       diagnosis: diagnosis.trim(),
       advice: advice.trim() || null,
+      diet_advice: diet.trim() || null,
+      general_care: generalCare.trim() || null,
       follow_up_date: followUp || null,
       medicines: cleaned,
-    });
+      doctor_qualification: qualification.trim(),
+      doctor_registration_no: registration.trim(),
+    };
+    const { error } = existingId
+      ? await supabase.from("prescriptions").update(payload).eq("id", existingId)
+      : await supabase.from("prescriptions").insert({
+          ...payload,
+          appointment_id: appointment.id,
+          patient_id: appointment.patient_id,
+          doctor_id: doctorId,
+          consultation_mode: appointment.mode,
+          doctor_name: DOCTOR_DEFAULTS.name,
+          signed_at: new Date().toISOString(),
+          signature_code: signatureCode(),
+        });
     setSaving(false);
     if (error) {
       toast.error("Could not save this prescription.");
       return;
     }
-    toast.success("Prescription issued to the patient");
+    toast.success(
+      existingId
+        ? "Prescription updated — the change is recorded"
+        : "Prescription issued to the patient",
+    );
     onDone();
   }
 
   return (
     <div className="mt-5 rounded-2xl border border-leaf/40 bg-mint/30 p-5">
+      {existingId && (
+        <p className="mb-4 rounded-xl bg-background p-3 text-xs text-muted-foreground">
+          Editing the prescription already issued for this consultation. Every change is saved in
+          the prescription history.
+        </p>
+      )}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1.5 md:col-span-2">
           <Label className="text-sm text-navy">Assessment</Label>
@@ -349,11 +407,30 @@ function PrescriptionForm({
             placeholder="Case summary and assessment"
           />
         </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">Qualification</Label>
+          <Input
+            value={qualification}
+            onChange={(e) => setQualification(e.target.value)}
+            placeholder="BHMS — Homeopathic Physician"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">Registration number</Label>
+          <Input
+            value={registration}
+            onChange={(e) => setRegistration(e.target.value)}
+            placeholder="State council registration no."
+          />
+        </div>
       </div>
 
       <div className="mt-5 space-y-4">
         {medicines.map((medicine, index) => (
-          <div key={index} className="grid gap-3 rounded-xl border border-border bg-background p-4 md:grid-cols-5">
+          <div
+            key={index}
+            className="grid gap-3 rounded-xl border border-border bg-background p-4 md:grid-cols-5"
+          >
             <Input
               placeholder="Medicine"
               value={medicine.name}
@@ -405,12 +482,30 @@ function PrescriptionForm({
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="space-y-1.5">
-          <Label className="text-sm text-navy">Advice</Label>
+          <Label className="text-sm text-navy">Medicine instructions / advice</Label>
           <Textarea
             rows={2}
             value={advice}
             onChange={(e) => setAdvice(e.target.value)}
-            placeholder="Diet, lifestyle and care advice"
+            placeholder="How to take the medicines, precautions"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">Diet advice</Label>
+          <Textarea
+            rows={2}
+            value={diet}
+            onChange={(e) => setDiet(e.target.value)}
+            placeholder="Foods to prefer or avoid"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-sm text-navy">General care</Label>
+          <Textarea
+            rows={2}
+            value={generalCare}
+            onChange={(e) => setGeneralCare(e.target.value)}
+            placeholder="Routine, sleep, activity and self-care guidance"
           />
         </div>
         <div className="space-y-1.5">
@@ -420,7 +515,7 @@ function PrescriptionForm({
       </div>
 
       <Button className="mt-5 rounded-full" onClick={() => void save()} disabled={saving}>
-        {saving ? "Saving…" : "Issue prescription"}
+        {saving ? "Saving…" : existingId ? "Save changes" : "Issue prescription"}
       </Button>
     </div>
   );

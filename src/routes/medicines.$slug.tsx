@@ -29,6 +29,9 @@ export const Route = createFileRoute("/medicines/$slug")({
         { property: "og:title", content: medicine.name },
         { property: "og:description", content: medicine.description },
         { property: "og:type", content: "product" },
+        { property: "og:image", content: productImage(medicine.slug) },
+        { name: "twitter:image", content: productImage(medicine.slug) },
+        { name: "twitter:card", content: "summary" },
         { property: "og:url", content: `/medicines/${medicine.slug}` },
       ],
       links: [{ rel: "canonical", href: `/medicines/${medicine.slug}` }],
@@ -60,7 +63,7 @@ function ProductPage() {
       <div className="min-w-0">
         <div className="h-64 overflow-hidden rounded-[2rem] border border-border surface-ivory sm:h-80 lg:h-[28rem]">
           <img
-            src={productImage(medicine.category)}
+            src={productImage(medicine.slug)}
             alt={medicine.name}
             width={800}
             height={800}
@@ -80,7 +83,7 @@ function ProductPage() {
               )}
             >
               <img
-                src={productImage(medicine.category)}
+                src={productImage(medicine.slug)}
                 alt=""
                 loading="lazy"
                 width={800}
@@ -115,18 +118,24 @@ function ProductPage() {
         </p>
         <h1 className="mt-2 text-3xl text-navy">{medicine.name}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Star className="size-4 fill-lime text-lime" /> {medicine.rating} ({medicine.reviews})
-          </span>
+          {medicine.reviews > 0 && (
+            <span className="flex items-center gap-1">
+              <Star className="size-4 fill-lime text-lime" /> {medicine.rating}
+              {medicine.reviews > 0 ? ` (${medicine.reviews})` : ""}
+            </span>
+          )}
           <StockBadge stock={medicine.stock} />
           <span>{medicine.pack}</span>
         </div>
 
         <div className="mt-6 flex items-end gap-3">
           <p className="font-display text-3xl text-navy">{formatINR(medicine.price)}</p>
-          <p className="pb-1 text-sm text-muted-foreground">
-            <s>{formatINR(medicine.mrp)}</s> · {discount}% off
-          </p>
+          {medicine.mrp > medicine.price && (
+            <p className="pb-1 text-sm text-muted-foreground">
+              <s>{formatINR(medicine.mrp)}</s> · {discount}% off
+            </p>
+          )}
+          <p className="pb-1 text-sm text-muted-foreground">+ ₹125 shipping</p>
         </div>
 
         <div className="mt-7 flex flex-wrap items-center gap-3">

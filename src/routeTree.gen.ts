@@ -10,30 +10,44 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AboutDoctorRouteImport } from './routes/about-doctor'
+import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AppointmentPolicyRouteImport } from './routes/appointment-policy'
 import { Route as AppointmentsRouteImport } from './routes/appointments'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BillingRouteImport } from './routes/billing'
 import { Route as BookAppointmentRouteImport } from './routes/book-appointment'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as CaseFormRouteImport } from './routes/case-form'
+import { Route as CaseRecordsRouteImport } from './routes/case-records'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConsultationRouteImport } from './routes/consultation'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CorporateInformationRouteImport } from './routes/corporate-information'
+import { Route as DeleteAccountRouteImport } from './routes/delete-account'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FinanceRouteImport } from './routes/finance'
+import { Route as MediaRecognitionRouteImport } from './routes/media-recognition'
+import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ShippingPolicyRouteImport } from './routes/shipping-policy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TreatmentsRouteImport } from './routes/treatments'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as MedicinesIndexRouteImport } from './routes/medicines.index'
 import { Route as MedicinesSlugRouteImport } from './routes/medicines.$slug'
 import { Route as PrescriptionsIdRouteImport } from './routes/prescriptions.$id'
+import { Route as ReceiptsIdRouteImport } from './routes/receipts.$id'
 import { Route as MedicinesCategorySlugRouteImport } from './routes/medicines.category.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,9 +55,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutDoctorRoute = AboutDoctorRouteImport.update({
   id: '/about-doctor',
   path: '/about-doctor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessibilityRoute = AccessibilityRouteImport.update({
+  id: '/accessibility',
+  path: '/accessibility',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -56,6 +80,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppointmentPolicyRoute = AppointmentPolicyRouteImport.update({
+  id: '/appointment-policy',
+  path: '/appointment-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppointmentsRoute = AppointmentsRouteImport.update({
   id: '/appointments',
   path: '/appointments',
@@ -66,6 +95,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BillingRoute = BillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BookAppointmentRoute = BookAppointmentRouteImport.update({
   id: '/book-appointment',
   path: '/book-appointment',
@@ -74,6 +108,16 @@ const BookAppointmentRoute = BookAppointmentRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseFormRoute = CaseFormRouteImport.update({
+  id: '/case-form',
+  path: '/case-form',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseRecordsRoute = CaseRecordsRouteImport.update({
+  id: '/case-records',
+  path: '/case-records',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutRoute = CheckoutRouteImport.update({
@@ -91,6 +135,16 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CorporateInformationRoute = CorporateInformationRouteImport.update({
+  id: '/corporate-information',
+  path: '/corporate-information',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeleteAccountRoute = DeleteAccountRouteImport.update({
+  id: '/delete-account',
+  path: '/delete-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorRoute = DoctorRouteImport.update({
   id: '/doctor',
   path: '/doctor',
@@ -99,6 +153,21 @@ const DoctorRoute = DoctorRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceRoute = FinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRecognitionRoute = MediaRecognitionRouteImport.update({
+  id: '/media-recognition',
+  path: '/media-recognition',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
+  id: '/medical-disclaimer',
+  path: '/medical-disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
@@ -116,6 +185,11 @@ const RefundPolicyRoute = RefundPolicyRouteImport.update({
   path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -129,6 +203,11 @@ const ShippingPolicyRoute = ShippingPolicyRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TreatmentsRoute = TreatmentsRouteImport.update({
@@ -161,6 +240,11 @@ const PrescriptionsIdRoute = PrescriptionsIdRouteImport.update({
   path: '/prescriptions/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReceiptsIdRoute = ReceiptsIdRouteImport.update({
+  id: '/receipts/$id',
+  path: '/receipts/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
   id: '/medicines/category/$slug',
   path: '/medicines/category/$slug',
@@ -169,56 +253,84 @@ const MedicinesCategorySlugRoute = MedicinesCategorySlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
+  '/case-records': typeof CaseRecordsRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
+  '/case-records': typeof CaseRecordsRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog': typeof BlogIndexRoute
   '/medicines': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -226,28 +338,42 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/about-doctor': typeof AboutDoctorRoute
+  '/accessibility': typeof AccessibilityRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
+  '/appointment-policy': typeof AppointmentPolicyRoute
   '/appointments': typeof AppointmentsRoute
   '/auth': typeof AuthRoute
+  '/billing': typeof BillingRoute
   '/book-appointment': typeof BookAppointmentRoute
   '/cart': typeof CartRoute
+  '/case-form': typeof CaseFormRoute
+  '/case-records': typeof CaseRecordsRoute
   '/checkout': typeof CheckoutRoute
   '/consultation': typeof ConsultationRoute
   '/contact': typeof ContactRoute
+  '/corporate-information': typeof CorporateInformationRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/doctor': typeof DoctorRoute
   '/faq': typeof FaqRoute
+  '/finance': typeof FinanceRoute
+  '/media-recognition': typeof MediaRecognitionRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/orders': typeof OrdersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/shipping-policy': typeof ShippingPolicyRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/treatments': typeof TreatmentsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/medicines/$slug': typeof MedicinesSlugRoute
   '/prescriptions/$id': typeof PrescriptionsIdRoute
+  '/receipts/$id': typeof ReceiptsIdRoute
   '/blog/': typeof BlogIndexRoute
   '/medicines/': typeof MedicinesIndexRoute
   '/medicines/category/$slug': typeof MedicinesCategorySlugRoute
@@ -256,84 +382,126 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
+    | '/case-records'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
+    | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
+    | '/case-records'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
+    | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog'
     | '/medicines'
     | '/medicines/category/$slug'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/about-doctor'
+    | '/accessibility'
     | '/account'
     | '/admin'
+    | '/appointment-policy'
     | '/appointments'
     | '/auth'
+    | '/billing'
     | '/book-appointment'
     | '/cart'
+    | '/case-form'
+    | '/case-records'
     | '/checkout'
     | '/consultation'
     | '/contact'
+    | '/corporate-information'
+    | '/delete-account'
     | '/doctor'
     | '/faq'
+    | '/finance'
+    | '/media-recognition'
+    | '/medical-disclaimer'
     | '/orders'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/reset-password'
     | '/services'
     | '/shipping-policy'
     | '/terms'
+    | '/testimonials'
     | '/treatments'
     | '/blog/$slug'
     | '/medicines/$slug'
     | '/prescriptions/$id'
+    | '/receipts/$id'
     | '/blog/'
     | '/medicines/'
     | '/medicines/category/$slug'
@@ -341,28 +509,42 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AboutDoctorRoute: typeof AboutDoctorRoute
+  AccessibilityRoute: typeof AccessibilityRoute
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
+  AppointmentPolicyRoute: typeof AppointmentPolicyRoute
   AppointmentsRoute: typeof AppointmentsRoute
   AuthRoute: typeof AuthRoute
+  BillingRoute: typeof BillingRoute
   BookAppointmentRoute: typeof BookAppointmentRoute
   CartRoute: typeof CartRoute
+  CaseFormRoute: typeof CaseFormRoute
+  CaseRecordsRoute: typeof CaseRecordsRoute
   CheckoutRoute: typeof CheckoutRoute
   ConsultationRoute: typeof ConsultationRoute
   ContactRoute: typeof ContactRoute
+  CorporateInformationRoute: typeof CorporateInformationRoute
+  DeleteAccountRoute: typeof DeleteAccountRoute
   DoctorRoute: typeof DoctorRoute
   FaqRoute: typeof FaqRoute
+  FinanceRoute: typeof FinanceRoute
+  MediaRecognitionRoute: typeof MediaRecognitionRoute
+  MedicalDisclaimerRoute: typeof MedicalDisclaimerRoute
   OrdersRoute: typeof OrdersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   ShippingPolicyRoute: typeof ShippingPolicyRoute
   TermsRoute: typeof TermsRoute
+  TestimonialsRoute: typeof TestimonialsRoute
   TreatmentsRoute: typeof TreatmentsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   MedicinesSlugRoute: typeof MedicinesSlugRoute
   PrescriptionsIdRoute: typeof PrescriptionsIdRoute
+  ReceiptsIdRoute: typeof ReceiptsIdRoute
   BlogIndexRoute: typeof BlogIndexRoute
   MedicinesIndexRoute: typeof MedicinesIndexRoute
   MedicinesCategorySlugRoute: typeof MedicinesCategorySlugRoute
@@ -377,11 +559,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about-doctor': {
       id: '/about-doctor'
       path: '/about-doctor'
       fullPath: '/about-doctor'
       preLoaderRoute: typeof AboutDoctorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessibility': {
+      id: '/accessibility'
+      path: '/accessibility'
+      fullPath: '/accessibility'
+      preLoaderRoute: typeof AccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -398,6 +594,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/appointment-policy': {
+      id: '/appointment-policy'
+      path: '/appointment-policy'
+      fullPath: '/appointment-policy'
+      preLoaderRoute: typeof AppointmentPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/appointments': {
       id: '/appointments'
       path: '/appointments'
@@ -412,6 +615,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/billing': {
+      id: '/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof BillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/book-appointment': {
       id: '/book-appointment'
       path: '/book-appointment'
@@ -424,6 +634,20 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-form': {
+      id: '/case-form'
+      path: '/case-form'
+      fullPath: '/case-form'
+      preLoaderRoute: typeof CaseFormRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-records': {
+      id: '/case-records'
+      path: '/case-records'
+      fullPath: '/case-records'
+      preLoaderRoute: typeof CaseRecordsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout': {
@@ -447,6 +671,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/corporate-information': {
+      id: '/corporate-information'
+      path: '/corporate-information'
+      fullPath: '/corporate-information'
+      preLoaderRoute: typeof CorporateInformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delete-account': {
+      id: '/delete-account'
+      path: '/delete-account'
+      fullPath: '/delete-account'
+      preLoaderRoute: typeof DeleteAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctor': {
       id: '/doctor'
       path: '/doctor'
@@ -459,6 +697,27 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media-recognition': {
+      id: '/media-recognition'
+      path: '/media-recognition'
+      fullPath: '/media-recognition'
+      preLoaderRoute: typeof MediaRecognitionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medical-disclaimer': {
+      id: '/medical-disclaimer'
+      path: '/medical-disclaimer'
+      fullPath: '/medical-disclaimer'
+      preLoaderRoute: typeof MedicalDisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders': {
@@ -482,6 +741,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -501,6 +767,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/treatments': {
@@ -545,6 +818,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrescriptionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/receipts/$id': {
+      id: '/receipts/$id'
+      path: '/receipts/$id'
+      fullPath: '/receipts/$id'
+      preLoaderRoute: typeof ReceiptsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/medicines/category/$slug': {
       id: '/medicines/category/$slug'
       path: '/medicines/category/$slug'
@@ -557,28 +837,42 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AboutDoctorRoute: AboutDoctorRoute,
+  AccessibilityRoute: AccessibilityRoute,
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
+  AppointmentPolicyRoute: AppointmentPolicyRoute,
   AppointmentsRoute: AppointmentsRoute,
   AuthRoute: AuthRoute,
+  BillingRoute: BillingRoute,
   BookAppointmentRoute: BookAppointmentRoute,
   CartRoute: CartRoute,
+  CaseFormRoute: CaseFormRoute,
+  CaseRecordsRoute: CaseRecordsRoute,
   CheckoutRoute: CheckoutRoute,
   ConsultationRoute: ConsultationRoute,
   ContactRoute: ContactRoute,
+  CorporateInformationRoute: CorporateInformationRoute,
+  DeleteAccountRoute: DeleteAccountRoute,
   DoctorRoute: DoctorRoute,
   FaqRoute: FaqRoute,
+  FinanceRoute: FinanceRoute,
+  MediaRecognitionRoute: MediaRecognitionRoute,
+  MedicalDisclaimerRoute: MedicalDisclaimerRoute,
   OrdersRoute: OrdersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   ShippingPolicyRoute: ShippingPolicyRoute,
   TermsRoute: TermsRoute,
+  TestimonialsRoute: TestimonialsRoute,
   TreatmentsRoute: TreatmentsRoute,
   BlogSlugRoute: BlogSlugRoute,
   MedicinesSlugRoute: MedicinesSlugRoute,
   PrescriptionsIdRoute: PrescriptionsIdRoute,
+  ReceiptsIdRoute: ReceiptsIdRoute,
   BlogIndexRoute: BlogIndexRoute,
   MedicinesIndexRoute: MedicinesIndexRoute,
   MedicinesCategorySlugRoute: MedicinesCategorySlugRoute,

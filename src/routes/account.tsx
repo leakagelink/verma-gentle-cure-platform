@@ -1,5 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, LogOut, Package, ShieldCheck, Stethoscope } from "lucide-react";
+import {
+  CalendarDays,
+  ClipboardList,
+  IndianRupee,
+  LogOut,
+  Package,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -8,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { ClinicalAssignments } from "@/components/account/ClinicalAssignments";
+import { DeletionRequests } from "@/components/account/DeletionRequests";
 
 export const Route = createFileRoute("/account")({
   head: () => ({
@@ -24,6 +34,8 @@ export const Route = createFileRoute("/account")({
         content: "Your patient profile, appointments, prescriptions and orders.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/account" },
     ],
     links: [{ rel: "canonical", href: "/account" }],
@@ -42,7 +54,7 @@ type ProfileForm = {
 const empty: ProfileForm = { full_name: "", phone: "", date_of_birth: "", gender: "", city: "" };
 
 function AccountPage() {
-  const { user, loading, signOut, isCareTeam } = useAuth();
+  const { user, loading, signOut, isCareTeam, role: verifiedRole } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState<ProfileForm>(empty);
   const [role, setRole] = useState<string>("patient");
@@ -211,12 +223,31 @@ function AccountPage() {
               </span>
             </span>
           </Link>
+          <Link to="/case-form" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+            <ClipboardList className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">My case-taking form</span>
+              <span className="block text-sm text-muted-foreground">
+                Share your detailed case history and reports before the consultation
+              </span>
+            </span>
+          </Link>
+
           <Link to="/orders" className="card-premium flex items-center gap-3 p-4 sm:p-5">
             <Package className="size-5 text-leaf" />
             <span>
               <span className="block font-semibold">My orders</span>
               <span className="block text-sm text-muted-foreground">
                 Track medicine orders and delivery status
+              </span>
+            </span>
+          </Link>
+          <Link to="/billing" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+            <IndianRupee className="size-5 text-leaf" />
+            <span>
+              <span className="block font-semibold">Payments & receipts</span>
+              <span className="block text-sm text-muted-foreground">
+                Fees, bills, receipts, invoices and refund status
               </span>
             </span>
           </Link>
@@ -238,6 +269,17 @@ function AccountPage() {
                 <span className="block font-semibold">Store admin</span>
                 <span className="block text-sm text-muted-foreground">
                   Manage orders, delivery and payment options
+                </span>
+              </span>
+            </Link>
+          )}
+          {isCareTeam && (
+            <Link to="/finance" className="card-premium flex items-center gap-3 p-4 sm:p-5">
+              <IndianRupee className="size-5 text-leaf" />
+              <span>
+                <span className="block font-semibold">Financial dashboard</span>
+                <span className="block text-sm text-muted-foreground">
+                  Collections, cash entries, receipts and refunds
                 </span>
               </span>
             </Link>
@@ -265,11 +307,25 @@ function AccountPage() {
           </Link>
           <p className="flex gap-2 rounded-2xl surface-ivory p-4 text-xs leading-relaxed text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-leaf" />
-            Only you can see your profile, appointments, prescriptions and orders.
+            Your records are accessible to you and authorized clinic staff as needed for care and
+            service.
           </p>
-
         </div>
       </div>
+      <div className="mt-8 flex flex-wrap gap-3 border-t border-border pt-6">
+        <Button asChild variant="outline">
+          <Link to="/privacy-policy">Privacy policy</Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link to="/delete-account">Delete account / personal data</Link>
+        </Button>
+      </div>
+      {verifiedRole === "admin" && (
+        <>
+          <ClinicalAssignments />
+          <DeletionRequests />
+        </>
+      )}
     </section>
   );
 }

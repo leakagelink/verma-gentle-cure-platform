@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { cancelAppointment as cancelPatientAppointment } from "@/lib/trusted-actions.functions";
 import { CalendarDays, FileText, Stethoscope } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -37,6 +39,8 @@ export const Route = createFileRoute("/appointments")({
         content: "Track your consultations and view digital prescriptions in one private place.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex, nofollow" },
       { property: "og:url", content: "/appointments" },
     ],
     links: [{ rel: "canonical", href: "/appointments" }],
@@ -45,6 +49,7 @@ export const Route = createFileRoute("/appointments")({
 });
 
 function AppointmentsPage() {
+  const cancel = useServerFn(cancelPatientAppointment);
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState<AppointmentRow[]>([]);
@@ -80,11 +85,9 @@ function AppointmentsPage() {
   }, [load]);
 
   async function cancelAppointment(id: string) {
-    const { error } = await supabase
-      .from("appointments")
-      .update({ status: "cancelled" })
-      .eq("id", id);
-    if (error) {
+    try {
+      await cancel({ data: { id } });
+    } catch {
       toast.error("Could not cancel this appointment.");
       return;
     }
@@ -105,9 +108,17 @@ function AppointmentsPage() {
           <h2 className="flex items-center gap-2 text-xl text-navy">
             <CalendarDays className="size-5 text-leaf" /> Appointments
           </h2>
-          <Button asChild className="rounded-full">
-            <Link to="/book-appointment">Book new consultation</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/case-form">Case form</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/billing">Payments</Link>
+            </Button>
+            <Button asChild className="rounded-full">
+              <Link to="/book-appointment">Book new consultation</Link>
+            </Button>
+          </div>
         </div>
 
         {loading ? (
@@ -168,7 +179,7 @@ function AppointmentsPage() {
         )}
 
         <h2 className="mt-9 flex items-center gap-2 text-xl text-navy sm:mt-14">
-          <FileText className="size-5 text-leaf" /> Digital prescriptions
+          <FileText className="size-5 text-leaf" /> Prescription timeline
         </h2>
         {loading ? null : prescriptions.length === 0 ? (
           <p className="mt-6 rounded-2xl border border-border surface-ivory p-6 text-sm text-muted-foreground">
@@ -225,7 +236,7 @@ function AppointmentsPage() {
                   <div className="mt-5">
                     <Button asChild variant="outline" className="rounded-full">
                       <Link to="/prescriptions/$id" params={{ id: rx.id }}>
-                        View / print prescription
+                        View / download / share
                       </Link>
                     </Button>
                   </div>

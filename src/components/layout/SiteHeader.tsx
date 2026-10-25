@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag, UserRound, X } from "lucide-react";
+import { Instagram, Menu, MessageCircle, Phone, ShoppingBag, UserRound, X } from "lucide-react";
+import { CLINIC } from "@/lib/site-data";
 import { useState } from "react";
 
 import { Logo } from "@/components/brand/Logo";
@@ -18,11 +19,12 @@ import { useAuth } from "@/hooks/useAuth";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/about-doctor", label: "About Doctor" },
-  { to: "/consultation", label: "Consultation" },
+  { to: "/about", label: "About" },
+  { to: "/about-doctor", label: "Dr. Rajshree Verma" },
   { to: "/treatments", label: "Treatments" },
+  { to: "/media-recognition", label: "Media & Recognition" },
   { to: "/medicines", label: "Medicines" },
-  { to: "/blog", label: "Blog" },
+  { to: "/blog", label: "Health Articles" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -38,13 +40,13 @@ export function SiteHeader() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Primary">
           {NAV.map((item) => (
             <Link
               key={item.to}
               to={item.to}
               activeOptions={{ exact: item.to === "/" }}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-mint/60 hover:text-navy"
+              className="rounded-full px-2.5 py-2 text-[0.82rem] font-medium text-muted-foreground transition-colors hover:bg-mint/60 hover:text-navy"
               activeProps={{ className: "bg-mint text-navy" }}
             >
               {item.label}
@@ -63,33 +65,57 @@ export function SiteHeader() {
               )}
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="icon" className="hidden rounded-full sm:inline-flex">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="hidden rounded-full sm:inline-flex"
+          >
             <Link to={user ? "/account" : "/auth"} aria-label="Login or account">
               <UserRound className="size-5" />
             </Link>
           </Button>
+          <a
+            href={CLINIC.phoneHref}
+            className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-navy hover:bg-mint/60 2xl:inline-flex"
+          >
+            <Phone className="size-4" /> {CLINIC.phone}
+          </a>
           <Button asChild className="hidden rounded-full lg:inline-flex">
-            <Link to="/book-appointment">Book Consultation</Link>
+            <Link to="/book-appointment">Book Appointment</Link>
           </Button>
           <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
             <DrawerTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full lg:hidden" aria-label="More">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full xl:hidden"
+                aria-label="More"
+              >
                 <Menu className="size-5" />
               </Button>
             </DrawerTrigger>
-            <DrawerContent className="max-h-[82dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] lg:hidden">
+            <DrawerContent className="max-h-[82dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)] xl:hidden">
               <DrawerHeader className="grid grid-cols-[minmax(0,1fr)_auto] items-center text-left">
                 <div className="min-w-0">
                   <DrawerTitle className="font-display text-xl text-navy">Explore</DrawerTitle>
                   <DrawerDescription>More from Verma Gentle Cure</DrawerDescription>
                 </div>
                 <DrawerClose asChild>
-                  <Button variant="ghost" size="icon" className="shrink-0 rounded-full" aria-label="Close menu">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="shrink-0 rounded-full"
+                    aria-label="Close menu"
+                  >
                     <X className="size-5" />
                   </Button>
                 </DrawerClose>
               </DrawerHeader>
-              <nav className="grid grid-cols-2 gap-2 overflow-y-auto px-4 pb-4" aria-label="More navigation">
+              <nav
+                className="grid grid-cols-2 gap-2 overflow-y-auto px-4 pb-4"
+                aria-label="More navigation"
+              >
                 {NAV.filter((item) => item.to !== "/").map((item) => (
                   <DrawerClose asChild key={item.to}>
                     <Link
@@ -97,6 +123,51 @@ export function SiteHeader() {
                       className="flex min-h-12 items-center rounded-xl border border-border px-4 text-sm font-medium text-foreground active:bg-mint/60"
                     >
                       {item.label}
+                    </Link>
+                  </DrawerClose>
+                ))}
+                <a
+                  href={CLINIC.phoneHref}
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <Phone className="size-4" /> Call Clinic
+                </a>
+                <a
+                  href={CLINIC.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <MessageCircle className="size-4" /> WhatsApp
+                </a>
+                <a
+                  href={CLINIC.instagramHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-semibold text-navy"
+                >
+                  <Instagram className="size-4" /> Instagram
+                </a>
+                {(
+                  [
+                    ["/testimonials", "Testimonials"],
+                    ["/book-appointment", "Book Appointment"],
+                    ["/medical-disclaimer", "Medical Disclaimer"],
+                    ["/privacy-policy", "Privacy Policy"],
+                    ["/delete-account", "Account & Data Deletion"],
+                    ["/terms", "Terms & Conditions"],
+                    ["/appointment-policy", "Cancellation Policy"],
+                    ["/accessibility", "Accessibility"],
+                    ["/corporate-information", "Corporate Information"],
+                    ["/faq", "FAQ"],
+                  ] as const
+                ).map(([to, label]) => (
+                  <DrawerClose asChild key={to}>
+                    <Link
+                      to={to}
+                      className="flex min-h-11 items-center rounded-xl px-4 text-xs text-muted-foreground active:bg-mint/60"
+                    >
+                      {label}
                     </Link>
                   </DrawerClose>
                 ))}

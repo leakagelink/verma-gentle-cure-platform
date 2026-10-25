@@ -37,4 +37,18 @@ export default tseslint.config(
     },
   },
   eslintPluginPrettier,
+  {
+    // Integration-managed sources are regenerated in the provider's format.
+    // Exclude only formatting enforcement, not TS/React/security lint rules.
+    files: [
+      "src/integrations/supabase/auth-attacher.ts",
+      "src/integrations/supabase/auth-middleware.ts",
+      "src/integrations/supabase/client.server.ts",
+      "src/integrations/supabase/client.ts",
+      "src/integrations/supabase/cron-auth.ts",
+      "src/integrations/supabase/previewAuthStorage.ts",
+      "src/integrations/supabase/types.ts",
+    ],
+    rules: { "prettier/prettier": "off" },
+  },
 );

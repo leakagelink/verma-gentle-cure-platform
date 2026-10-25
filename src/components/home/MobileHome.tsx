@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  Award,
   CalendarDays,
   ClipboardList,
   Package,
@@ -11,11 +12,12 @@ import {
   Video,
 } from "lucide-react";
 
-import doctorImage from "@/assets/dr-rajshree-verma.jpg";
+import heroPortrait from "@/assets/dr-rajshree-verma-hero.jpg.asset.json";
+import { ContactLine } from "@/components/layout/ClinicContact";
 import { Button } from "@/components/ui/button";
 import { productImage } from "@/lib/product-images";
 import { MEDICINE_CATEGORIES } from "@/lib/shop-data";
-import { CONDITIONS, STEPS, TESTIMONIALS } from "@/lib/site-data";
+import { AWARDS, CONDITIONS, STEPS, TESTIMONIALS } from "@/lib/site-data";
 
 const QUICK_ACTIONS = [
   { to: "/book-appointment", label: "Book consult", icon: Video, tone: "bg-mint text-forest" },
@@ -28,40 +30,48 @@ export function MobileHome() {
   return (
     <div className="md:hidden">
       {/* Hero */}
-      <section className="container-page pt-4">
-        <div className="relative overflow-hidden rounded-[1.75rem] bg-navy p-5 text-navy-foreground shadow-[var(--shadow-lift)]">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -right-12 -top-14 size-40 leaf-blob bg-lime/25 blur-xl"
-          />
-          <div className="relative">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[0.68rem] font-semibold text-lime">
-              <span className="size-1.5 rounded-full bg-lime" />
-              Slots open today
-            </span>
-            <h1 className="mt-3 text-[1.7rem] leading-[1.12] text-navy-foreground text-balance-tight">
-              Natural healing,
-              <br />
-              <span className="text-lime">personalised for you</span>
-            </h1>
-            <p className="mt-2 text-sm leading-relaxed text-mint/85">
-              Consult Dr. Rajshree Verma online and get a digital prescription with medicines
-              delivered to your door.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <Button asChild className="h-11 flex-1 rounded-xl bg-lime text-sm font-semibold text-navy hover:bg-lime/90">
-                <Link to="/book-appointment">
-                  Book consultation <ArrowRight className="size-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="h-11 shrink-0 rounded-xl border-white/25 bg-transparent px-4 text-sm text-navy-foreground hover:bg-white/10"
-              >
-                <Link to="/medicines">Shop</Link>
-              </Button>
+      <section className="surface-ivory">
+        <div className="container-page pt-5 pb-2">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-leaf">
+            Verma Gentle Cure
+          </p>
+          <h1 className="mt-2 text-[1.65rem] leading-[1.15] text-navy text-balance-tight">
+            Gentle Care. Individual Attention.{" "}
+            <span className="text-forest">Welcome to Verma Gentle Cure</span>
+          </h1>
+          <div className="relative mt-4">
+            <span
+              aria-hidden
+              className="absolute inset-x-6 -bottom-2 top-6 rounded-[2rem] bg-mint"
+            />
+            <img
+              src={heroPortrait.url}
+              alt="Dr. Rajshree Verma, Homeopathic Physician"
+              width={1024}
+              height={1536}
+              className="relative h-72 w-full rounded-[1.75rem] border border-border object-cover object-top shadow-[var(--shadow-soft)]"
+            />
+            <div className="absolute bottom-3 left-3 right-3 rounded-2xl border border-border bg-card/95 p-3 backdrop-blur">
+              <p className="text-sm font-semibold text-navy">Dr. Rajshree Verma</p>
+              <p className="text-xs text-muted-foreground">
+                BHMS · Homeopathic Physician · 6 Years of Experience
+              </p>
             </div>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            A homeopathic healthcare clinic in Jamshedpur founded by Dr. Rajshree Verma (BHMS),
+            emphasizing individualized consultation and compassionate care.
+          </p>
+          <ContactLine className="mt-3" />
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Button asChild className="h-12 rounded-xl text-sm font-semibold">
+              <Link to="/book-appointment">
+                Book Appointment <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="h-12 rounded-xl text-sm">
+              <Link to="/contact">Contact Clinic</Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -78,7 +88,9 @@ export function MobileHome() {
               <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${tone}`}>
                 <Icon className="size-4.5" />
               </span>
-              <span className="w-full truncate text-[0.68rem] font-semibold text-navy">{label}</span>
+              <span className="w-full truncate text-[0.68rem] font-semibold text-navy">
+                {label}
+              </span>
             </Link>
           ))}
         </div>
@@ -88,9 +100,11 @@ export function MobileHome() {
       <section className="container-page mt-4">
         <div className="hide-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
           {[
-            { icon: ShieldCheck, text: "Verified BHMS doctor" },
-            { icon: Truck, text: "Pan-India delivery" },
-            { icon: CalendarDays, text: "Free follow-up review" },
+            { icon: ShieldCheck, text: "6 Years of Professional Experience" },
+            { icon: CalendarDays, text: "Established in Jamshedpur" },
+            { icon: Star, text: "Patient-Centred Approach" },
+            { icon: Award, text: "Media Featured" },
+            { icon: Truck, text: "Accessible Clinic Location" },
           ].map(({ icon: Icon, text }) => (
             <span
               key={text}
@@ -133,16 +147,18 @@ export function MobileHome() {
       <section className="container-page mt-7">
         <div className="flex items-center gap-3 rounded-2xl border border-border surface-ivory p-3">
           <img
-            src={doctorImage}
+            src={heroPortrait.url}
             alt="Dr. Rajshree Verma"
             loading="lazy"
-            width={512}
-            height={512}
+            width={1024}
+            height={1536}
             className="size-16 shrink-0 rounded-2xl object-cover object-top"
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-navy">Dr. Rajshree Verma</p>
-            <p className="truncate text-xs text-muted-foreground">BHMS · 20+ years experience</p>
+            <p className="truncate text-xs text-muted-foreground">
+              BHMS · Homeopathic Physician · 6 Years of Experience
+            </p>
             <Link
               to="/about-doctor"
               className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-leaf"
@@ -155,12 +171,15 @@ export function MobileHome() {
 
       {/* How it works */}
       <section className="container-page mt-7">
-        <Header title="How it works" />
+        <Header title="How consultation works" />
         <ol className="mt-3 space-y-2">
           {STEPS.map((step, i) => (
-            <li key={step.title} className="flex gap-3 rounded-2xl border border-border bg-card p-3">
-              <span className="grid size-7 shrink-0 place-items-center rounded-full gradient-leaf font-display text-sm text-navy">
-                {i + 1}
+            <li
+              key={step.title}
+              className="flex gap-3 rounded-2xl border border-border bg-card p-3"
+            >
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-forest font-display text-xs text-forest-foreground">
+                {String(i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-navy">{step.title}</p>
@@ -185,6 +204,26 @@ export function MobileHome() {
             >
               {c.name}
             </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Awards */}
+      <section className="container-page mt-7">
+        <Header title="Awards & Recognition" to="/media-recognition" />
+        <div className="hide-scrollbar -mx-4 mt-3 flex snap-x gap-3 overflow-x-auto px-4 pb-1">
+          {AWARDS.map((a) => (
+            <div
+              key={a.title}
+              className="w-44 shrink-0 snap-start rounded-2xl border border-lime/50 bg-card p-3"
+            >
+              <Award className="size-5 text-lime" />
+              <p className="mt-2 text-sm font-semibold leading-snug text-navy">{a.title}</p>
+              <p className="mt-1 text-[0.68rem] text-muted-foreground">
+                {a.year} · {a.org}
+              </p>
+              <p className="mt-1 line-clamp-2 text-[0.68rem] text-muted-foreground">{a.category}</p>
+            </div>
           ))}
         </div>
       </section>

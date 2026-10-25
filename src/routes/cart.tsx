@@ -17,11 +17,13 @@ export const Route = createFileRoute("/cart")({
       { title: "Shopping Cart | Verma Gentle Cure" },
       {
         name: "description",
-        content: "Review the homeopathic medicines in your cart, apply a coupon and proceed to checkout.",
+        content:
+          "Review the homeopathic medicines in your cart, apply a coupon and proceed to checkout.",
       },
       { property: "og:title", content: "Shopping Cart | Verma Gentle Cure" },
       { property: "og:description", content: "Review your medicine order before checkout." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/cart" },
       { name: "robots", content: "noindex" },
     ],
@@ -38,7 +40,9 @@ function CartPage() {
 
   const discount = applied ? Math.round(subtotal * applied.rate) : 0;
   const delivery =
-    subtotal === 0 || subtotal - discount >= settings.free_delivery_over ? 0 : settings.delivery_fee;
+    subtotal === 0 || subtotal - discount >= settings.free_delivery_over
+      ? 0
+      : settings.delivery_fee;
   const total = Math.max(0, subtotal - discount + delivery);
 
   return (
@@ -62,7 +66,7 @@ function CartPage() {
               {items.map(({ medicine, qty }) => (
                 <li key={medicine.slug} className="card-premium flex gap-3 p-3 sm:gap-4 sm:p-4">
                   <img
-                    src={productImage(medicine.category)}
+                    src={productImage(medicine.slug)}
                     alt={medicine.name}
                     loading="lazy"
                     width={800}

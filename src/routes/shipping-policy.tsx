@@ -14,6 +14,7 @@ export const Route = createFileRoute("/shipping-policy")({
       { property: "og:title", content: "Shipping Policy | Verma Gentle Cure" },
       { property: "og:description", content: "Dispatch timelines, charges and tracking." },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/shipping-policy" },
     ],
     links: [{ rel: "canonical", href: "/shipping-policy" }],
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/shipping-policy")({
         {
           heading: "Delivery charges",
           body: [
-            "A flat delivery charge of ₹49 applies to orders below ₹799. Orders of ₹799 and above are delivered free.",
+            "A flat shipping charge of ₹125 applies to each order. Each homeopathic kit costs ₹1,500. There is no free-shipping threshold.",
           ],
         },
         {

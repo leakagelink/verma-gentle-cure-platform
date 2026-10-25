@@ -37,7 +37,7 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
         aria-label={medicine.name}
       >
         <img
-          src={productImage(medicine.category)}
+          src={productImage(medicine.slug)}
           alt={medicine.name}
           loading="lazy"
           width={800}
@@ -58,16 +58,23 @@ export function MedicineCard({ medicine }: { medicine: Medicine }) {
           </Link>
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">{medicine.pack}</p>
-        <p className="mt-2 hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
-          <Star className="size-3.5 fill-lime text-lime" />
-          {medicine.rating} · {medicine.reviews} reviews
-        </p>
+        {medicine.reviews > 0 && (
+          <p className="mt-2 hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
+            <Star className="size-3.5 fill-lime text-lime" />
+            {medicine.rating}
+            {medicine.reviews > 0 ? ` · ${medicine.reviews} reviews` : ""}
+          </p>
+        )}
         <div className="mt-4 flex flex-1 items-end justify-between gap-3">
           <div>
             <p className="font-display text-lg text-navy sm:text-xl">{formatINR(medicine.price)}</p>
-            <p className="text-[0.65rem] text-muted-foreground sm:text-xs">
-              <s>{formatINR(medicine.mrp)}</s> · {discount}% off
-            </p>
+            {medicine.mrp > medicine.price ? (
+              <p className="text-[0.65rem] text-muted-foreground sm:text-xs">
+                <s>{formatINR(medicine.mrp)}</s> · {discount}% off
+              </p>
+            ) : (
+              <p className="text-[0.65rem] text-muted-foreground sm:text-xs">+ ₹125 shipping</p>
+            )}
           </div>
         </div>
         <div className="mt-3 flex gap-2 sm:mt-4">

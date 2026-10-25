@@ -1,12 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  BellRing,
-  HeartPulse,
-  Package,
-  RefreshCw,
-  Stethoscope,
-  Video,
-} from "lucide-react";
+import { BellRing, HeartPulse, Package, RefreshCw, Stethoscope, Video } from "lucide-react";
 
 import { PageHero } from "@/components/ui-kit/PageHero";
 import { Button } from "@/components/ui/button";
@@ -29,6 +22,7 @@ export const Route = createFileRoute("/services")({
         content: "Consultation, follow-up care and medicine delivery from Verma Gentle Cure.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "/services" },
     ],
     links: [{ rel: "canonical", href: "/services" }],
