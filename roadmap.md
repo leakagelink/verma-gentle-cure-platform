@@ -1,5 +1,11 @@
 # Verma Gentle Cure — build roadmap
 
+## Final release-blockers verification — October 25, 2026
+- [ ] Recheck environment tracking; apply allowed exclusions or report managed-file/Git restrictions.
+- [ ] Verify hosted schema and available non-production deletion test environment.
+- [ ] Resolve application-owned lint and document generated-source formatting policy; rerun all tests.
+- [ ] Verify automatic build evidence and native artifact availability; deliver concise release report.
+
 ## Final critical fixes — October 25, 2026
 - [x] Reproduce missing baseline and add full clinical isolated replay through 0019 without changing production history.
 - [x] Improve deletion submissions, cross-scope exclusion, receipt retries and strict provider evidence; 61 local tests pass.
