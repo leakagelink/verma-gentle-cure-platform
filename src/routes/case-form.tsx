@@ -222,6 +222,9 @@ function CaseFormPage() {
     setUploading(true);
     const added: CaseAttachment[] = [];
     try {
+      await consent({
+        data: { accepted: true, noticeVersion: HEALTH_NOTICE_VERSION, purpose: "case" },
+      });
       for (const file of Array.from(files)) {
         if (!validReport(file)) {
           toast.error("Use a PDF, JPEG, PNG or WebP file up to 10 MB.");

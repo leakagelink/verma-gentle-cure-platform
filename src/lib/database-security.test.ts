@@ -263,6 +263,46 @@ describe("direct PostgreSQL security regression", () => {
     ]);
     expect(remains.rows.length).toBeGreaterThan(0);
   });
+  it("unassigned doctors cannot read prescriptions or audit snapshots", async () => {
+    const unassigned = "00000000-0000-4000-8000-000000000060";
+    await reset();
+    await db.exec(`INSERT INTO auth.users(id) VALUES('${unassigned}'); INSERT INTO public.user_roles(user_id,role) VALUES('${unassigned}','doctor');
+      SELECT set_config('request.jwt.claim.role','service_role',false);
+      INSERT INTO public.prescriptions(patient_id,doctor_id,diagnosis,medicines) VALUES('${patient}','${other}','Synthetic diagnosis','[]');
+      SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${unassigned}',false),set_config('request.jwt.claim.role','authenticated',false);`);
+    const prescriptions = await db.query(
+      "SELECT id FROM public.prescriptions WHERE patient_id=$1",
+      [patient],
+    );
+    const audits = await db.query("SELECT id FROM public.prescription_audit WHERE patient_id=$1", [
+      patient,
+    ]);
+    expect(prescriptions.rows).toHaveLength(0);
+    expect(audits.rows).toHaveLength(0);
+    await reset();
+    const exists = await db.query("SELECT id FROM public.prescriptions WHERE patient_id=$1", [
+      patient,
+    ]);
+    expect(exists.rows.length).toBeGreaterThan(0);
+  });
+  it("storage rejects upload without a current server-issued case consent receipt", async () => {
+    await reset();
+    await db.exec(
+      `CREATE POLICY synthetic_owner_upload ON storage.objects FOR INSERT TO authenticated WITH CHECK(bucket_id='patient-reports' AND (storage.foldername(name))[1]=auth.uid()::text);`,
+    );
+    const insert = `INSERT INTO storage.objects(bucket_id,name,metadata) VALUES('patient-reports','${patient}/synthetic.pdf','{"mimetype":"application/pdf","size":100}')`;
+    await expect(asPatient(insert)).rejects.toThrow();
+    await reset();
+    await db.exec(
+      `INSERT INTO public.health_consent_receipts(user_id,purpose,notice_version) VALUES('${patient}','case','health-2026-10-24')`,
+    );
+    await asPatient(insert);
+    await reset();
+    const objects = await db.query("SELECT name FROM storage.objects WHERE name=$1", [
+      `${patient}/synthetic.pdf`,
+    ]);
+    expect(objects.rows).toHaveLength(1);
+  });
   it("denies unauthorized deletion claims and direct completion forgery", async () => {
     await expect(
       asPatient("SELECT public.claim_account_deletion('00000000-0000-4000-8000-000000000040')"),
@@ -281,6 +321,12 @@ describe("direct PostgreSQL security regression", () => {
     await reset();
     await db.exec(`INSERT INTO auth.users(id) VALUES('${disposable}'); INSERT INTO public.account_deletion_requests(id,user_id,scope) VALUES('${request}','${disposable}','account');
       SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`);
+    await reset();
+    const before = await db.query("SELECT id FROM public.profiles WHERE id=$1", [disposable]);
+    expect(before.rows).toHaveLength(1);
+    await db.exec(
+      `SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${other}',false);`,
+    );
     const claim = await db.query<{ result: { state: string; token: string } }>(
       `SELECT public.claim_account_deletion('${request}') result`,
     );

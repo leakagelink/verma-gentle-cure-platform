@@ -1,0 +1,9 @@
+DROP POLICY IF EXISTS clinical_case_scope ON public.case_records;
+CREATE POLICY clinical_case_scope ON public.case_records AS RESTRICTIVE FOR ALL TO authenticated USING(patient_id=auth.uid() OR public.can_access_patient(patient_id)) WITH CHECK(patient_id=auth.uid() OR public.can_access_patient(patient_id));
+DROP POLICY IF EXISTS clinical_notes_scope ON public.case_clinical_notes;
+CREATE POLICY clinical_notes_scope ON public.case_clinical_notes AS RESTRICTIVE FOR ALL TO authenticated USING(EXISTS(SELECT 1 FROM public.case_records c WHERE c.id=case_record_id AND public.can_access_patient(c.patient_id))) WITH CHECK(doctor_id=auth.uid() AND EXISTS(SELECT 1 FROM public.case_records c WHERE c.id=case_record_id AND public.can_access_patient(c.patient_id)));
+DROP POLICY IF EXISTS report_clinical_scope ON storage.objects;
+CREATE POLICY report_clinical_scope ON storage.objects AS RESTRICTIVE FOR SELECT TO authenticated USING(bucket_id<>'patient-reports' OR (storage.foldername(name))[1]=auth.uid()::text OR public.can_access_patient(((storage.foldername(name))[1])::uuid));
+CREATE POLICY report_current_consent ON storage.objects AS RESTRICTIVE FOR INSERT TO authenticated WITH CHECK(bucket_id<>'patient-reports' OR ((storage.foldername(name))[1]=auth.uid()::text AND EXISTS(SELECT 1 FROM public.health_consent_receipts c WHERE c.user_id=auth.uid() AND c.purpose='case' AND c.notice_version='health-2026-10-24' AND c.accepted_at BETWEEN now()-interval '15 minutes' AND now() AND c.consumed_at IS NULL)));
+CREATE POLICY report_no_overwrite ON storage.objects AS RESTRICTIVE FOR UPDATE TO authenticated USING(bucket_id<>'patient-reports') WITH CHECK(bucket_id<>'patient-reports');
+COMMENT ON POLICY report_current_consent ON storage.objects IS 'Requires server-issued per-visit case consent before upload. Receipt may authorize a batch for 15 minutes; case saving consumes its own receipt. MIME content scanning remains separate.';
