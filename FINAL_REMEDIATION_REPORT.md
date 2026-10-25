@@ -20,6 +20,8 @@ Automatic preview compilation: latest inspected entry **build OK**, 03:41:30 UTC
 Public browser test: localhost /delete-account submitted synthetic unregistered contact, showed ownership-verification message, zero page errors. Published /delete-account and /privacy-policy returned HTTP 200. Published availability does not prove the newly edited version is live; no publish action was taken.
 Hosted signed-in check: `lovable auth-session --json --self` failed because no app account matches the requesting identity. No other patient identity was selected.
 
+Backend scan on 25 October 2026: one public store_settings-read warning, intentional for checkout options; cloud/infrastructure scan skipped because no connector is configured. Database linter: two no-policy tables (locked internal coordination) and nine signed-in SECURITY DEFINER warnings require individual authorization review; this is not a clean-security certification.
+
 ## Remaining risks ranked
 **High / release blockers**
 1. Full deletion for patients with retained records is NOT IMPLEMENTED. Retention categories, lawful basis, expiration periods, eligible redaction/archive design and scheduled expiry processing need clinic/legal approval. Automation currently blocks those accounts; it does not anonymize retained clinical/financial records or remove their Auth identity.
