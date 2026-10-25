@@ -1,5 +1,12 @@
 # Verma Gentle Cure — build roadmap
 
+## Final critical fixes — October 25, 2026
+- [ ] Reproduce and repair the missing canonical baseline without changing production history.
+- [ ] Improve eligible deletion recovery and verify available Auth/Storage flows.
+- [ ] Inspect environment tracking, secret exposure and generated-code lint failures.
+- [ ] Run supported regression suites and inspect current hosted privileges.
+- [ ] Deliver evidence, current Google Play requirements and exact remaining release gates.
+
 ## Final remediation audit
 - [x] Implement public unauthenticated intake and eligible verified-owner deletion processor with fail-closed retention, dependency fencing and readback.
 - [x] Run 46 isolated tests and synthetic public intake; independently inspect deployed policies, secrets, migration replay and lint.
