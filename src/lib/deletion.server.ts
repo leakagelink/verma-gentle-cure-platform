@@ -29,18 +29,9 @@ export async function processEligibleDeletion(
     return result;
   }
   async function transition(state: "completed" | "failed") {
-    const result = await admin
-      .from("account_deletion_requests")
-      .update({
-        processing_state: state,
-        completed_at: state === "completed" ? new Date().toISOString() : null,
-        failure_code: state === "failed" ? "processing_failed_requires_reconciliation" : null,
-      })
-      .eq("id", id)
-      .eq("processing_token", token)
-      .eq("processing_state", "processing")
-      .select("id")
-      .single();
+    const result = await admin.rpc("finish_deletion_generation", {
+      _request: id, _token: token, _state: state,
+    });
     if (result.error || !result.data) {
       const receipt = await admin.from("account_deletion_requests")
         .select("processing_state").eq("id", id).eq("processing_token", token).single();
@@ -48,6 +39,7 @@ export async function processEligibleDeletion(
       if (state === "completed" && receipt.data?.processing_state === "completed") return;
       throw new Error("Deletion receipt unavailable");
     }
+    if (result.data !== state) throw new Error("Deletion receipt requires reconciliation");
   }
   return executeDeletion(
     { userId, scope },
