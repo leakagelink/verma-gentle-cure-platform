@@ -1,10 +1,13 @@
 # Verma Gentle Cure — build roadmap
 
 ## Final release-blockers verification — October 25, 2026
-- [ ] Recheck environment tracking; apply allowed exclusions or report managed-file/Git restrictions.
-- [ ] Verify hosted schema and available non-production deletion test environment.
-- [ ] Resolve application-owned lint and document generated-source formatting policy; rerun all tests.
-- [ ] Verify automatic build evidence and native artifact availability; deliver concise release report.
+- [x] Recheck tracking/history; .env remains tracked, .gitignore read-only and stateful Git restricted; owner-side commands documented.
+- [x] Compare all 20 migration hashes to hosted ledger and inspect security catalog; fresh isolated hosted target remains unavailable.
+- [x] Resolve generated formatting errors using an exact-file, formatting-only policy; lint exits 0 with 8 warnings, 61 tests pass.
+- [x] Verify automatic build and public pages; deliver FINAL_RELEASE_BLOCKERS_REPORT.md with native/staging artifact requirements.
+- [ ] Remove .env tracking — owner Windows repository action required.
+- [ ] Fresh hosted replay and disposable Auth/Storage deletion — authorized non-production target/accounts and missing historical baseline provenance required.
+- [ ] Native review — Android source ZIP and signed AAB, excluding private signing keys, plus Play declaration drafts required.
 
 ## Final critical fixes — October 25, 2026
 - [x] Reproduce missing baseline and add full clinical isolated replay through 0019 without changing production history.
